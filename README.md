@@ -1,4 +1,4 @@
-# car_washing_day
+# car_warshing_day
 
 A new Flutter project.
 
