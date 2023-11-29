@@ -1,3 +1,5 @@
+import 'package:car_washing_day/screens/calendar/calendar_page.dart';
+import 'package:car_washing_day/screens/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,14 +8,16 @@ import '../../../config/global_assets.dart';
 class MainPageController extends GetxController {
   final List<Map<String, dynamic>> navList = [
     {
-      'page': () => const SizedBox.shrink(),
-      'label': '홈',
+      'page': () => HomePage(),
       'iconPath': GlobalAssets.svgHome,
     },
     {
-      'page': () => const SizedBox.shrink(),
-      'label': '캘린더',
+      'page': () => CalendarPage(),
       'iconPath': GlobalAssets.svgCalendar,
+    },
+    {
+      'page': () => const SizedBox(),
+      'iconPath': GlobalAssets.svgPerson,
     },
   ];
 

@@ -40,11 +40,11 @@ class MainPage extends StatelessWidget {
         currentIndex: controller.pageIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
-        selectedLabelStyle: $style.text.subTitle12,
-        unselectedLabelStyle: $style.text.body12,
         selectedItemColor: $style.colors.primary,
         unselectedItemColor: $style.colors.black,
         elevation: 0,
+        showUnselectedLabels: false,
+        showSelectedLabels: false,
         onTap: controller.onChangedPage,
         items: List.generate(
           controller.navList.length,
@@ -52,7 +52,7 @@ class MainPage extends StatelessWidget {
             final Map<String, dynamic> navItem = controller.navList[index];
 
             return BottomNavigationBarItem(
-              label: navItem['label'],
+              label: '',
               icon: SvgPicture.asset(
                 navItem['iconPath'],
                 width: 24 * sizeUnit,
