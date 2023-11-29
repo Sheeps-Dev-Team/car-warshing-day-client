@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
   final bool? centerTitle;
   final double? leadingWidth;
   final ScrollController? controller;
-  final bool showBottomLine = false;
+  final bool showBottomLine = true;
 
   static const appBarHeight = 48;
 

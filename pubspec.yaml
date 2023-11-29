@@ -44,6 +44,8 @@ dependencies:
   gap: ^3.0.0 # 간격 간소화 위젯
   dio: ^5.1.2 # form data 전송
   fluttertoast: ^8.2.2 # 토스트
+  syncfusion_flutter_calendar: ^23.2.4 # 캘린더
+  uuid: ^4.2.1 # id 부여
 
 dev_dependencies:
   flutter_test:
