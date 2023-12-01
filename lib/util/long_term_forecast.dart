@@ -1,10 +1,8 @@
-
 /// 장기예보 클래스
 ///
 /// 지역코드, 기준일자, 날씨를 입력하고
 /// [getProbability]함수를 이용하여 기준 일자 다음날부터 며칠 뒤까지 맑을 확률을 반환합니다.
 class LongTermForecast {
-
   /// locCode는 지역코드입니다. 필요한 지역코드를 입력하세요.
   ///
   /// 지역코드 목록
@@ -38,17 +36,33 @@ class LongTermForecast {
 
   LongTermForecast({required this.locCode, required this.baseDate, required this.baseIsSunny});
 
+  /// 며칠 뒤 까지 맑을 확률을 응답합니다. [days]에 며칠 뒤의 확률이 필요한지 입력하세요.
+  /// [days]는 1이상이어야 합니다.
   double getProbability(int days) {
-    double probability = 0;
-
-    DateTime(year).compareTo(other)
-
+    // 지역코드가 존재하지 않으면 리턴
+    if (!locRainData.containsKey(locCode)||days < 1) {
+      return 0;
+    }
+    double probability = 1;
+    DateTime forecastDate = baseDate;
+    forecastDate = forecastDate.add(const Duration(days: 1));
+    int tmpMonth = forecastDate.month;
+    // 기준 일자 날씨에 따라서 첫 날 확률
+    if (baseIsSunny) {
+      probability *= locRainData[locCode]![tmpMonth.toString()]!["s_s"]!;
+    } else {
+      probability *= locRainData[locCode]![tmpMonth.toString()]!["r_s"]!;
+    }
+    days--;
+    while (days > 0) {
+      forecastDate = forecastDate.add(const Duration(days: 1));
+      tmpMonth = forecastDate.month;
+      probability *= locRainData[locCode]![tmpMonth.toString()]!["s_s"]!;
+      days--;
+    }
     return probability;
   }
 }
-
-
-
 
 const Map<String, Map<String, Map<String, double>>> locRainData = {
   "108": {
