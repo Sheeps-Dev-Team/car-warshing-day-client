@@ -6,7 +6,7 @@ import 'controllers/rain_controller.dart';
 import 'one_drop.dart';
 
 class Rain extends StatelessWidget {
-  const Rain({Key? key, required this.rainingType}) : super(key: key);
+  const Rain({super.key, required this.rainingType});
 
   final RainingType rainingType;
 
