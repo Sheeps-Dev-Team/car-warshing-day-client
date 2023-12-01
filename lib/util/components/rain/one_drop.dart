@@ -35,7 +35,7 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    _startX = widget.screen.width * Random().nextDouble() + widget.screen.width / 10;
+    _startX = widget.screen.width * Random().nextDouble() + widget.screen.width / 20;
     _moveX = 10 + 10 * Random().nextDouble();
     _opacity = .6 + .4 * Random().nextDouble();
     _scale = .6 + .4 * Random().nextDouble();
@@ -63,7 +63,13 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
         rainController.resetDrop(widget.id);
       }
     });
+
+
     _controller.forward();
+    // Future.delayed(
+    //   Duration(milliseconds: (500 * Random().nextDouble()).ceil()),
+    //       () => _controller.forward(),
+    // );
     super.initState();
   }
 
@@ -75,8 +81,8 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double dropHeight = widget.screen.height * .1 * sizeUnit;
-    double dropWidth = dropHeight * .04 * sizeUnit;
+    final double dropHeight = widget.screen.height * .1 * sizeUnit;
+    final double dropWidth = dropHeight * .04 * sizeUnit;
 
     return Positioned(
       top: (widget.screen.height + dropHeight) * _animation.value - dropHeight,

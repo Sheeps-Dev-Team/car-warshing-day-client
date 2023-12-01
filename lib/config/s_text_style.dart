@@ -12,8 +12,22 @@ class STextStyle {
   late final Color fontColor = $style.colors.black;
   final double height = 1.3;
 
+  late final TextStyle headline40 = TextStyle(
+    fontSize: 40 * scale,
+    fontWeight: FontWeight.bold,
+    height: height,
+    color: fontColor,
+  );
+
   late final TextStyle headline32 = TextStyle(
     fontSize: 32 * scale,
+    fontWeight: FontWeight.bold,
+    height: height,
+    color: fontColor,
+  );
+
+  late final TextStyle headline28 = TextStyle(
+    fontSize: 28 * scale,
     fontWeight: FontWeight.bold,
     height: height,
     color: fontColor,
@@ -98,6 +112,13 @@ class STextStyle {
 
   late final TextStyle subTitle12 = TextStyle(
     fontSize: 12 * scale,
+    fontWeight: FontWeight.w500,
+    height: height,
+    color: fontColor,
+  );
+
+  late final TextStyle subTitle10 = TextStyle(
+    fontSize: 10 * scale,
     fontWeight: FontWeight.w500,
     height: height,
     color: fontColor,
