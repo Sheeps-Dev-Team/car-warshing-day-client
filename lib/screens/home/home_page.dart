@@ -1,29 +1,61 @@
 import 'package:car_washing_day/config/constants.dart';
-import 'package:car_washing_day/data/models/weather.dart';
-import 'package:car_washing_day/util/components/custom_app_bar.dart';
-import 'package:car_washing_day/util/components/rain/rain.dart';
+import 'package:car_washing_day/screens/home/controllers/home_controller.dart';
+import 'package:car_washing_day/util/components/bubble/bubble.dart';
+import 'package:car_washing_day/util/components/car_animation.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-        leading: SizedBox.shrink(),
-        title: '세차언제',
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Spacer(),
+            Text('오늘 세차하면?', style: $style.text.subTitle16.copyWith(height: 1.15)),
+            Gap($style.insets.$8),
+            Text('20일 지속', style: $style.text.headline40.copyWith(height: 1.15)),
+            const Spacer(),
             SizedBox(
-              width: double.infinity,
-              height: 300 * sizeUnit,
-              child: const Rain(rainingType: RainingType.snow),
+              width: 260 * sizeUnit,
+              height: 160 * sizeUnit,
+              child: const Center(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Bubble(),
+                    CarAnimation(),
+                    Bubble(),
+                    // Rain(rainingType: RainingType.rain),
+                  ],
+                ),
+              ),
             ),
+            const Spacer(),
+            Text('인천 광역시 연수구', style: $style.text.subTitle12),
+            Gap($style.insets.$8),
+            SizedBox(
+              height: 16 * sizeUnit,
+              child: const VerticalDivider(color: Colors.black),
+            ),
+            Gap($style.insets.$4),
+            Text(
+              DateFormat('MM.dd').format(controller.now),
+              style: $style.text.headline28.copyWith(height: 1.15),
+            ),
+            Gap($style.insets.$4),
+            Text(
+              DateFormat('EEEE').format(controller.now).toUpperCase(),
+              style: $style.text.headline12.copyWith(height: 1.15),
+            ),
+            const Spacer(),
           ],
         ),
       ),
