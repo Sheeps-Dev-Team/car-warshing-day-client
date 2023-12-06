@@ -1,5 +1,6 @@
 import 'package:car_washing_day/util/components/custom_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -17,46 +18,54 @@ class CalendarPage extends StatelessWidget {
         leading: SizedBox.shrink(),
         title: '세차언제',
       ),
-      body: GetBuilder<CalendarPageController>(
-          init: Get.put(CalendarPageController()),
-          builder: (controller) {
-            return Column(
-              children: [
-                SizedBox(
-                  height: 484 * sizeUnit,
-                  child: SfCalendar(
-                    controller: controller.calendarController,
-                    view: CalendarView.month,
-                    monthViewSettings: const MonthViewSettings(
-                      dayFormat: 'EEE',
-                      appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
+        child: GetBuilder<CalendarPageController>(
+            init: Get.put(CalendarPageController()),
+            builder: (controller) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 484 * sizeUnit,
+                    child: SfCalendar(
+                      controller: controller.calendarController,
+                      view: CalendarView.month,
+                      monthViewSettings: const MonthViewSettings(
+                        // dayFormat: 'EEE',
+                        appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+                      ),
+
+                      // headerStyle: CalendarHeaderStyle(
+                      //   textStyle: $style.text.headline14,
+                      // ),
+                      // viewHeaderStyle: ViewHeaderStyle(
+                      //   dayTextStyle: $style.text.headline12,
+                      // ),
+                      dataSource: DiaryDataSource(controller.weatherList),
+                      headerHeight: 0,
+                      // viewHeaderHeight: 0 * sizeUnit,
+                      // headerDateFormat: 'yyyy년 MM월',
+                      maxDate: controller.now.add(Duration(days: controller.weatherList.length - 1)),
+                      minDate: controller.now,
+                      initialDisplayDate: controller.now,
+                      initialSelectedDate: controller.now,
+                      monthCellBuilder: (context, detail) => cellItem(detail),
+                      appointmentBuilder: (context, calendarAppointmentDetails) => appointmentsItem(calendarAppointmentDetails),
+                      // specialRegions: [TimeRegion(startTime: controller.now, endTime: controller.now.add(const Duration(days: 3)))],
+                      // timeRegionBuilder: (context, timeRegionDetails) => Container(width: 20, height: 20,color: Colors.redAccent,),
+                      // allowAppointmentResize: true,
+                      // appoint
+                      // onSelectionChanged: (details) => controller.onSelectionChanged(details.date!),
+                      // onViewChanged: (details) => controller.onViewChanged(details),
+                      // selectionDecoration: BoxDecoration(
+                      // image: DecorationImage(image: Image.asset(pngCheck).image),
+                      // ),
                     ),
-                    headerStyle: CalendarHeaderStyle(
-                      textStyle: $style.text.headline14,
-                    ),
-                    // viewHeaderStyle: ViewHeaderStyle(
-                    //   dayTextStyle: $style.text.headline12,
-                    // ),
-                    dataSource: DiaryDataSource(controller.weatherList),
-                    // headerHeight: 40 * sizeUnit,
-                    // viewHeaderHeight: 0 * sizeUnit,
-                    headerDateFormat: 'yyyy년 MM월',
-                    maxDate: controller.now.add(Duration(days: controller.weatherList.length - 1)),
-                    minDate: controller.now,
-                    initialDisplayDate: controller.now,
-                    initialSelectedDate: controller.now,
-                    monthCellBuilder: (context, detail) => cellItem(detail),
-                    appointmentBuilder: (context, calendarAppointmentDetails) => appointmentsItem(calendarAppointmentDetails),
-                    // onSelectionChanged: (details) => controller.onSelectionChanged(details.date!),
-                    // onViewChanged: (details) => controller.onViewChanged(details),
-                    // selectionDecoration: BoxDecoration(
-                    // image: DecorationImage(image: Image.asset(pngCheck).image),
-                    // ),
                   ),
-                ),
-              ],
-            );
-          }),
+                ],
+              );
+            }),
+      ),
     );
   }
 
@@ -66,22 +75,21 @@ class CalendarPage extends StatelessWidget {
     final DateTime midDate = details.visibleDates[0].add(Duration(days: mid));
 
     return Opacity(
-      opacity: details.date.month == midDate.month ? 1 : 0.6,
-      child: Container(
+      opacity: details.date.month == midDate.month ? 1 : .6,
+      child: Padding(
         padding: EdgeInsets.all(2 * sizeUnit),
         // decoration: BoxDecoration(
         // borderRadius: BorderRadius.circular($style.corners.$8),
         // color: Colors.white,
         // border: Border.all(color: $style.colors.grey, width: 1 * sizeUnit),
         // ),
-        alignment: Alignment.topCenter,
         child: Text(
           details.date.day.toString(),
           style: $style.text.subTitle12.copyWith(
             color: details.date.weekday == 7
                 ? $style.colors.red
                 : details.date.weekday == 6
-                    ? const Color(0xFF00B6F1)
+                    ? $style.colors.primary
                     : null,
           ),
         ),
@@ -89,21 +97,13 @@ class CalendarPage extends StatelessWidget {
     );
   }
 
-  Widget appointmentsItem(CalendarAppointmentDetails calendarAppointmentDetails){
-    late final IconData iconData;
-    switch(calendarAppointmentDetails.appointments.first.skyType){
-      case SkyType.sunny:
-        iconData = Icons.wb_sunny_outlined;
-        break;
-      case SkyType.cloudy:
-        iconData = Icons.wb_cloudy_outlined;
-        break;
-      case SkyType.overcast:
-        iconData = Icons.snowing;
-        break;
-    }
+  Widget appointmentsItem(CalendarAppointmentDetails calendarAppointmentDetails) {
+    final Weather weather = calendarAppointmentDetails.appointments.first;
 
-    return Icon(iconData);
+    return OverflowBox(
+      maxHeight: 27 * sizeUnit,
+      child: SvgPicture.asset(weather.getWeatherIcon, height: 27 * sizeUnit),
+    );
   }
 }
 

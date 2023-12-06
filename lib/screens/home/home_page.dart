@@ -7,6 +7,10 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../data/models/weather.dart';
+import '../../util/components/bubble/bubble_lump.dart';
+import '../../util/components/rain/rain.dart';
+
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
@@ -31,9 +35,9 @@ class HomePage extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     Bubble(),
+                    BubbleLump(),
                     CarAnimation(),
-                    Bubble(),
-                    // Rain(rainingType: RainingType.rain),
+                    Rain(rainingType: RainingType.rainAndSnow),
                   ],
                 ),
               ),

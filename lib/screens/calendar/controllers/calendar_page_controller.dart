@@ -13,7 +13,7 @@ class CalendarPageController extends GetxController {
     30,
     (index) => Weather(
       skyType: SkyType.values[Random().nextInt(SkyType.values.length)],
-      rainingType: RainingType.values[Random().nextInt(RainingType.values.length)],
+      rainingType: RainingType.values[Random().nextInt(RainingType.values.length - 1) + 1],
       pop: Random().nextInt(100),
       pcp: '강수 없음',
       dateTime: now.add(Duration(days: index)),
