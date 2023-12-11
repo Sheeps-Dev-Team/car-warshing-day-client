@@ -37,7 +37,7 @@ class AppStyle {
 /// App color
 @immutable
 class AppColors {
-  final Color primary = const Color(0xFF52B043);
+  final Color primary = const Color(0xFF00B6F1);
   final Color red = const Color(0xFFFF2B00);
   final Color black = const Color(0xFF333333);
   final Color darkGrey = const Color(0xFF858B8E);

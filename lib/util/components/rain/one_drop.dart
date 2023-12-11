@@ -40,8 +40,8 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
     _opacity = .6 + .4 * Random().nextDouble();
     _scale = .6 + .4 * Random().nextDouble();
 
-    final Duration rainDuration = Duration(milliseconds: 400 + (200 * Random().nextDouble()).floor());
-    final Duration snowDuration = Duration(milliseconds: 800 + (400 * Random().nextDouble()).floor());
+    final Duration rainDuration = Duration(milliseconds: 200 + (400 * Random().nextDouble()).floor());
+    final Duration snowDuration = Duration(milliseconds: 800 + (800 * Random().nextDouble()).floor());
     _duration = widget.rainingType == RainingType.rain
         ? rainDuration
         : widget.rainingType == RainingType.snow
@@ -66,10 +66,7 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
 
 
     _controller.forward();
-    // Future.delayed(
-    //   Duration(milliseconds: (500 * Random().nextDouble()).ceil()),
-    //       () => _controller.forward(),
-    // );
+
     super.initState();
   }
 
@@ -124,7 +121,7 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
   Widget snowDropWidget() {
     return SvgPicture.asset(
       GlobalAssets.svgSnow,
-      width: 24 * sizeUnit,
+      width: 20 * sizeUnit,
       colorFilter: ColorFilter.mode(
         Colors.blueGrey.withOpacity(_opacity - .4),
         BlendMode.srcIn,
