@@ -1,5 +1,7 @@
 import 'package:car_washing_day/screens/calendar/calendar_page.dart';
 import 'package:car_washing_day/screens/home/home_page.dart';
+import 'package:car_washing_day/screens/login/login_page.dart';
+import 'package:car_washing_day/screens/profile/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +18,8 @@ class MainPageController extends GetxController {
       'iconPath': GlobalAssets.svgCalendar,
     },
     {
-      'page': () => const SizedBox(),
+      'page': () => ProfilePage(),
+      //'page': () => LoginPage(),
       'iconPath': GlobalAssets.svgPerson,
     },
   ];
