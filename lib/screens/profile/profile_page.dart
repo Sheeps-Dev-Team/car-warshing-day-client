@@ -103,19 +103,13 @@ class _ProfilePageState extends State<ProfilePage> {
               Container(
                 width: double.infinity,
                 color: Colors.white,
-                child: GetBuilder<ProfileController>(builder: (_) {
-                  return CustomDataTable(
-                    columns: controller.dataTableColumns,
-                    // rows: List.generate(
-                    //   1,
-                    //   (index) => [
-                    //     (index + 1).toString(),
-                    //   ],
-                    // ),
-                    rows: List.generate(1, (index) => testList),
-                    onRowTap: (index) {},
-                  );
-                }),
+                // child: GetBuilder<ProfileController>(builder: (_) {
+                //   return CustomDataTable(
+                //     columns: controller.dataTableColumns,
+                //     rows: List.generate(1, (index) => testList),
+                //     onRowTap: (index) {},
+                //   );
+                // }),
               ),
               InkWell(
                 child: Text(
