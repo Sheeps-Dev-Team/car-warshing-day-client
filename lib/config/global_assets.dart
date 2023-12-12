@@ -12,4 +12,6 @@ class GlobalAssets {
       'assets/images/global/apple_login_btn.svg';
   static const String svgGoogleLogin = // 애플로그인
       'assets/images/global/google_login_btn.svg'; // 구글로그인
+  static const String svgDropdown =
+      'assets/images/global/dropdown.svg'; // 드롭다운메뉴 아이콘
 }

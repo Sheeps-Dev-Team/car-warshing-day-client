@@ -41,8 +41,8 @@ class AppColors {
   final Color red = const Color(0xFFFF2B00);
   final Color black = const Color(0xFF333333);
   final Color darkGrey = const Color(0xFF858B8E);
-  final Color grey = const Color(0xFFAAAAAA);
-  final Color lightGrey = const Color(0xFFF6F8F9);
+  final Color grey = const Color(0xFFC4C4C4);
+  final Color lightGrey = const Color(0xFFEEEEEE);
   final Color barrierColor = const Color.fromRGBO(0, 0, 0, 0.2);
 }
 

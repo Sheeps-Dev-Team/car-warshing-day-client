@@ -11,7 +11,7 @@ class CustomSwitchButton extends StatefulWidget {
     required this.onToggleCallback,
   });
   @override
-  _CustomSwitchButtonState createState() => _CustomSwitchButtonState();
+  State<CustomSwitchButton> createState() => _CustomSwitchButtonState();
 }
 
 class _CustomSwitchButtonState extends State<CustomSwitchButton> {
@@ -19,8 +19,8 @@ class _CustomSwitchButtonState extends State<CustomSwitchButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 77 * sizeUnit,
-      height: 24 * sizeUnit,
+      width: 106 * sizeUnit,
+      height: 32 * sizeUnit,
       child: Stack(
         children: <Widget>[
           GestureDetector(
@@ -34,21 +34,12 @@ class _CustomSwitchButtonState extends State<CustomSwitchButton> {
               setState(() {});
             },
             child: Container(
-              width: 77 * sizeUnit,
-              height: 24 * sizeUnit,
-              decoration: ShapeDecoration(
+              width: 106 * sizeUnit,
+              height: 32 * sizeUnit,
+              decoration: BoxDecoration(
                   color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(29 * sizeUnit),
-                  ),
-                  shadows: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.10),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    )
-                  ]),
+                  borderRadius: BorderRadius.circular(29 * sizeUnit),
+                  border: Border.all(color: $style.colors.lightGrey)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(
@@ -68,8 +59,8 @@ class _CustomSwitchButtonState extends State<CustomSwitchButton> {
             alignment:
                 initialPosition ? Alignment.centerLeft : Alignment.centerRight,
             child: Container(
-              width: 40 * sizeUnit,
-              height: 24 * sizeUnit,
+              width: 56 * sizeUnit,
+              height: 32 * sizeUnit,
               decoration: ShapeDecoration(
                 color: $style.colors.primary,
                 shape: RoundedRectangleBorder(
