@@ -22,16 +22,11 @@ class CustomDataTable extends StatefulWidget {
 class _CustomDataTableState extends State<CustomDataTable> {
   late double w; //열의 너비
   List<double> extendWidthList = [];
-  int hoverIndex = nullInt; // 현재 마우스 커서가 위치한 행의 인덱스 저장
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       extendWidthList.clear();
-
-      w = (constraints.maxWidth - 2) /
-          widget.columns
-              .length; // (maxWidth - tablePadding - borderWidth) / columns.length;
 
       int maxFlex = 0;
       for (int element in widget.widthFlexList) {
@@ -49,12 +44,16 @@ class _CustomDataTableState extends State<CustomDataTable> {
       return Column(
         children: [
           header(),
-          SizedBox(height: 16 * sizeUnit),
+          Divider(
+            height: 1 * sizeUnit,
+            thickness: 1 * sizeUnit,
+            color: $style.colors.grey,
+          ),
+          Gap($style.insets.$16),
           Expanded(
             child: ListView.separated(
               itemCount: widget.rows.length,
-              separatorBuilder: (context, index) =>
-                  SizedBox(height: 8 * sizeUnit),
+              separatorBuilder: (context, index) => Gap($style.insets.$16),
               itemBuilder: (context, index) {
                 return dataRow(
                   dataRow: widget.rows[index],
@@ -62,11 +61,6 @@ class _CustomDataTableState extends State<CustomDataTable> {
                 );
               },
             ),
-          ),
-          Divider(
-            height: 1 * sizeUnit,
-            thickness: 2 * sizeUnit,
-            color: $style.colors.lightGrey,
           ),
         ],
       );
@@ -76,62 +70,50 @@ class _CustomDataTableState extends State<CustomDataTable> {
   Widget dataRow({required List<String> dataRow, required int index}) {
     return InkWell(
       onTap: () => widget.onRowTap(index),
-      onHover: (value) => setState(() {
-        if (value) {
-          hoverIndex = index;
-        } else {
-          hoverIndex = nullInt;
-        }
-      }),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular($style.corners.$4),
-          border: Border.all(
-              color: hoverIndex == index
-                  ? $style.colors.primary
-                  : $style.colors.grey),
-        ),
-        child: Row(
-          children: List.generate(dataRow.length, (i) {
-            return Container(
-              alignment: Alignment.center,
-              width: extendWidthList.isNotEmpty ? extendWidthList[i] : w,
-              height: 36 * sizeUnit,
-              child: Text(
-                dataRow[i],
-                style: $style.text.body14,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            );
-          }),
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(dataRow.length, (i) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 7 * sizeUnit),
+            alignment: Alignment.center,
+            height: 16 * sizeUnit,
+            child: Text(
+              dataRow[i],
+              style: $style.text.subTitle14.copyWith(
+                  color: i == 1 ? $style.colors.grey : null,
+                  fontWeight: i == 1
+                      ? FontWeight.w400
+                      : i == 2
+                          ? FontWeight.w600
+                          : FontWeight.w500),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          );
+        }),
       ),
     );
   }
 
   Widget header() {
     return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(widget.columns.length, (index) {
-      return SizedBox(
-        width: extendWidthList.isNotEmpty ? extendWidthList[index] : w,
-        child: Column(
-          children: [
-            Text(
-              widget.columns[index],
-              style: $style.text.headline14,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 7 * sizeUnit),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  widget.columns[index],
+                  style: $style.text.headline14,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+                Gap($style.insets.$8),
+              ],
             ),
-            Gap($style.insets.$8),
-            Divider(
-              height: 1 * sizeUnit,
-              thickness: 2 * sizeUnit,
-              color: $style.colors.lightGrey,
-            ),
-          ],
-        ),
-      );
-    }));
+          );
+        }));
   }
 }
