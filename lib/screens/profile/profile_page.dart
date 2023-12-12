@@ -1,32 +1,21 @@
 import 'package:car_washing_day/config/constants.dart';
+import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/screens/profile/controllers/profile_controller.dart';
+import 'package:car_washing_day/screens/profile/profile_detail_page.dart';
 import 'package:car_washing_day/util/components/base_widget.dart';
 import 'package:car_washing_day/util/components/custom_data_table.dart';
-import 'package:car_washing_day/util/components/custom_switch_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class ProfilePage extends StatelessWidget {
+  ProfilePage({super.key});
 
-  //final ProfileController controller = Get.put(ProfileController());
+  final ProfileController controller = Get.put(ProfileController());
 
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-final ProfileController controller = Get.put(ProfileController());
-
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     bool isLogin = false;
-    List<String> testList = [
-      '1',
-      '2',
-      '3',
-    ];
 
     return BaseWidget(
       child: Scaffold(
@@ -35,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             children: [
               Gap($style.insets.$32),
-              if (isLogin == true) ...{
+              if (isLogin) ...{
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -44,6 +33,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: $style.text.headline20,
                     ),
                     InkWell(
+                      onTap: () {
+                        Get.to(() => const LoginPage());
+                      },
                       child: Container(
                         alignment: Alignment.center,
                         width: 80 * sizeUnit,
@@ -81,41 +73,48 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ]),
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          'PUSH ALARM',
-                          style: $style.text.subTitle12,
+                    InkWell(
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 96 * sizeUnit,
+                        height: 32 * sizeUnit,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: $style.colors.primary),
+                          borderRadius: BorderRadius.circular(52 * sizeUnit),
                         ),
-                        Gap(6 * sizeUnit),
-                        CustomSwitchButton(
-                          values: const ['ON', 'OFF'],
-                          onToggleCallback: (value) {
-                            setState(() {});
-                          },
+                        child: Text(
+                          '프로필 수정 ',
+                          style: $style.text.headline14
+                              .copyWith(color: $style.colors.primary),
+                          textAlign: TextAlign.center,
                         ),
-                      ],
+                      ),
+                      onTap: () {
+                        Get.to(() => const ProfileDetailPage());
+                      },
                     ),
                   ],
                 ),
               },
-              Gap(47 * sizeUnit),
-              Container(
-                width: double.infinity,
-                color: Colors.white,
-                // child: GetBuilder<ProfileController>(builder: (_) {
-                //   return CustomDataTable(
-                //     columns: controller.dataTableColumns,
-                //     rows: List.generate(1, (index) => testList),
-                //     onRowTap: (index) {},
-                //   );
-                // }),
-              ),
-              InkWell(
-                child: Text(
-                  '회원 탈퇴',
-                  style: $style.text.subTitle12
-                      .copyWith(color: $style.colors.grey),
+              Gap(32 * sizeUnit),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: GetBuilder<ProfileController>(builder: (controller) {
+                    return CustomDataTable(
+                      columns: controller.dataTableColumns,
+                      rows: List.generate(
+                          isLogin ? 0 : 100,
+                          (index) => [
+                                '03.03',
+                                '03.03 - 03.07',
+                                '5일',
+                              ]),
+                      onRowTap: (index) {},
+                    );
+                  }),
                 ),
               ),
             ],
