@@ -41,8 +41,8 @@ class AppColors {
   final Color red = const Color(0xFFFF2B00);
   final Color black = const Color(0xFF333333);
   final Color darkGrey = const Color(0xFF858B8E);
-  final Color grey = const Color(0xFFAAAAAA);
-  final Color lightGrey = const Color(0xFFE1E1E1);
+  final Color grey = const Color(0xFFC4C4C4);
+  final Color lightGrey = const Color(0xFFEEEEEE);
   final Color barrierColor = const Color.fromRGBO(0, 0, 0, 0.2);
 }
 
@@ -85,6 +85,7 @@ class Insets {
   late final double $10 = 10 * scale;
   late final double $12 = 12 * scale;
   late final double $14 = 14 * scale;
+  late final double $15 = 15 * scale;
   late final double $16 = 16 * scale;
   late final double $20 = 20 * scale;
   late final double $24 = 24 * scale;
