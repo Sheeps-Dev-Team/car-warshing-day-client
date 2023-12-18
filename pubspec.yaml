@@ -55,6 +55,8 @@ dependencies:
   http: ^1.1.2
   http_parser: ^4.0.1
 
+  kakao_flutter_sdk_user: ^1.7.0 # 카카오 로그인 sdk
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

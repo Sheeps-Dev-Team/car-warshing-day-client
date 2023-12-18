@@ -1,5 +1,6 @@
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/config/global_assets.dart';
+import 'package:car_washing_day/screens/login/controllers/login_controller.dart';
 import 'package:car_washing_day/screens/login/login_detail_page.dart';
 import 'package:car_washing_day/util/components/base_widget.dart';
 import 'package:flutter/gestures.dart';
@@ -9,7 +10,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+
+  final LoginController controller = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,8 @@ class LoginPage extends StatelessWidget {
                     height: 48 * sizeUnit,
                   ),
                   onTap: () {
-                    Get.to(() => LoginDetailPage());
+                    // Get.to(() => LoginDetailPage());
+                    controller.kakaoLoginFunc();
                   },
                 ),
                 Gap($style.insets.$15),
