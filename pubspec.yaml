@@ -51,11 +51,13 @@ dependencies:
   firebase_core: ^2.24.2
   firebase_messaging: ^14.7.9
   flutter_local_notifications: ^16.2.0
+  firebase_auth: ^4.15.3
 
   http: ^1.1.2
   http_parser: ^4.0.1
 
   kakao_flutter_sdk_user: ^1.7.0 # 카카오 로그인 sdk
+  google_sign_in: ^6.2.1 # 구글 로그인
 
 dev_dependencies:
   flutter_test:

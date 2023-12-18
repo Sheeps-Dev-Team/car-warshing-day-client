@@ -12,7 +12,20 @@
           "package_name": "kr.sheeps.car_washing_day.car_washing_day"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "991432308122-f2kt6ta4n5n23miepiid7kh42t27s14h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.sheeps.car_washing_day.car_washing_day",
+            "certificate_hash": "7c607c9d885eb4dfac55dff5134fc9c740a0d9d6"
+          }
+        },
+        {
+          "client_id": "991432308122-unv7aql0i4s88duvir194t18bbe7gsmh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBbqBPY0mYTZcKijuX1slTW5uuJ4eEetQ8"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991432308122-unv7aql0i4s88duvir194t18bbe7gsmh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "991432308122-7cfja33f2g5m4gh61k3p16nmcvds41ou.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kr.sheeps.carwashingday.carWashingDay"
+              }
+            }
+          ]
         }
       }
     }

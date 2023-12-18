@@ -62,11 +62,11 @@ class LoginPage extends StatelessWidget {
                 ),
                 Gap($style.insets.$15),
                 GestureDetector(
+                  onTap: controller.googleLoginFunc,
                   child: SvgPicture.asset(
                     GlobalAssets.svgGoogleLogin,
                     height: 48 * sizeUnit,
                   ),
-                  onTap: () {},
                 ),
                 const Spacer(),
                 RichText(

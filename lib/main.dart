@@ -9,6 +9,7 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 import 'config/constants.dart';
 import 'config/style.dart';
+import 'firebase_options.dart';
 import 'screens/main/splash_screen.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -41,7 +42,7 @@ void initializeNotification() async {
 void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initializeNotification();
   
   KakaoSdk.init(nativeAppKey: kakaoNativeAppKey); // kakao init
