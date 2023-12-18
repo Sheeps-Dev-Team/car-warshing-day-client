@@ -6,16 +6,17 @@ import 'controllers/rain_controller.dart';
 import 'one_drop.dart';
 
 class Rain extends StatelessWidget {
-  const Rain({super.key, required this.rainingType});
+  Rain({super.key, required this.rainingType});
 
   final RainingType rainingType;
+
+  final RainController controller = Get.put(RainController());
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constrains) {
         return GetBuilder<RainController>(
-          init: Get.put(RainController()),
           builder: (controller) {
             return Stack(
               children: controller.rainDropId

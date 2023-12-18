@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Bubble extends StatelessWidget {
-  const Bubble({super.key});
+  Bubble({super.key});
+
+  final BubbleController controller = Get.put(BubbleController());
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constrains) {
         return GetBuilder<BubbleController>(
-          init: Get.put(BubbleController()),
           builder: (controller) {
             return Stack(
               children: List.generate(

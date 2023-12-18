@@ -59,12 +59,7 @@ class _OneBubbleState extends State<OneBubble> with SingleTickerProviderStateMix
       }
     });
 
-    Future.delayed(
-      Duration(milliseconds: (1000 * Random().nextDouble()).ceil()),
-      () {
-        if (Get.isRegistered<BubbleController>()) _controller.forward();
-      },
-    );
+    _controller.forward();
 
     super.initState();
   }

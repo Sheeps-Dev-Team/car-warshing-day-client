@@ -44,9 +44,9 @@ dependencies:
   gap: ^3.0.0 # 간격 간소화 위젯
   dio: ^5.1.2 # form data 전송
   fluttertoast: ^8.2.2 # 토스트
-  syncfusion_flutter_calendar: ^23.2.6 # 캘린더
   uuid: ^4.2.1 # id 부여
   lottie: ^2.7.0 # 로티
+  scrollable_positioned_list: ^0.3.8 # 스크롤 포지션
 
 dev_dependencies:
   flutter_test:

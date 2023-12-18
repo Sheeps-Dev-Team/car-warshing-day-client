@@ -89,6 +89,13 @@ class STextStyle {
     color: fontColor,
   );
 
+  late final TextStyle title18 = TextStyle(
+    fontSize: 18 * scale,
+    fontWeight: FontWeight.w600,
+    height: height,
+    color: fontColor,
+  );
+
   late final TextStyle title16 = TextStyle(
     fontSize: 16 * scale,
     fontWeight: FontWeight.w600,
