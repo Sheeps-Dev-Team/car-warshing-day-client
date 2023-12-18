@@ -1,14 +1,18 @@
 import 'package:car_washing_day/config/global_assets.dart';
-import 'package:car_washing_day/util/components/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../config/constants.dart';
+import '../../config/weather_assets.dart';
 import '../../data/models/weather.dart';
+import '../../util/components/bubble/bubble.dart';
+import '../../util/components/bubble/bubble_lump.dart';
+import '../../util/components/car_animation.dart';
+import '../../util/components/rain/rain.dart';
 import 'controllers/calendar_page_controller.dart';
 
 class CalendarPage extends StatelessWidget {
@@ -19,52 +23,223 @@ class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
-        child: GetBuilder<CalendarPageController>(builder: (_) {
-          return SingleChildScrollView(
-            child: Column(
+      body: GetBuilder<CalendarPageController>(builder: (_) {
+        return Column(
+          children: [
+            Gap($style.insets.$24),
+
+            /// header
+            header(),
+            Gap($style.insets.$24),
+
+            /// calendar
+            yearAndMonth(), // 년도. 달
+            Gap($style.insets.$16),
+            SizedBox(
+              height: 76 * sizeUnit,
+              child: ScrollablePositionedList.builder(
+                itemScrollController: controller.itemScrollController,
+                scrollDirection: Axis.horizontal,
+                itemCount: controller.weatherList.length,
+                itemBuilder: (context, index) {
+                  final Weather weather = controller.weatherList[index];
+
+                  return weatherItem(
+                    index: index,
+                    weather: weather,
+                    onTap: () => controller.onSelectionChanged(weather.dateTime),
+                  );
+                },
+              ),
+            ),
+
+            Gap($style.insets.$24),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
+              child: Divider(color: $style.colors.lightGrey, height: 1 * sizeUnit),
+            ),
+
+            /// estimatedDate
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
+                child: ListView(
+                  children: [
+                    Gap($style.insets.$24),
+                    estimatedDateItem(
+                      label: '세차일',
+                      periodStart: controller.now.add(const Duration(days: 5)),
+                      continuousDay: 5,
+                      color: $style.colors.red,
+                      trailingIconPath: GlobalAssets.svgMinusInCircle,
+                      isWashingDay: true,
+                    ),
+                    Gap($style.insets.$24),
+                    Divider(color: $style.colors.lightGrey, height: 1 * sizeUnit),
+                    Gap($style.insets.$24),
+                    estimatedDateItem(
+                      label: '예상 지속일',
+                      periodStart: controller.selectedDate,
+                      continuousDay: 2,
+                      color: $style.colors.primary,
+                    ),
+                    Gap($style.insets.$24),
+                    estimatedDateItem(
+                      label: '추천일',
+                      periodStart: controller.now,
+                      continuousDay: 6,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      }),
+    );
+  }
+
+  // 에상 지속일 아이템
+  Row estimatedDateItem({
+    required String label,
+    required DateTime periodStart,
+    required int continuousDay,
+    Color? color,
+    String? trailingIconPath,
+    bool isWashingDay = false,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(minWidth: 34 * sizeUnit),
+              child: Text(
+                DateFormat('MM.dd').format(periodStart),
+                // '04.04',
+                style: $style.text.subTitle12,
+              ),
+            ),
+            if (isWashingDay) ...[
+              Gap($style.insets.$4),
+              SvgPicture.asset(GlobalAssets.svgPin, width: 20 * sizeUnit),
+            ],
+          ],
+        ),
+        Gap($style.insets.$16),
+        Expanded(
+          child: Container(
+            height: 48 * sizeUnit,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular($style.corners.$4),
+              boxShadow: $style.boxShadows.bs2,
+            ),
+            child: Row(
               children: [
-                Gap($style.insets.$16),
-
-                /// header
-                header(),
-                Gap($style.insets.$24),
-
-                /// calendar
-                yearAndMonth(), // 년도, 달
-                Gap($style.insets.$16),
-                dayOfWeek(context), // 요일
-                SizedBox(
-                  height: 336 * sizeUnit,
-                  child: calendar(), // 캘린더
+                Container(
+                  width: 4 * sizeUnit,
+                  height: 48 * sizeUnit,
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular($style.corners.$4),
+                      bottomLeft: Radius.circular($style.corners.$4),
+                    ),
+                  ),
                 ),
-                Divider(color: $style.colors.lightGrey, height: 1 * sizeUnit),
-
-                /// estimatedDate
-                SizedBox(
-                  height: 160 * sizeUnit,
+                Gap($style.insets.$12),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(label, style: $style.text.subTitle14.copyWith(height: 1.15)),
+                      Gap($style.insets.$2),
+                      RichText(
+                        text: TextSpan(
+                          style: $style.text.body12.copyWith(color: $style.colors.darkGrey, height: 1.15),
+                          children: [
+                            TextSpan(text: DateFormat('MM.dd').format(periodStart)),
+                            const TextSpan(text: ' - '),
+                            TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay)))),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                Text(
+                  '$continuousDay일',
+                  style: $style.text.title18.copyWith(color: color ?? $style.colors.darkGrey),
+                ),
+                Gap($style.insets.$12),
+                SvgPicture.asset(
+                  trailingIconPath ?? GlobalAssets.svgPlusInCircle,
+                  width: 20 * sizeUnit,
+                ),
+                Gap($style.insets.$8),
               ],
             ),
-          );
-        }),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // 날씨 아이템
+  Padding weatherItem({required int index, required Weather weather, required GestureTapCallback onTap}) {
+    final bool isSelected = weather.dateTime == controller.selectedDate;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: index == 0 ? $style.insets.$20 : 0,
+        right: $style.insets.$16,
+      ),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: Column(
+          children: [
+            Text(
+              DateFormat('EEE').format(weather.dateTime).toUpperCase(),
+              style: $style.text.headline12.copyWith(color: weather.getWeekdayColor),
+            ),
+            Gap($style.insets.$8),
+            Container(
+              padding: EdgeInsets.fromLTRB($style.insets.$4, $style.insets.$4, $style.insets.$4, 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular($style.corners.$4),
+                boxShadow: $style.boxShadows.bs1,
+                color: isSelected ? $style.colors.primary : Colors.white,
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    weather.dateTime.day.toString(),
+                    style: $style.text.subTitle12.copyWith(color: isSelected ? Colors.white : $style.colors.black),
+                  ),
+                  Gap($style.insets.$4),
+                  SvgPicture.asset(
+                    weather.getWeatherIcon,
+                    width: 24 * sizeUnit,
+                    colorFilter: isSelected && weather.getWeatherIcon == WeatherAssets.snowy ? const ColorFilter.mode(Colors.white, BlendMode.srcIn) : null,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  // 년도, 달
+  // 년도. 달
   Row yearAndMonth() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        InkWell(
-          onTap: () => controller.calendarController.backward!(),
-          child: SvgPicture.asset(
-            GlobalAssets.svgArrowLeft,
-            width: 16 * sizeUnit,
-          ),
-        ),
+        Gap($style.insets.$12),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: $style.insets.$8),
           child: Text(
@@ -72,183 +247,55 @@ class CalendarPage extends StatelessWidget {
             style: $style.text.headline16,
           ),
         ),
-        RotatedBox(
-          quarterTurns: 2,
-          child: InkWell(
-            onTap: () => controller.calendarController.forward!(),
-            child: SvgPicture.asset(
-              GlobalAssets.svgArrowLeft,
-              width: 16 * sizeUnit,
-            ),
-          ),
-        ),
       ],
     );
   }
 
-  // 캘린더
-  SfCalendar calendar() {
-    // 셀 아이템
-    Widget cellItem(MonthCellDetails details) {
-      final int mid = details.visibleDates.length ~/ 2;
-      final DateTime midDate = details.visibleDates[0].add(Duration(days: mid));
-      final bool isCurrentMonth = details.date.month == midDate.month;
-      final bool isSelected = controller.selectedDate == details.date;
-
-      return Align(
-        alignment: Alignment.topCenter,
-        child: Opacity(
-          opacity: isCurrentMonth ? 1 : .6,
-          child: Container(
-            width: 20 * sizeUnit,
-            height: 20 * sizeUnit,
-            // margin: EdgeInsets.only(bottom: 6 * sizeUnit),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isSelected ? $style.colors.primary : Colors.transparent,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              details.date.day.toString(),
-              style: $style.text.subTitle14.copyWith(
-                color: isSelected
-                    ? Colors.white
-                    : isCurrentMonth
-                        ? details.date.weekday == 7
-                            ? $style.colors.red
-                            : details.date.weekday == 6
-                                ? $style.colors.primary
-                                : null
-                        : $style.colors.grey,
+  Padding header() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
+      child: Row(
+        children: [
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                style: $style.text.headline20.copyWith(color: $style.colors.primary, height: 1.15),
+                children: [
+                  const TextSpan(text: '예상 지속일'),
+                  TextSpan(text: ' 은\n약 ', style: $style.text.title16),
+                  TextSpan(text: '5 ', style: TextStyle(fontSize: 24 * sizeUnit)),
+                  TextSpan(text: '일 입니다.', style: $style.text.title16),
+                ],
               ),
             ),
           ),
-        ),
-      );
-    }
-
-    Widget appointmentsItem(CalendarAppointmentDetails calendarAppointmentDetails) {
-      final Weather weather = calendarAppointmentDetails.appointments.first;
-
-      return OverflowBox(
-        maxHeight: 33 * sizeUnit,
-        child: Column(
-          children: [
-            Gap(6 * sizeUnit),
-            SvgPicture.asset(weather.getWeatherIcon, height: 27 * sizeUnit),
-          ],
-        ),
-      );
-    }
-
-    return SfCalendar(
-      controller: controller.calendarController,
-      view: CalendarView.month,
-      monthViewSettings: MonthViewSettings(
-        agendaItemHeight: 48 * sizeUnit,
-        appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
-      ),
-      viewHeaderHeight: 0,
-      headerHeight: 0,
-      dataSource: DiaryDataSource(controller.weatherList),
-      onSelectionChanged: controller.onSelectionChanged,
-      maxDate: controller.now.add(Duration(days: controller.weatherList.length - 1)),
-      minDate: controller.now,
-      initialDisplayDate: controller.now,
-      initialSelectedDate: controller.now,
-      selectionDecoration: const BoxDecoration(),
-      monthCellBuilder: (context, detail) => cellItem(detail),
-      appointmentBuilder: (context, calendarAppointmentDetails) => appointmentsItem(calendarAppointmentDetails),
-    );
-  }
-
-  // 요일
-  Widget dayOfWeek(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: List.generate(
-            controller.dayOfWeekList.length,
-            (index) => Expanded(
+          Padding(
+            padding: EdgeInsets.only(right: $style.insets.$4),
+            child: SizedBox(
+              width: 120 * sizeUnit,
+              height: 68 * sizeUnit,
               child: Center(
-                child: Text(
-                  controller.dayOfWeekList[index],
-                  style: $style.text.headline12.copyWith(
-                    color: index == 0
-                        ? $style.colors.red
-                        : index == controller.dayOfWeekList.length - 1
-                            ? $style.colors.primary
-                            : null,
-                  ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Bubble(),
+                    Positioned(
+                      bottom: 8 * sizeUnit,
+                      child: BubbleLump(width: 110 * sizeUnit),
+                    ),
+                    const CarAnimation(),
+                    Rain(rainingType: RainingType.rainAndSnow),
+                  ],
                 ),
               ),
             ),
           ),
-        ),
-        Gap($style.insets.$16),
-        Divider(color: $style.colors.lightGrey, height: 1 * sizeUnit),
-        Gap($style.insets.$24),
-      ],
+          // CustomButton.small(
+          //   text: '로그인 하기',
+          //   onTap: () {},
+          // ),
+        ],
+      ),
     );
-  }
-
-  Row header() {
-    return Row(
-      children: [
-        Expanded(
-          child: RichText(
-            text: TextSpan(
-              style: $style.text.title20.copyWith(color: $style.colors.primary),
-              children: [
-                const TextSpan(text: '로그인'),
-                TextSpan(text: ' 하고\n', style: $style.text.title16),
-                const TextSpan(text: '세차일을 등록'),
-                TextSpan(text: ' 해 보세요!', style: $style.text.title16),
-              ],
-            ),
-          ),
-        ),
-        CustomButton.small(
-          text: '로그인 하기',
-          onTap: () {},
-        ),
-      ],
-    );
-  }
-}
-
-class DiaryDataSource extends CalendarDataSource {
-  DiaryDataSource(List<Weather> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return _getWeather(index).dateTime;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return _getWeather(index).dateTime;
-  }
-
-  @override
-  String getSubject(int index) {
-    return _getWeather(index).skyType.toString();
-  }
-
-  @override
-  Color getColor(int index) {
-    return $style.colors.primary;
-  }
-
-  @override
-  Object? getId(int index) {
-    return index;
-  }
-
-  Weather _getWeather(int index) {
-    return appointments![index];
   }
 }

@@ -40,7 +40,7 @@ class AppColors {
   final Color primary = const Color(0xFF00B6F1);
   final Color red = const Color(0xFFFF2B00);
   final Color black = const Color(0xFF333333);
-  final Color darkGrey = const Color(0xFF858B8E);
+  final Color darkGrey = const Color(0xFFAAAAAA);
   final Color grey = const Color(0xFFC4C4C4);
   final Color lightGrey = const Color(0xFFEEEEEE);
   final Color barrierColor = const Color.fromRGBO(0, 0, 0, 0.2);
@@ -66,9 +66,17 @@ class Corners {
 class BoxShadows {
   final List<BoxShadow> bs1 = const [
     BoxShadow(
-      color: Color.fromRGBO(0, 0, 0, 0.2),
-      offset: Offset(2, 4),
-      blurRadius: 8,
+      color: Color.fromRGBO(0, 0, 0, 0.1),
+      offset: Offset(0, 0),
+      blurRadius: 4,
+    ),
+  ];
+
+  final List<BoxShadow> bs2 = const [
+    BoxShadow(
+      color: Color.fromRGBO(0, 0, 0, 0.1),
+      offset: Offset(0, 2),
+      blurRadius: 4,
     ),
   ];
 }
@@ -80,6 +88,7 @@ class Insets {
 
   final double scale;
 
+  late final double $2 = 2 * scale;
   late final double $4 = 4 * scale;
   late final double $8 = 8 * scale;
   late final double $10 = 10 * scale;

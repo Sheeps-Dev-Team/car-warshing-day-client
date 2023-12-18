@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class BubbleLump extends StatefulWidget {
-  const BubbleLump({super.key});
+  const BubbleLump({super.key, required this.width});
+
+  final double width;
 
   @override
   State<BubbleLump> createState() => _BubbleLumpState();
@@ -36,14 +38,11 @@ class _BubbleLumpState extends State<BubbleLump> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 20 * sizeUnit,
-      child: Transform.scale(
-        scale: _animation.value,
-        child: SvgPicture.asset(
-          'assets/images/global/bubble_lump.svg',
-          width: 240 * sizeUnit,
-        ),
+    return Transform.scale(
+      scale: _animation.value,
+      child: SvgPicture.asset(
+        'assets/images/global/bubble_lump.svg',
+        width: widget.width,
       ),
     );
   }
