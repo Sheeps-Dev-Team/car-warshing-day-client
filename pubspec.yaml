@@ -48,6 +48,8 @@ dependencies:
   lottie: ^2.7.0 # 로티
   scrollable_positioned_list: ^0.3.8 # 스크롤 포지션
 
+  kakao_flutter_sdk_user: ^1.7.0 # 카카오 로그인 sdk
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

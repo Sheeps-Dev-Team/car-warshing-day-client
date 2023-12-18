@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        Get.to(() => const LoginPage());
+                        Get.to(() => LoginPage());
                       },
                       child: Container(
                         alignment: Alignment.center,

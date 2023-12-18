@@ -2,12 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 import 'config/constants.dart';
 import 'config/style.dart';
 import 'screens/main/splash_screen.dart';
 
 void main() {
+  KakaoSdk.init(nativeAppKey: kakaoNativeAppKey); // kakao init
+
   runApp(const MyApp());
 }
 
