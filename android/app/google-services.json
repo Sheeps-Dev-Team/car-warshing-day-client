@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "991432308122",
+    "project_id": "car-washing-day",
+    "storage_bucket": "car-washing-day.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991432308122:android:b8b0cdb5bff87cb3673623",
+        "android_client_info": {
+          "package_name": "kr.sheeps.car_washing_day.car_washing_day"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbqBPY0mYTZcKijuX1slTW5uuJ4eEetQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
