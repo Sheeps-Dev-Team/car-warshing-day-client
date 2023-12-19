@@ -47,6 +47,7 @@ dependencies:
   uuid: ^4.2.1 # id 부여
   lottie: ^2.7.0 # 로티
   scrollable_positioned_list: ^0.3.8 # 스크롤 포지션
+  flutter_secure_storage: ^9.0.0 # 로컬 보안 저장소
   
   firebase_core: ^2.24.2
   firebase_messaging: ^14.7.9

@@ -1,3 +1,5 @@
+import 'package:car_washing_day/respository/user_repository.dart';
+import 'package:car_washing_day/screens/login/login_detail_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -13,7 +15,7 @@ class LoginController extends GetxController {
     final String kEmail = await kakaoLogin();
 
     if (kEmail.isNotEmpty) {
-      loginFunc(email: kEmail, loginType: LoginType.kakao);
+      loginFunc(email: kEmail, loginType: loginTypeKaKao);
       return true;
     } else {
       GlobalFunction.showToast(msg: '카카오 로그인에 실패했습니다.');
@@ -39,7 +41,7 @@ class LoginController extends GetxController {
       // Once signed in, return the UserCredential
       final UserCredential user = await FirebaseAuth.instance.signInWithCredential(credential);
       if (user.user != null) {
-        loginFunc(email: user.user!.email ?? '', loginType: LoginType.google);
+        loginFunc(email: user.user!.email ?? '', loginType: loginTypeGoogle);
         return true;
       } else {
         GlobalFunction.showToast(msg: '구글 로그인에 실패했습니다.');
@@ -53,21 +55,15 @@ class LoginController extends GetxController {
   }
 
   // 로그인
-  Future<void> loginFunc({required String email, required LoginType loginType, String? name}) async {
+  Future<void> loginFunc({required String email, required String loginType, String? name}) async {
     if (kDebugMode) print('$email $loginType');
 
-    // // 등록된 유저인지 체크
-    // final bool idCheck = await AppRepository.userIDCheck(email);
-    //
-    // if (idCheck) {
-    //   GlobalFunction.globalLogin(
-    //     email: email,
-    //     nullCallback: () {
-    //       GlobalFunction.showCustomDialog(title: '로그인 실패', description: '로그인에 실패하였습니다.\n잠시 후 다시 시도해 주세요.');
-    //     },
-    //   );
-    // } else {
-    //   Get.to(() => PermissionPage(name: name, loginType: loginType, email: email)); // 권한 관리 페이지로 이동
-    // }
+    GlobalFunction.globalLogin(
+      email: email,
+      loginType: loginType,
+      nullCallback: () {
+        GlobalFunction.showCustomDialog(title: '로그인 실패', description: '로그인에 실패하였습니다.\n잠시 후 다시 시도해 주세요.');
+      },
+    );
   }
 }

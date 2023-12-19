@@ -5,7 +5,7 @@ import '../data/_model.dart';
 import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
-class AppRepository {
+class UserRepository {
   static const String networkURL = '/user';
 
   static Future<User?> userCreate(User obj) async {
