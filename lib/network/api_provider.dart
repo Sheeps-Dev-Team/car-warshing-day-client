@@ -5,15 +5,16 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
+import '../data/global_data.dart';
 import 'custom_exception.dart';
 
 enum Status { LOADING, COMPLETED, ERROR }
 
 class ApiProvider {
-  final String _baseUrl = kReleaseMode == false ? "debug url" : "release url"; //서버 붙는 위치
-  final String _imageUrl = kReleaseMode == false ? "debug image url" : "release image url";
+  final String _baseUrl = kReleaseMode == false ? "http://211.34.221.66:" : "http://211.34.221.66:"; //서버 붙는 위치
+  final String _imageUrl = kReleaseMode == false ? "http://211.34.221.66:" : "http://211.34.221.66:";
 
-  final String port = kReleaseMode == false ? "debug port" : "release port";                       //기본 포트
+  final String port = kReleaseMode == false ? "50012" : "50012";                       //기본 포트
 
   String get getUrl => _baseUrl + port;
 
@@ -56,48 +57,27 @@ class ApiProvider {
   }
 
   //post
-  Future<dynamic> post(String url, dynamic data, ) async {
+  Future<dynamic> post(String url, dynamic data, {String? urlParam}) async {
     var responseJson;
 
     String tempUri = _baseUrl + port;
 
-    var uri = Uri.parse(tempUri + url);
+    var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
 
-    if(kIsWeb){
-      try {
-        final response = await http.post(uri,
-            headers: {
-              'Content-Type' : 'application/json',
-            },
-            body: data,
-            encoding: Encoding.getByName('utf-8'));
+    try {
+      final response = await http.post(uri,
+          headers: {
+            'Content-Type' : 'application/json',
+            'Authorization' : GlobalData.accessToken ?? ""
+          },
+          body: data,
+          encoding: Encoding.getByName('utf-8'));
 
-        if(response.body == "" || response.body == null) return null;
+      if(response.body == "") return null;
 
-        responseJson = _response(response);
-      } on SocketException {
-        throw FetchDataException('인터넷 접속이 원활하지 않습니다.');
-      }
-    }else {
-      HttpClient httpClient = HttpClient();
-      httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-
-      IOClient ioClient = IOClient(httpClient);
-
-      try {
-        final response = await ioClient.post(uri,
-            headers: {
-              'Content-Type' : 'application/json',
-            },
-            body: data,
-            encoding: Encoding.getByName('utf-8'));
-
-        if(response.body == "") return null;
-
-        responseJson = _response(response);
-      } on SocketException {
-        throw FetchDataException('인터넷 접속이 원활하지 않습니다');
-      }
+      responseJson = _response(response);
+    } on SocketException {
+      throw FetchDataException('인터넷 접속이 원활하지 않습니다');
     }
 
     return responseJson;
@@ -108,6 +88,7 @@ class ApiProvider {
 
     switch (response.statusCode) {
       case 200:
+      case 201:
         var responseJson = json.decode(response.body.toString());
         if (kDebugMode) print(responseJson.toString());
         return responseJson;
