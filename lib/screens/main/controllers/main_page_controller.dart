@@ -18,8 +18,8 @@ class MainPageController extends GetxController {
       'iconPath': GlobalAssets.svgCalendar,
     },
     {
-      'page': () => ProfilePage(),
-      //'page': () => LoginPage(),
+      //'page': () => ProfilePage(),
+      'page': () => LoginPage(),
       'iconPath': GlobalAssets.svgPerson,
     },
   ];

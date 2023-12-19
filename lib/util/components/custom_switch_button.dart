@@ -58,19 +58,30 @@ class _CustomSwitchButtonState extends State<CustomSwitchButton> {
             curve: Curves.decelerate,
             alignment:
                 initialPosition ? Alignment.centerLeft : Alignment.centerRight,
-            child: Container(
-              width: 56 * sizeUnit,
-              height: 32 * sizeUnit,
-              decoration: ShapeDecoration(
-                color: $style.colors.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(29 * sizeUnit),
+            child: GestureDetector(
+              onTap: () {
+                initialPosition = !initialPosition;
+                var index = 0;
+                if (!initialPosition) {
+                  index = 1;
+                }
+                widget.onToggleCallback(index);
+                setState(() {});
+              },
+              child: Container(
+                width: 56 * sizeUnit,
+                height: 32 * sizeUnit,
+                decoration: ShapeDecoration(
+                  color: $style.colors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(29 * sizeUnit),
+                  ),
                 ),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                initialPosition ? widget.values[0] : widget.values[1],
-                style: $style.text.subTitle14.copyWith(color: Colors.white),
+                alignment: Alignment.center,
+                child: Text(
+                  initialPosition ? widget.values[0] : widget.values[1],
+                  style: $style.text.subTitle14.copyWith(color: Colors.white),
+                ),
               ),
             ),
           ),

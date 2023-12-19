@@ -1,6 +1,8 @@
 import 'package:car_washing_day/config/constants.dart';
+import 'package:car_washing_day/screens/profile/controllers/profile_controller.dart';
 import 'package:car_washing_day/util/components/base_widget.dart';
 import 'package:car_washing_day/util/components/custom_app_bar.dart';
+import 'package:car_washing_day/util/components/custom_dropdown_button.dart';
 import 'package:car_washing_day/util/components/custom_switch_button.dart';
 import 'package:car_washing_day/util/components/custom_text_field.dart';
 import 'package:car_washing_day/util/global_function.dart';
@@ -9,7 +11,9 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class ProfileDetailPage extends StatelessWidget {
-  const ProfileDetailPage({super.key});
+  ProfileDetailPage({super.key});
+
+  final ProfileController controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +65,52 @@ class ProfileDetailPage extends StatelessWidget {
                           style: $style.text.headline16,
                         ),
                         Gap($style.insets.$16),
-                        CustomTextField(
-                          hintText: '시,도 선택',
-                          textAlign: TextAlign.center,
+                        SizedBox(
                           width: 328 * sizeUnit,
-                          borderRadius: BorderRadius.circular(100 * sizeUnit),
-                          borderColor: $style.colors.lightGrey,
+                          child: Obx(
+                            () => CustomDropdownButton(
+                              border:
+                                  Border.all(color: $style.colors.lightGrey),
+                              value: controller.selectedArea.isEmpty
+                                  ? null
+                                  : controller.selectedArea.value,
+                              items: ['시, 도 선택', '서울', '인천'],
+                              hintText: '시, 도 선택',
+                              onChanged: (value) {
+                                controller.selectedSubArea('');
+
+                                if (value == '시, 도 선택') {
+                                  controller.selectedArea('');
+                                } else {
+                                  controller.selectedArea(value);
+                                }
+                              },
+                            ),
+                          ),
                         ),
                         Gap($style.insets.$12),
-                        CustomTextField(
-                          hintText: '구,군 선택',
-                          textAlign: TextAlign.center,
+                        SizedBox(
                           width: 328 * sizeUnit,
-                          borderRadius: BorderRadius.circular(100 * sizeUnit),
-                          borderColor: $style.colors.lightGrey,
+                          child: Obx(
+                            () => CustomDropdownButton(
+                              border:
+                                  Border.all(color: $style.colors.lightGrey),
+                              value: controller.selectedSubArea.isEmpty
+                                  ? null
+                                  : controller.selectedSubArea.value,
+                              items: ['구,군 선택', '연수구', '남동구'],
+                              hintText: '구,군 선택',
+                              onChanged: (value) {
+                                controller.selectedSubArea('');
+
+                                if (value == '시, 도 선택') {
+                                  controller.selectedSubArea('');
+                                } else {
+                                  controller.selectedSubArea(value);
+                                }
+                              },
+                            ),
+                          ),
                         ),
                         Gap($style.insets.$24),
                         Align(
