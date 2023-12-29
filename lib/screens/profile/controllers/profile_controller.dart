@@ -9,4 +9,5 @@ class ProfileController extends GetxController {
 
   RxString selectedArea = ''.obs; // 선택된 시, 도
   RxString selectedSubArea = ''.obs; // 선택된 구, 군
+  RxString selectedPrecipitationProbability = ''.obs; // 선택된 강수 확률
 }

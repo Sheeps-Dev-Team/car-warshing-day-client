@@ -76,7 +76,7 @@ class LoginDetailPage extends StatelessWidget {
                               value: controller.selectedArea.isEmpty
                                   ? null
                                   : controller.selectedArea.value,
-                              items: ['시, 도 선택', ...areaMap.keys.toList()],
+                              items: ['시, 도 선택', ...areaMap.keys],
                               hintText: '시, 도 선택',
                               onChanged: (value) {
                                 controller.selectedSubArea('');
@@ -108,9 +108,7 @@ class LoginDetailPage extends StatelessWidget {
                                     ],
                               hintText: '구,군 선택',
                               onChanged: (value) {
-                                controller.selectedSubArea('');
-
-                                if (value == '시, 도 선택') {
+                                if (value == '구, 군 선택') {
                                   controller.selectedSubArea('');
                                 } else {
                                   controller.selectedSubArea(value);
@@ -131,18 +129,32 @@ class LoginDetailPage extends StatelessWidget {
                             () => CustomDropdownButton(
                               border:
                                   Border.all(color: $style.colors.lightGrey),
-                              value: controller.selectedSubArea.isEmpty
+                              value: controller
+                                      .selectedPrecipitationProbability.isEmpty
                                   ? null
-                                  : controller.selectedSubArea.value,
-                              items: ['강수 확률 선택', '10%', '20%', '30%'],
+                                  : controller
+                                      .selectedPrecipitationProbability.value,
+                              items: [
+                                '강수 확률 선택',
+                                '10%',
+                                '20%',
+                                '30%',
+                                '40%',
+                                '50%',
+                                '60%',
+                                '70%',
+                                '80%',
+                                '90%',
+                                '100%'
+                              ],
                               hintText: '강수 확률 선택',
                               onChanged: (value) {
-                                controller.selectedSubArea('');
-
                                 if (value == '강수 확률 선택') {
-                                  controller.selectedSubArea('');
+                                  controller
+                                      .selectedPrecipitationProbability('');
                                 } else {
-                                  controller.selectedSubArea(value);
+                                  controller
+                                      .selectedPrecipitationProbability(value);
                                 }
                               },
                             ),

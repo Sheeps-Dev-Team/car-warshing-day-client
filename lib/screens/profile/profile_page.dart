@@ -1,4 +1,5 @@
 import 'package:car_washing_day/config/constants.dart';
+import 'package:car_washing_day/data/region_data.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/screens/profile/controllers/profile_controller.dart';
 import 'package:car_washing_day/screens/profile/profile_detail_page.dart';
@@ -25,26 +26,61 @@ class ProfilePage extends StatelessWidget {
     return BaseWidget(
       child: Scaffold(
         appBar: CustomAppBar(
-          //title: isLogin ? '로그인 해주세요' : ,
-          leading: SizedBox.shrink(),
+          centerTitle: true,
+          title: isLogin ? '로그인 해주세요' : '',
+          titleWidget: isLogin
+              ? null
+              : RichText(
+                  text: TextSpan(
+                      style: $style.text.headline20.copyWith(
+                          color: $style.colors.primary,
+                          fontWeight: FontWeight.w700),
+                      children: [
+                        TextSpan(
+                          text: '어서오세요! ',
+                          style: $style.text.headline20
+                              .copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        const TextSpan(
+                          text: 'OOO',
+                        ),
+                        TextSpan(
+                          text: '님',
+                          style: $style.text.headline20
+                              .copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ]),
+                ),
+          leading: const SizedBox.shrink(),
           actions: [
             isLogin
-                ? SizedBox.shrink()
-                : InkWell(
-                    onTap: () {},
-                    child: Text(
-                      '수정하기',
-                      style: $style.text.headline14
-                          .copyWith(color: $style.colors.grey),
-                    ),
+                ? const SizedBox.shrink()
+                : Row(
+                    children: [
+                      InkWell(
+                        onTap: () {},
+                        child: Text(
+                          '수정하기',
+                          style: $style.text.headline14
+                              .copyWith(color: $style.colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Gap($style.insets.$16),
+                    ],
                   )
           ],
         ),
         body: GestureDetector(
           onTap: GlobalFunction.unFocus,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
+            padding: isLogin
+                ? EdgeInsets.symmetric(horizontal: 104 * sizeUnit)
+                : EdgeInsets.symmetric(horizontal: $style.insets.$16),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment:
+                  isLogin ? MainAxisAlignment.center : MainAxisAlignment.start,
               children: [
                 if (isLogin) ...{
                   InkWell(
@@ -67,6 +103,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Gap($style.insets.$12),
                   Text(
                     '로그인 후 이용이 가능합니다:)',
                     style: $style.text.subTitle12
@@ -107,7 +144,7 @@ class ProfilePage extends StatelessWidget {
                                 value: controller.selectedArea.isEmpty
                                     ? null
                                     : controller.selectedArea.value,
-                                items: ['시, 도 선택', '서울특별시', '인천광역시'],
+                                items: ['시, 도 선택', ...areaMap.keys],
                                 hintText: '시, 도 선택',
                                 onChanged: (value) {
                                   controller.selectedSubArea('');
@@ -131,12 +168,16 @@ class ProfilePage extends StatelessWidget {
                                 value: controller.selectedSubArea.isEmpty
                                     ? null
                                     : controller.selectedSubArea.value,
-                                items: ['구,군 선택', '연수구', '남동구'],
+                                items: controller.selectedArea.isEmpty
+                                    ? []
+                                    : [
+                                        '구, 군 선택',
+                                        ...areaMap[
+                                            controller.selectedArea.value]!
+                                      ],
                                 hintText: '구,군 선택',
                                 onChanged: (value) {
-                                  controller.selectedSubArea('');
-
-                                  if (value == '시, 도 선택') {
+                                  if (value == '구, 군 선택') {
                                     controller.selectedSubArea('');
                                   } else {
                                     controller.selectedSubArea(value);
@@ -157,18 +198,33 @@ class ProfilePage extends StatelessWidget {
                               () => CustomDropdownButton(
                                 border:
                                     Border.all(color: $style.colors.lightGrey),
-                                value: controller.selectedSubArea.isEmpty
+                                value: controller
+                                        .selectedPrecipitationProbability
+                                        .isEmpty
                                     ? null
-                                    : controller.selectedSubArea.value,
-                                items: ['강수 확률 선택', '10%', '20%', '30%'],
+                                    : controller
+                                        .selectedPrecipitationProbability.value,
+                                items: [
+                                  '강수 확률 선택',
+                                  '10%',
+                                  '20%',
+                                  '30%',
+                                  '40%',
+                                  '50%',
+                                  '60%',
+                                  '70%',
+                                  '80%',
+                                  '90%',
+                                  '100%'
+                                ],
                                 hintText: '강수 확률 선택',
                                 onChanged: (value) {
-                                  controller.selectedSubArea('');
-
                                   if (value == '강수 확률 선택') {
-                                    controller.selectedSubArea('');
+                                    controller
+                                        .selectedPrecipitationProbability('');
                                   } else {
-                                    controller.selectedSubArea(value);
+                                    controller.selectedPrecipitationProbability(
+                                        value);
                                   }
                                 },
                               ),
