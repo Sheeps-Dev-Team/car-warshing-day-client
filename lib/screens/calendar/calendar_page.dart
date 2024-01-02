@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:car_washing_day/config/global_assets.dart';
+import 'package:car_washing_day/respository/user_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -12,8 +16,14 @@ import '../../data/models/weather.dart';
 import '../../util/components/bubble/bubble.dart';
 import '../../util/components/bubble/bubble_lump.dart';
 import '../../util/components/car_animation.dart';
+import '../../util/components/custom_button.dart';
 import '../../util/components/rain/rain.dart';
 import 'controllers/calendar_page_controller.dart';
+
+
+
+
+import 'package:http/http.dart' as http;
 
 class CalendarPage extends StatelessWidget {
   CalendarPage({super.key});
@@ -251,6 +261,43 @@ class CalendarPage extends StatelessWidget {
     );
   }
 
+  Future<void> sendNotificationToDevice(
+      {required String deviceToken,
+        required String title,
+        required String content,
+        required Map<String, dynamic> data}) async {
+
+    final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=BOLtfwUZVTZpNMV3iSh0EDPQG0Af_ZD_3XGQFMuPxeM',
+    };
+
+    final body = {
+      'notification': {'title': title, 'body': content, 'data': data},
+      'to': deviceToken,
+    };
+
+    final response =
+    await http.post(url, headers: headers, body: json.encode(body));
+
+
+
+    if (response.statusCode == 200) {
+
+      // Notification sent successfully
+      print("성공적으로 전송되었습니다.");
+      print("$title $content");
+
+    } else {
+      print(response.body);
+      // Failed to send notification
+      print("전송에 실패하였습니다.");
+
+    }
+  }
+
   Padding header() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
@@ -290,10 +337,29 @@ class CalendarPage extends StatelessWidget {
               ),
             ),
           ),
-          // CustomButton.small(
-          //   text: '로그인 하기',
-          //   onTap: () {},
-          // ),
+          Column(
+            children: [
+              CustomButton.small(
+                text: '로그인 하기',
+                onTap: () {
+                  UserRepository.userLogin('test@gmail.com', '구글');
+                },
+              ),
+              CustomButton.small(text: '토큰 보내기', onTap: () {
+                FirebaseMessaging.instance.getToken().then((token) {
+                  if(token != null){
+                    print(token);
+                    UserRepository.updateFcmToken(token);
+                  }
+                });
+                // sendNotificationToDevice(deviceToken: 'dyTkhibS3k8hji9IIXgj0N:APA91bEEPJEnfGJwzPWYgFy50Wfc_eYekwIlWT8xJM7sh-AqvOl1MpJbdvoJiePNPpSfDqQw46FfTWhhg7ubOYZ-S23lHrV-zf1GLlHOWWo6FpztEyGaL0AuToIupdkvqGy9FHVIue0q',
+                //   title: 'test',
+                //   content: 'contents',
+                //   data: {'test_parameter1': 1, 'test_parameter2': '테스트1'},
+                // );
+              })
+            ],
+          ),
         ],
       ),
     );
