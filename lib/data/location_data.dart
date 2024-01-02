@@ -414,62 +414,62 @@ const List<String> areaUlsanLocation = [
 ];
 
 // 중기 예보구역코드
-Map<String, List<String>> capitalArea = {
+Map<String, String> capitalArea = {
   // 수도권 지역
-  "11B00000": areaSeoulCategory,
-  "11B00000": areaIncheonCategory,
-  "11B00000": areaGyeonggiCategory,
+  "서울특별시": "11B00000",
+  "인천광역시": "11B00000",
+  "경기도": "11B00000",
 };
 
-Map<String, List<String>> kangwonYeongseoArea = {
+Map<String, String> kangwonYeongseoArea = {
   // 강원도 영서지방
-  "11D10000": areaKangwonYeongseoCategory,
+  "강원영서지방": "11D10000",
 };
 
-Map<String, List<String>> kangwonYeongdongArea = {
+Map<String, String> kangwonYeongdongArea = {
   // 강원도 영동지방
-  "11D20000": areaKangwonYeongdongCategory,
+  "강원영동지방": "11D20000",
 };
 
-Map<String, List<String>> daejeonChungnamArea = {
+Map<String, String> daejeonChungnamArea = {
   // 대전충남 지역
-  "11C20000": areaDaejeonCategory,
-  "11C20000": areaSejongCategory,
-  "11C20000": areaChungnamCategory,
+  "대전광역시": "11C20000",
+  "세종특별자치시": "11C20000",
+  "충청남도": "11C20000",
 };
 
-Map<String, List<String>> chungbukArea = {
+Map<String, String> chungbukArea = {
   // 충북지역
-  "11C10000": areaChungbukCategory,
+  "충청북도": "11C10000",
 };
 
-Map<String, List<String>> gwangjuJeonnamArea = {
+Map<String, String> gwangjuJeonnamArea = {
   // 광주, 전라남도 지역
-  "11F20000": areaGwangjuCategory,
-  "11F20000": areaJeonnamCategory,
+  "광주광역시": "11F20000",
+  "전라남도": "11F20000",
 };
 
-Map<String, List<String>> jeonbukArea = {
+Map<String, String> jeonbukArea = {
   // 전라북도지역
-  "11F10000": areaJeonbukCategory,
+  "전라북도": "11F10000",
 };
 
-Map<String, List<String>> daeguGyeongbukArea = {
+Map<String, String> daeguGyeongbukArea = {
   // 대구, 경상북도 지역
-  "11H10000": areaDaeguCategory,
-  "11H10000": areaGyeongbukCategory,
+  "대구광역시": "11H10000",
+  "경상북도": "11H10000",
 };
 
-Map<String, List<String>> busanUlsanGyeongnamArea = {
+Map<String, String> busanUlsanGyeongnamArea = {
   // 부산, 울산, 경상남도 지역
-  "11H20000": areaBusanCategory,
-  "11H20000": areaUlsanCategory,
-  "11H20000": areaGyeongnamCategory,
+  "부산광역시": "11H20000",
+  "울산광역시": "11H20000",
+  "경상남도": "11H20000",
 };
 
-Map<String, List<String>> jejuArea = {
+Map<String, String> jejuArea = {
   // 제주도
-  "11G00000": areaJejuCategory,
+  "부산광역시": "11G00000",
 };
 
 class userLocationFunction {

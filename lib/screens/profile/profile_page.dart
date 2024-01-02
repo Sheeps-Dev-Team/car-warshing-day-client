@@ -68,6 +68,7 @@ class ProfilePage extends StatelessWidget {
                     ],
                   )
           ],
+        ),
         body: GestureDetector(
           onTap: GlobalFunction.unFocus,
           child: Padding(
@@ -82,7 +83,7 @@ class ProfilePage extends StatelessWidget {
                 if (isLogin) ...{
                   InkWell(
                     onTap: () {
-                      Get.to(() => const LoginPage());
+                      Get.to(() => LoginPage());
                     },
                     child: Container(
                       alignment: Alignment.center,
