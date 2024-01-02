@@ -469,7 +469,7 @@ Map<String, String> busanUlsanGyeongnamArea = {
 
 Map<String, String> jejuArea = {
   // 제주도
-  "부산광역시": "11G00000",
+  "제주특별자치도": "11G00000",
 };
 
 class userLocationFunction {
