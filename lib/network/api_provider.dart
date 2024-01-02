@@ -11,8 +11,8 @@ import 'custom_exception.dart';
 enum Status { LOADING, COMPLETED, ERROR }
 
 class ApiProvider {
-  final String _baseUrl = kReleaseMode == false ? "http://211.34.221.66:" : "http://211.34.221.66:"; //서버 붙는 위치
-  final String _imageUrl = kReleaseMode == false ? "http://211.34.221.66:" : "http://211.34.221.66:";
+  final String _baseUrl = kReleaseMode == false ? "http://192.168.2.168:" : "http://192.168.2.168:"; //서버 붙는 위치
+  final String _imageUrl = kReleaseMode == false ? "http://192.168.2.168:" : "http://192.168.2.168:";
 
   final String port = kReleaseMode == false ? "50012" : "50012";                       //기본 포트
 
