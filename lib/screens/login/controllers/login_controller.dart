@@ -10,6 +10,11 @@ import '../../../util/global_function.dart';
 import 'kakao_login.dart';
 
 class LoginController extends GetxController {
+  
+  RxString selectedArea = ''.obs; // 선택된 시, 도
+  RxString selectedSubArea = ''.obs; // 선택된 구, 군
+  RxString selectedPrecipitationProbability = ''.obs;
+  
   // 카카오 로그인
   Future<bool> kakaoLoginFunc() async {
     final String kEmail = await kakaoLogin();

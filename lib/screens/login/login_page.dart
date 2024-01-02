@@ -23,51 +23,42 @@ class LoginPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
             child: Column(
               children: [
-                const Spacer(flex: 2),
+                const Spacer(flex: 1),
+                SvgPicture.asset(
+                  GlobalAssets.svgCarWarshingLogo,
+                  width: 70 * sizeUnit,
+                  height: 97.5 * sizeUnit,
+                ),
+                Gap($style.insets.$16),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
                       style: $style.text.headline48.copyWith(
                           color: $style.colors.primary,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.w800),
                       children: [
                         TextSpan(
                           text: '세차 ',
                           style: $style.text.headline48
-                              .copyWith(fontWeight: FontWeight.w600),
+                              .copyWith(fontWeight: FontWeight.w800),
                         ),
                         const TextSpan(
                           text: '언제?',
                         ),
                       ]),
                 ),
-                const Spacer(flex: 2),
-                GestureDetector(
-                  child: SvgPicture.asset(
-                    GlobalAssets.svgKakaoLogin,
-                    height: 48 * sizeUnit,
-                  ),
+                const Spacer(flex: 1),
+                loginBtn(
+                  path: GlobalAssets.svgKakaoLogin,
                   onTap: () {
                     // Get.to(() => LoginDetailPage());
                     controller.kakaoLoginFunc();
                   },
                 ),
                 Gap($style.insets.$15),
-                GestureDetector(
-                  child: SvgPicture.asset(
-                    GlobalAssets.svgAppleLogin,
-                    height: 48 * sizeUnit,
-                  ),
-                  onTap: () {},
-                ),
+                loginBtn(path: GlobalAssets.svgAppleLogin, onTap: () {}),
                 Gap($style.insets.$15),
-                GestureDetector(
-                  onTap: controller.googleLoginFunc,
-                  child: SvgPicture.asset(
-                    GlobalAssets.svgGoogleLogin,
-                    height: 48 * sizeUnit,
-                  ),
-                ),
+                loginBtn(path: GlobalAssets.svgGoogleLogin, onTap: () {}),
                 const Spacer(),
                 RichText(
                   textAlign: TextAlign.center,
@@ -96,6 +87,17 @@ class LoginPage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  GestureDetector loginBtn(
+      {required String path, required GestureTapCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SvgPicture.asset(
+        path,
+        height: 48 * sizeUnit,
       ),
     );
   }

@@ -26,13 +26,12 @@ class CustomDropdownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: $style.corners.$8),
-      //width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: $style.insets.$8),
       width: 328 * sizeUnit,
       height: 48 * sizeUnit,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: borderRadius ?? BorderRadius.circular($style.corners.$8),
+        borderRadius: borderRadius ?? BorderRadius.circular(100 * sizeUnit),
         border: border,
       ),
       child: Row(
@@ -43,15 +42,22 @@ class CustomDropdownButton extends StatelessWidget {
           Gap($style.insets.$8),
           Expanded(
             child: DropdownButton<String>(
+              padding: EdgeInsets.symmetric(horizontal: $style.insets.$12),
               onChanged: onChanged,
               underline: const SizedBox.shrink(),
               isExpanded: true,
-              hint: Text(
-                hintText,
-                style: $style.text.subTitle16
-                    .copyWith(color: $style.colors.primary, height: 1.0),
+              hint: Center(
+                child: Text(
+                  hintText,
+                  style: $style.text.subTitle14
+                      .copyWith(color: $style.colors.grey, height: 1.0),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              icon: SvgPicture.asset(GlobalAssets.svgDropdown),
+              icon: SvgPicture.asset(
+                GlobalAssets.svgDropdown,
+                width: 10 * sizeUnit,
+              ),
               borderRadius:
                   borderRadius ?? BorderRadius.circular($style.corners.$8),
               value: value,
@@ -63,8 +69,13 @@ class CustomDropdownButton extends StatelessWidget {
 
                 return DropdownMenuItem(
                   value: value,
-                  child: Text(value,
-                      style: $style.text.subTitle16.copyWith(height: 1.0)),
+                  child: Center(
+                    child: Text(
+                      value,
+                      style: $style.text.subTitle16.copyWith(height: 1.0),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 );
               }),
             ),
