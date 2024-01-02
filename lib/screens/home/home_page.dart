@@ -23,22 +23,23 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             const Spacer(),
-            Text('오늘 세차하면?',
-                style: $style.text.subTitle16.copyWith(height: 1.15)),
+            Text('오늘 세차하면?', style: $style.text.subTitle16.copyWith(height: 1.15)),
             Gap($style.insets.$8),
-            Text('20일 지속',
-                style: $style.text.headline40.copyWith(height: 1.15)),
+            Text('20일 지속', style: $style.text.headline40.copyWith(height: 1.15)),
             const Spacer(),
             SizedBox(
               width: 260 * sizeUnit,
               height: 160 * sizeUnit,
-              child: const Center(
+              child: Center(
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     Bubble(),
-                    BubbleLump(),
-                    CarAnimation(),
+                    Positioned(
+                      bottom: 20 * sizeUnit,
+                      child: BubbleLump(width: 260 * sizeUnit),
+                    ),
+                    const CarAnimation(),
                     Rain(rainingType: RainingType.rainAndSnow),
                   ],
                 ),

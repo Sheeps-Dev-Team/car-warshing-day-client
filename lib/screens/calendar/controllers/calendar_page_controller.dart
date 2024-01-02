@@ -1,16 +1,14 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../data/models/weather.dart';
 
 class CalendarPageController extends GetxController {
-  final CalendarController calendarController = CalendarController();
+  final ItemScrollController itemScrollController = ItemScrollController();
   final DateTime n = DateTime.now();
   late final DateTime now = DateTime(n.year, n.month, n.day);
-  final List<String> dayOfWeekList = ['일', '월', '화', '수', '목', '금', '토'];
 
   late DateTime selectedDate = now;
 
@@ -18,7 +16,7 @@ class CalendarPageController extends GetxController {
     10,
     (index) => Weather(
       skyType: SkyType.values[Random().nextInt(SkyType.values.length)],
-      rainingType: RainingType.values[Random().nextInt(RainingType.values.length - 1) + 1],
+      rainingType: RainingType.values[Random().nextInt(RainingType.values.length - 1)],
       pop: Random().nextInt(100),
       pcp: '강수 없음',
       dateTime: now.add(Duration(days: index)),
@@ -27,16 +25,13 @@ class CalendarPageController extends GetxController {
 
   @override
   void onClose() {
-    calendarController.dispose();
 
     super.onClose();
   }
 
-  // 날짜 변경
-  void onSelectionChanged(CalendarSelectionDetails calendarSelectionDetails){
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if(calendarSelectionDetails.date != null) selectedDate = calendarSelectionDetails.date!;
-      update();
-    });
+  // 선택 날짜 변경
+  void onSelectionChanged(DateTime dateTime){
+    selectedDate = dateTime;
+    update();
   }
 }

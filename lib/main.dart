@@ -1,13 +1,120 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 import 'config/constants.dart';
 import 'config/style.dart';
+import 'firebase_options.dart';
 import 'screens/main/splash_screen.dart';
 
-void main() {
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("백그라운드 메시지 처리.. ${message.notification!.body!}");
+}
+
+@pragma('vm:entry-point')
+void backgroundHandler(NotificationResponse details) {
+  // 액션 추가... 파라미터는 details.payload 방식으로 전달
+}
+
+void initializeNotification() async {
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(const AndroidNotificationChannel(
+      'high_importance_channel', 'high_importance_notification',
+      importance: Importance.max)
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(const InitializationSettings(
+      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+      iOS: DarwinInitializationSettings()
+      )
+      ,onDidReceiveNotificationResponse: (details) {
+      },
+      onDidReceiveBackgroundNotificationResponse: backgroundHandler,
+  );
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    RemoteNotification? notification = message.notification;
+
+    if (notification != null) {
+      flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'high_importance_channel',
+              'high_importance_notification',
+              importance: Importance.max,
+            ),
+            iOS: DarwinNotificationDetails(),
+          ),
+          payload: message.data['test_paremeter1']);
+      print("수신자 측 메시지 수신");
+    }
+  });
+
+  RemoteMessage? message = await FirebaseMessaging.instance.getInitialMessage();
+  if (message != null) {
+    // 액션 부분 -> 파라미터는 message.data['test_parameter1'] 이런 방식으로...
+
+
+  }
+}
+
+Future<void> setupInteractedMessage() async {
+  // Get any messages which caused the application to open from
+  // a terminated state.
+  RemoteMessage? initialMessage =
+  await FirebaseMessaging.instance.getInitialMessage();
+
+  // If the message also contains a data property with a "type" of "chat",
+  // navigate to a chat screen
+  if (initialMessage != null) {
+    _handleMessage(initialMessage);
+  }
+
+  // Also handle any interaction when the app is in the background via a
+  // Stream listener
+  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+}
+
+void _handleMessage(RemoteMessage message) {
+  debugPrint(message.data.toString());
+}
+
+
+void main() async{
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  initializeNotification();
+
+  KakaoSdk.init(nativeAppKey: kakaoNativeAppKey); // kakao init
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  initializeNotification();
+  setupInteractedMessage();
+
   runApp(const MyApp());
 }
 

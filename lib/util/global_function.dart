@@ -1,9 +1,16 @@
+import 'package:car_washing_day/data/global_data.dart';
+import 'package:car_washing_day/respository/user_repository.dart';
+import 'package:car_washing_day/screens/login/login_detail_page.dart';
+import 'package:car_washing_day/screens/login/login_page.dart';
+import 'package:car_washing_day/screens/main/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../config/constants.dart';
+import '../data/models/user.dart';
 
 class GlobalFunction {
   // 포커스 해제 함수
@@ -134,13 +141,39 @@ class GlobalFunction {
   }
 
   // 로그인
-  static Future<void> globalLogin({required String email, required Function nullCallback}) async {
+  static Future<void> globalLogin({required String email, required String loginType, required Function nullCallback}) async {
+    loadingDialog(); // 로딩 시작
 
+    User? user = await UserRepository.userLogin(email, loginType);
+
+    if(user != null) {
+      GlobalData.loginUser = user;
+
+      // 자동 로그인 정보 저장
+      const storage = FlutterSecureStorage();
+      await storage.write(key: 'email', value: email);
+      await storage.write(key: 'loginType', value: loginType);
+
+      // 필수 정보 없는 경우
+      if(user.nickName.isEmpty) {
+        Get.offAll(LoginDetailPage());
+      } else {
+        Get.offAll(MainPage());
+      }
+    } else {
+      await deleteLoginData(); // 로그인 정보 삭제
+      Get.close(1); // 로딩 종료
+
+      nullCallback();
+    }
   }
 
   // 로그아웃
   static Future<void> logout() async{
+    await deleteLoginData(); // 로그인 정보 삭제
+    GlobalData.resetData(); // 글로벌 데이터 리셋
 
+    Get.offAll(LoginPage());
   }
 
   // date picker
@@ -199,5 +232,13 @@ class GlobalFunction {
         ),
       ),
     );
+  }
+
+  // 로그인 정보 삭제
+  static Future<void> deleteLoginData() async{
+    const storage = FlutterSecureStorage();
+
+    await storage.delete(key: 'email');
+    await storage.delete(key: 'loginType');
   }
 }

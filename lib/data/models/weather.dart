@@ -1,4 +1,5 @@
 import 'package:car_washing_day/config/weather_assets.dart';
+import 'package:flutter/material.dart';
 
 import '../../config/constants.dart';
 
@@ -21,11 +22,11 @@ class Weather {
   final String pcp; // 1시간 강수량
   final DateTime dateTime;
 
-  /// 강수 확률 높으면 rainingType
-  /// 강수 확률 낮거나 없으면 skyType
+  /// 강수 형태가 있으면 rainingType
+  /// 강수 형태가 없으면 skyType
   String get getWeatherIcon {
-    // 강수 확률이 높은 경우
-    if (pop >= defaultPop) {
+    // 강수 형태가 있는 경우
+    if (rainingType != RainingType.none) {
       switch (rainingType) {
         case RainingType.rain:
           return WeatherAssets.rainy;
@@ -45,6 +46,17 @@ class Weather {
         case SkyType.overcast:
           return WeatherAssets.overcast;
       }
+    }
+  }
+
+  /// 요일 컬러
+  Color get getWeekdayColor {
+    if (dateTime.weekday == 7) {
+      return $style.colors.red;
+    } else if (dateTime.weekday == 6) {
+      return $style.colors.primary;
+    } else {
+      return $style.colors.black;
     }
   }
 }

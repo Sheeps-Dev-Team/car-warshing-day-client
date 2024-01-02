@@ -68,7 +68,6 @@ class ProfilePage extends StatelessWidget {
                     ],
                   )
           ],
-        ),
         body: GestureDetector(
           onTap: GlobalFunction.unFocus,
           child: Padding(

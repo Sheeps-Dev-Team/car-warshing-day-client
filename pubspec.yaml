@@ -44,9 +44,21 @@ dependencies:
   gap: ^3.0.0 # 간격 간소화 위젯
   dio: ^5.1.2 # form data 전송
   fluttertoast: ^8.2.2 # 토스트
-  syncfusion_flutter_calendar: ^23.2.6 # 캘린더
   uuid: ^4.2.1 # id 부여
   lottie: ^2.7.0 # 로티
+  scrollable_positioned_list: ^0.3.8 # 스크롤 포지션
+  flutter_secure_storage: ^9.0.0 # 로컬 보안 저장소
+  
+  firebase_core: ^2.24.2
+  firebase_messaging: ^14.7.9
+  flutter_local_notifications: ^16.2.0
+  firebase_auth: ^4.15.3
+
+  http: ^1.1.2
+  http_parser: ^4.0.1
+
+  kakao_flutter_sdk_user: ^1.7.0 # 카카오 로그인 sdk
+  google_sign_in: ^6.2.1 # 구글 로그인
 
 dev_dependencies:
   flutter_test:

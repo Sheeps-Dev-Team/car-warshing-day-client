@@ -33,12 +33,18 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
   late final Duration _duration;
   final bool isRain = Random().nextBool();
 
+  late final double dropHeight;
+  late final double dropWidth;
+
   @override
   void initState() {
     _startX = widget.screen.width * Random().nextDouble() + widget.screen.width / 20;
     _moveX = 10 + 10 * Random().nextDouble();
     _opacity = .6 + .4 * Random().nextDouble();
     _scale = .6 + .4 * Random().nextDouble();
+
+    dropHeight = widget.screen.height * .1 * sizeUnit;
+    dropWidth = dropHeight * .04 * sizeUnit;
 
     final Duration rainDuration = Duration(milliseconds: 200 + (400 * Random().nextDouble()).floor());
     final Duration snowDuration = Duration(milliseconds: 800 + (800 * Random().nextDouble()).floor());
@@ -78,8 +84,6 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final double dropHeight = widget.screen.height * .1 * sizeUnit;
-    final double dropWidth = dropHeight * .04 * sizeUnit;
 
     return Positioned(
       top: (widget.screen.height + dropHeight) * _animation.value - dropHeight,
@@ -88,26 +92,26 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
         turns: AlwaysStoppedAnimation(_moveX * .1 / 360),
         child: Transform.scale(
           scale: _scale,
-          child: dropWidget(dropHeight, dropWidth),
+          child: dropWidget(),
         ),
       ),
     );
   }
 
-  Widget dropWidget(double dropHeight, double dropWidth) {
+  Widget dropWidget() {
     switch (widget.rainingType) {
       case RainingType.rain:
-        return rainDropWidget(dropHeight, dropWidth);
+        return rainDropWidget();
       case RainingType.snow:
         return snowDropWidget();
       case RainingType.rainAndSnow:
-        return isRain ? rainDropWidget(dropHeight, dropWidth) : snowDropWidget();
+        return isRain ? rainDropWidget() : snowDropWidget();
       default:
         return const SizedBox.shrink();
     }
   }
 
-  Container rainDropWidget(double dropHeight, double dropWidth) {
+  Container rainDropWidget() {
     return Container(
       height: dropHeight,
       width: dropWidth,
@@ -121,7 +125,7 @@ class _OneDropState extends State<OneDrop> with SingleTickerProviderStateMixin {
   Widget snowDropWidget() {
     return SvgPicture.asset(
       GlobalAssets.svgSnow,
-      width: 20 * sizeUnit,
+      width: dropWidth * 20,
       colorFilter: ColorFilter.mode(
         Colors.blueGrey.withOpacity(_opacity - .4),
         BlendMode.srcIn,
