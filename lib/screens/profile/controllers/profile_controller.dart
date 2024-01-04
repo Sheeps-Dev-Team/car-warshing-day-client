@@ -29,6 +29,7 @@ class ProfileController extends GetxController {
     loginType: '',
     nickName: '',
     address: '',
+    pop: 0,
   );
 
 // 유저 데이터 세팅
