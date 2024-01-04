@@ -13,7 +13,7 @@ class UserRepository {
     User? user;
     var res = await ApiProvider().post(
         networkURL,
-        jsonEncode(obj.toCreateJson()));
+        obj.toCreateJsonEncode);
 
     if (res != null) {
       user = User.fromJson(res);
@@ -60,7 +60,7 @@ class UserRepository {
   static Future<String?> update(User obj) async {
     var res = await ApiProvider().patch(
         networkURL,
-        jsonEncode(obj.toUpdateJson()), urlParam: GlobalData.loginUser!.userId.toString() );
+        obj.toUpdateJsonEncode(), urlParam: GlobalData.loginUser!.userId.toString() );
 
     if (res != null) {
       GlobalData.loginUser = obj;
