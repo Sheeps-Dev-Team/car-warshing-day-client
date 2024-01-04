@@ -8,8 +8,8 @@ import '../network/api_provider.dart';
 class UserRepository {
   static const String networkURL = '/user';
 
-  static Future<User?> userCreate(User obj) async {
-    //사용자 로그인
+  //가입
+  static Future<User?> create(User obj) async {
     User? user;
     var res = await ApiProvider().post(
         networkURL,
@@ -22,7 +22,8 @@ class UserRepository {
     return user;
   }
 
-  static Future<User?> userLogin(String email, String loginType) async {
+  //로그인
+  static Future<User?> login(String email, String loginType) async {
     //사용자 로그인
     User? user;
     var res = await ApiProvider().post(
@@ -40,6 +41,7 @@ class UserRepository {
     return user;
   }
 
+  //토큰수정
   static Future<String?> updateFcmToken(String fcmToken) async {
     String? resStr;
     var res = await ApiProvider().post(
@@ -52,5 +54,18 @@ class UserRepository {
     }
 
     return resStr;
+  }
+
+  //수정
+  static Future<String?> update(User obj) async {
+    var res = await ApiProvider().patch(
+        networkURL,
+        jsonEncode(obj.toUpdateJson()), urlParam: GlobalData.loginUser!.userId.toString() );
+
+    if (res != null) {
+      GlobalData.loginUser = obj;
+    }
+
+    return res["message"] ?? "";
   }
 }
