@@ -43,7 +43,7 @@ class UserRepository {
     WashingCarDay? washingCarDay;
     var res = await ApiProvider().post(
       washingURL,
-      jsonEncode(obj.toCreateJson()),urlParam: GlobalData.loginUser!.userId.toString()
+      obj.toCreateJsonEncode(),urlParam: GlobalData.loginUser!.userId.toString()
     );
 
     if (res != null) {

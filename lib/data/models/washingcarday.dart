@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../config/constants.dart';
 
 class WashingCarDay {
@@ -45,4 +47,17 @@ class WashingCarDay {
     'regId' : regId,
     'customPop' : customPop
   };
+
+  String toCreateJsonEncode() {
+    Map<String, dynamic> map = {
+      'startedAt' : startedAt.toString().substring(0,9).replaceAll(('-'), ''),
+      'finishedAt' : startedAt.toString().substring(0,9).replaceAll(('-'), ''),
+      'nx' : nx,
+      'ny' : ny,
+      'regId' : regId,
+      'customPop' : customPop
+    };
+
+    return jsonEncode(map);
+  }
 }
