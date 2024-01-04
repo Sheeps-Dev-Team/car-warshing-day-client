@@ -144,7 +144,7 @@ class GlobalFunction {
   static Future<void> globalLogin({required String email, required String loginType, required Function nullCallback}) async {
     loadingDialog(); // 로딩 시작
 
-    User? user = await UserRepository.userLogin(email, loginType);
+    User? user = await UserRepository.login(email, loginType);
 
     if(user != null) {
       GlobalData.loginUser = user;

@@ -342,7 +342,7 @@ class CalendarPage extends StatelessWidget {
               CustomButton.small(
                 text: '로그인 하기',
                 onTap: () {
-                  UserRepository.userLogin('test@gmail.com', '구글');
+                  UserRepository.login('test@gmail.com', '구글');
                 },
               ),
               CustomButton.small(text: '토큰 보내기', onTap: () {

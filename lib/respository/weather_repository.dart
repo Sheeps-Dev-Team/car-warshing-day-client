@@ -1,0 +1,53 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import '../data/_model.dart';
+import '../data/global_data.dart';
+import '../network/api_provider.dart';
+
+class UserRepository {
+  static const String networkURL = '/weather';
+  static const String washingURL = '/washingcarday';
+
+  //단기예보
+  static Future<void> getShortForm(int nx,int ny) async {
+    var res = await ApiProvider().get(
+      networkURL,
+      urlParam: 'short/$nx/$ny'
+    );
+
+    if (res != null) {
+      print(res);
+    }
+
+    // return user;
+  }
+
+  //중기예보
+  static Future<void> getMiddleForm(String regId) async {
+    var res = await ApiProvider().get(
+        networkURL,
+        urlParam: 'middle/$regId'
+    );
+
+    if (res != null) {
+      print(res);
+    }
+
+    // return user;
+  }
+
+  //세차일 등록
+  static Future<void> createWashing(WashingCarDay obj) async {
+    var res = await ApiProvider().post(
+      washingURL,
+      jsonEncode(obj.toCreateJson()),urlParam: GlobalData.loginUser!.userId.toString()
+    );
+
+    if (res != null) {
+      print(res);
+    }
+
+    // return user;
+  }
+}
