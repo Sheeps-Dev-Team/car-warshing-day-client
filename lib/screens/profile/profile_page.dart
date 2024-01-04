@@ -121,6 +121,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           Gap($style.insets.$16),
                           CustomTextField(
+                            controller: controller.nicknameController,
                             hintText: controller.user.nickName,
                             hintStyle: $style.text.subTitle14
                                 .copyWith(color: $style.colors.grey),

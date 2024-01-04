@@ -3,18 +3,17 @@ import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/data/location_data.dart';
 import '../_model.dart';
 
-class User{
-  User({
-    this.userId = nullInt,
-    required this.email,
-    required this.loginType,
-    required this.nickName,
-    required this.address,
-    required this.pop,
-    this.washingCarDay,
-    this.createdAt,
-    this.lastModifiedAt
-  });
+class User {
+  User(
+      {this.userId = nullInt,
+      required this.email,
+      required this.loginType,
+      required this.nickName,
+      required this.address,
+      required this.pop,
+      this.washingCarDay,
+      this.createdAt,
+      this.lastModifiedAt});
 
   int userId;
   String email;
@@ -40,8 +39,8 @@ class User{
     }
 
     WashingCarDay? washingCarDay;
-    if(json['washingcardays'] != null){
-      for(var i = 0 ; i < json['washingcardays'].length; ++i){
+    if (json['washingcardays'] != null) {
+      for (var i = 0; i < json['washingcardays'].length; ++i) {
         washingCarDay = WashingCarDay.fromJson(json['washingcardays'][i]);
       }
     }
@@ -62,18 +61,18 @@ class User{
   }
 
   Map<String, dynamic> toCreateJson() => {
-    'email' : email,
-    'loginType' : loginType,
-    'nickName' : nickName,
-    'address' : address,
-  };
+        'email': email,
+        'loginType': loginType,
+        'nickName': nickName,
+        'address': address,
+      };
 
   Map<String, dynamic> toUpdateJson() => {
-    'loginType' : loginType,
-    'nickName' : nickName,
-    'address' : address,
-    'custom_pop' : pop
-  };
+        'loginType': loginType,
+        'nickName': nickName,
+        'address': address,
+        'custom_pop': pop
+      };
 
 //단기 좌표
   String get getShortTerm {
@@ -93,6 +92,4 @@ class User{
     final String midTermValue = midTermLocationMap[userArea]!; //중기 코드 추출
     return midTermValue;
   }
-}
-
 }
