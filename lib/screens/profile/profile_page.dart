@@ -39,8 +39,8 @@ class ProfilePage extends StatelessWidget {
                           style: $style.text.headline20
                               .copyWith(fontWeight: FontWeight.w700),
                         ),
-                        const TextSpan(
-                          text: 'OOO',
+                        TextSpan(
+                          text: controller.user.nickName,
                         ),
                         TextSpan(
                           text: '님',
@@ -73,7 +73,7 @@ class ProfilePage extends StatelessWidget {
           onTap: GlobalFunction.unFocus,
           child: Padding(
             padding: isLogin
-                ? EdgeInsets.symmetric(horizontal: 104 * sizeUnit)
+                ? EdgeInsets.zero
                 : EdgeInsets.symmetric(horizontal: $style.insets.$16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,23 +81,25 @@ class ProfilePage extends StatelessWidget {
                   isLogin ? MainAxisAlignment.center : MainAxisAlignment.start,
               children: [
                 if (isLogin) ...{
-                  InkWell(
-                    onTap: () {
-                      Get.to(() => LoginPage());
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 80 * sizeUnit,
-                      height: 32 * sizeUnit,
-                      decoration: BoxDecoration(
-                        color: $style.colors.primary,
-                        borderRadius: BorderRadius.circular(52 * sizeUnit),
-                      ),
-                      child: Text(
-                        '로그인 하기',
-                        style: $style.text.headline14
-                            .copyWith(color: Colors.white),
-                        textAlign: TextAlign.center,
+                  Center(
+                    child: InkWell(
+                      onTap: () {
+                        Get.to(() => LoginPage());
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 80 * sizeUnit,
+                        height: 32 * sizeUnit,
+                        decoration: BoxDecoration(
+                          color: $style.colors.primary,
+                          borderRadius: BorderRadius.circular(52 * sizeUnit),
+                        ),
+                        child: Text(
+                          '로그인 하기',
+                          style: $style.text.headline14
+                              .copyWith(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
@@ -105,7 +107,7 @@ class ProfilePage extends StatelessWidget {
                   Text(
                     '로그인 후 이용이 가능합니다:)',
                     style: $style.text.subTitle12
-                        .copyWith(color: $style.colors.grey),
+                        .copyWith(color: $style.colors.darkGrey),
                   ),
                 } else if (!isLogin) ...{
                   Expanded(
@@ -119,7 +121,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           Gap($style.insets.$16),
                           CustomTextField(
-                            hintText: '입력해 주세요.',
+                            hintText: controller.user.nickName,
                             hintStyle: $style.text.subTitle14
                                 .copyWith(color: $style.colors.grey),
                             textAlign: TextAlign.center,
@@ -186,8 +188,14 @@ class ProfilePage extends StatelessWidget {
                           ),
                           Gap($style.insets.$24),
                           Text(
-                            '강수 확률 선택',
+                            '강수 확률 설정',
                             style: $style.text.headline16,
+                          ),
+                          Gap($style.insets.$14),
+                          Text(
+                            '설정된 강수 확률 이하는 세차 지속일에 영향을 주지 않습니다.',
+                            style: $style.text.subTitle12
+                                .copyWith(color: $style.colors.darkGrey),
                           ),
                           Gap($style.insets.$16),
                           SizedBox(
@@ -234,15 +242,16 @@ class ProfilePage extends StatelessWidget {
                             child: Text(
                               '세차 추천일, 세차 예정일과 같은 유용한 알림을 받아보세요.',
                               style: $style.text.subTitle12
-                                  .copyWith(color: $style.colors.grey),
+                                  .copyWith(color: $style.colors.darkGrey),
                             ),
                           ),
                           Gap($style.insets.$8),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'PUSH ALARM',
-                                style: $style.text.subTitle16,
+                                '알림 설정',
+                                style: $style.text.headline16,
                               ),
                               Gap(119 * sizeUnit),
                               CustomSwitchButton(

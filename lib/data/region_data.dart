@@ -172,7 +172,7 @@ const List<String> areaChungbukCategory = [
   "충주시",
 ];
 
-const List<String> areaSejongCategory = ["세종특별자치시|"];
+const List<String> areaSejongCategory = ["세종특별자치시"];
 
 const List<String> areaChungnamCategory = [
   "계룡시",

@@ -166,15 +166,15 @@ class LoginDetailPage extends StatelessWidget {
                           child: Text(
                             '세차 추천일, 세차 예정일과 같은 유용한 알림을 받아보세요.',
                             style: $style.text.subTitle12
-                                .copyWith(color: $style.colors.grey),
+                                .copyWith(color: $style.colors.darkGrey),
                           ),
                         ),
                         Gap($style.insets.$8),
                         Row(
                           children: [
                             Text(
-                              'PUSH ALARM',
-                              style: $style.text.subTitle16,
+                              '알림 설정',
+                              style: $style.text.headline16,
                             ),
                             Gap(119 * sizeUnit),
                             CustomSwitchButton(

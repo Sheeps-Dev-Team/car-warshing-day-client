@@ -2,6 +2,7 @@ import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/config/global_assets.dart';
 import 'package:car_washing_day/screens/login/controllers/login_controller.dart';
 import 'package:car_washing_day/screens/login/login_detail_page.dart';
+import 'package:car_washing_day/screens/profile/profile_page.dart';
 import 'package:car_washing_day/util/components/base_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -51,20 +52,27 @@ class LoginPage extends StatelessWidget {
                 loginBtn(
                   path: GlobalAssets.svgKakaoLogin,
                   onTap: () {
-                    // Get.to(() => LoginDetailPage());
                     controller.kakaoLoginFunc();
                   },
                 ),
                 Gap($style.insets.$15),
-                loginBtn(path: GlobalAssets.svgAppleLogin, onTap: () {}),
+                loginBtn(
+                    path: GlobalAssets.svgAppleLogin,
+                    onTap: () {
+                      Get.to(() => LoginDetailPage());
+                    }),
                 Gap($style.insets.$15),
-                loginBtn(path: GlobalAssets.svgGoogleLogin, onTap: () {}),
+                loginBtn(
+                    path: GlobalAssets.svgGoogleLogin,
+                    onTap: () {
+                      Get.to(() => ProfilePage());
+                    }),
                 const Spacer(),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
                       style: $style.text.body12
-                          .copyWith(color: $style.colors.grey),
+                          .copyWith(color: $style.colors.darkGrey),
                       children: [
                         const TextSpan(
                           text: '로그인 이전에 sheeps의\n',
