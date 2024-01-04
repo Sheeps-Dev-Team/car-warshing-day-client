@@ -38,16 +38,18 @@ class UserRepository {
   }
 
   //세차일 등록
-  static Future<void> createWashing(WashingCarDay obj) async {
+  static Future<WashingCarDay?> createWashing(WashingCarDay obj) async {
+
+    WashingCarDay? washingCarDay;
     var res = await ApiProvider().post(
       washingURL,
       jsonEncode(obj.toCreateJson()),urlParam: GlobalData.loginUser!.userId.toString()
     );
 
     if (res != null) {
-      print(res);
+      washingCarDay = WashingCarDay.fromJson(res);
     }
 
-    // return user;
+    return washingCarDay;
   }
 }
