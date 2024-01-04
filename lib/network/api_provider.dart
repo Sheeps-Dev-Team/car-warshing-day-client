@@ -29,29 +29,24 @@ class ApiProvider {
   }
 
   //get
-  Future<dynamic> get(String url) async {
+  Future<dynamic> get(String url, {String? urlParam}) async {
     var responseJson;
 
-    var uri = Uri.parse(_baseUrl + port + url);
+    String tempUri = _baseUrl + port;
 
-    HttpClient httpClient = HttpClient();
-    httpClient.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-
-    IOClient ioClient = IOClient(httpClient);
-
+    var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
     try {
-      final response = await ioClient.get(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      );
+      final response = await http.get(uri,
+          headers: {
+            'Content-Type' : 'application/json',
+            'Authorization' : GlobalData.accessToken ?? ""
+          });
 
-      if (response.body == "") return null;
+      if(response.body == "") return null;
 
       responseJson = _response(response);
     } on SocketException {
-      throw FetchDataException('인터넷 접속이 원활하지 않습니다.');
+      throw FetchDataException('인터넷 접속이 원활하지 않습니다');
     }
     return responseJson;
   }
@@ -63,9 +58,34 @@ class ApiProvider {
     String tempUri = _baseUrl + port;
 
     var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
-
     try {
       final response = await http.post(uri,
+          headers: {
+            'Content-Type' : 'application/json',
+            'Authorization' : GlobalData.accessToken ?? ""
+          },
+          body: data,
+          encoding: Encoding.getByName('utf-8'));
+
+      if(response.body == "") return null;
+
+      responseJson = _response(response);
+    } on SocketException {
+      throw FetchDataException('인터넷 접속이 원활하지 않습니다');
+    }
+
+    return responseJson;
+  }
+
+  //post
+  Future<dynamic> patch(String url, dynamic data, {String? urlParam}) async {
+    var responseJson;
+
+    String tempUri = _baseUrl + port;
+
+    var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
+    try {
+      final response = await http.patch(uri,
           headers: {
             'Content-Type' : 'application/json',
             'Authorization' : GlobalData.accessToken ?? ""
