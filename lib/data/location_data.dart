@@ -1,7 +1,8 @@
 import 'package:car_washing_day/data/region_data.dart';
 import 'package:flutter/material.dart';
 
-Map<String, Map<String, List<String>>> locationMap = {
+//단기
+Map<String, Map<String, String>> locationMap = {
   "서울특별시": seoulLocationMap,
   "인천광역시": incheonLocationMap,
   "경기도": gyeonggiLocationMap,
@@ -22,94 +23,94 @@ Map<String, Map<String, List<String>>> locationMap = {
   "제주특별자치도": jejuLocationMap,
 };
 
-final Map<String, List<String>> seoulLocationMap = {
+final Map<String, String> seoulLocationMap = {
   for (int i = 0; i < areaSeoulCategory.length; i++)
-    areaSeoulCategory[i]: [areaSeoulLocation[i]],
+    areaSeoulCategory[i]: areaSeoulLocation[i],
 };
 
-final Map<String, List<String>> incheonLocationMap = {
+final Map<String, String> incheonLocationMap = {
   for (int i = 0; i < areaIncheonCategory.length; i++)
-    areaIncheonCategory[i]: [areaIncheonLocation[i]],
+    areaIncheonCategory[i]: areaIncheonLocation[i],
 };
 
-final Map<String, List<String>> gyeonggiLocationMap = {
+final Map<String, String> gyeonggiLocationMap = {
   for (int i = 0; i < areaGyeonggiCategory.length; i++)
-    areaGyeonggiCategory[i]: [areaGyeonggiLocation[i]],
+    areaGyeonggiCategory[i]: areaGyeonggiLocation[i],
 };
 
-final Map<String, List<String>> kangwonYeongdongLocationMap = {
+final Map<String, String> kangwonYeongdongLocationMap = {
   for (int i = 0; i < areaKangwonYeongdongCategory.length; i++)
-    areaKangwonYeongdongCategory[i]: [areaKangwonYeongdongLocation[i]],
+    areaKangwonYeongdongCategory[i]: areaKangwonYeongdongLocation[i],
 };
 
-final Map<String, List<String>> kangwonYeongseoLocationMap = {
+final Map<String, String> kangwonYeongseoLocationMap = {
   for (int i = 0; i < areaKangwonYeongseoCategory.length; i++)
-    areaKangwonYeongseoCategory[i]: [areaKangwonYeongseoLocation[i]],
+    areaKangwonYeongseoCategory[i]: areaKangwonYeongseoLocation[i],
 };
 
-final Map<String, List<String>> daeguLocationMap = {
+final Map<String, String> daeguLocationMap = {
   for (int i = 0; i < areaDaeguCategory.length; i++)
-    areaDaeguCategory[i]: [areaDaeguLocation[i]],
+    areaDaeguCategory[i]: areaDaeguLocation[i],
 };
 
-final Map<String, List<String>> daejeonLocationMap = {
+final Map<String, String> daejeonLocationMap = {
   for (int i = 0; i < areaDaejeonCategory.length; i++)
-    areaDaejeonCategory[i]: [areaDaejeonLocation[i]],
+    areaDaejeonCategory[i]: areaDaejeonLocation[i],
 };
 
-final Map<String, List<String>> chungbukLocationMap = {
+final Map<String, String> chungbukLocationMap = {
   for (int i = 0; i < areaChungbukCategory.length; i++)
-    areaChungbukCategory[i]: [areaChungbukLocation[i]],
+    areaChungbukCategory[i]: areaChungbukLocation[i],
 };
 
-final Map<String, List<String>> sejongLocationMap = {
+final Map<String, String> sejongLocationMap = {
   for (int i = 0; i < areaSejongCategory.length; i++)
-    areaSejongCategory[i]: [areaSejongLocation[i]],
+    areaSejongCategory[i]: areaSejongLocation[i],
 };
 
-final Map<String, List<String>> chungnamLocationMap = {
+final Map<String, String> chungnamLocationMap = {
   for (int i = 0; i < areaChungnamCategory.length; i++)
-    areaChungnamCategory[i]: [areaChungnamLocation[i]],
+    areaChungnamCategory[i]: areaChungnamLocation[i],
 };
 
-final Map<String, List<String>> gwangjuLocationMap = {
+final Map<String, String> gwangjuLocationMap = {
   for (int i = 0; i < areaGwangjuCategory.length; i++)
-    areaGwangjuCategory[i]: [areaGwangjuLocation[i]],
+    areaGwangjuCategory[i]: areaGwangjuLocation[i],
 };
 
-final Map<String, List<String>> jeonnamLocationMap = {
+final Map<String, String> jeonnamLocationMap = {
   for (int i = 0; i < areaJeonnamCategory.length; i++)
-    areaJeonnamCategory[i]: [areaJeonnamLocation[i]],
+    areaJeonnamCategory[i]: areaJeonnamLocation[i],
 };
 
-final Map<String, List<String>> jeonbukLocationMap = {
+final Map<String, String> jeonbukLocationMap = {
   for (int i = 0; i < areaJeonbukCategory.length; i++)
-    areaJeonbukCategory[i]: [areaJeonbukLocation[i]],
+    areaJeonbukCategory[i]: areaJeonbukLocation[i],
 };
 
-final Map<String, List<String>> busanLocationMap = {
+final Map<String, String> busanLocationMap = {
   for (int i = 0; i < areaJeonbukCategory.length; i++)
-    areaBusanCategory[i]: [areaBusanLocation[i]],
+    areaBusanCategory[i]: areaBusanLocation[i],
 };
 
-final Map<String, List<String>> gyeongbukLocationMap = {
+final Map<String, String> gyeongbukLocationMap = {
   for (int i = 0; i < areaGyeongbukCategory.length; i++)
-    areaGyeongbukCategory[i]: [areaGyeongbukLocation[i]],
+    areaGyeongbukCategory[i]: areaGyeongbukLocation[i],
 };
 
-final Map<String, List<String>> gyeongnamLocationMap = {
+final Map<String, String> gyeongnamLocationMap = {
   for (int i = 0; i < areaGyeongnamCategory.length; i++)
-    areaGyeongnamCategory[i]: [areaGyeongnamLocation[i]],
+    areaGyeongnamCategory[i]: areaGyeongnamLocation[i],
 };
 
-final Map<String, List<String>> jejuLocationMap = {
+final Map<String, String> jejuLocationMap = {
   for (int i = 0; i < areaJejuCategory.length; i++)
-    areaJejuCategory[i]: [areaJejuLocation[i]],
+    areaJejuCategory[i]: areaJejuLocation[i],
 };
 
-final Map<String, List<String>> ulsanLocationMap = {
+final Map<String, String> ulsanLocationMap = {
   for (int i = 0; i < areaUlsanCategory.length; i++)
-    areaUlsanCategory[i]: [areaUlsanLocation[i]],
+    areaUlsanCategory[i]: areaUlsanLocation[i],
 };
 
 const List<String> areaSeoulLocation = [
@@ -414,71 +415,23 @@ const List<String> areaUlsanLocation = [
 ];
 
 // 중기 예보구역코드
-Map<String, String> capitalArea = {
-  // 수도권 지역
-  "서울특별시": "11B00000",
-  "인천광역시": "11B00000",
-  "경기도": "11B00000",
+Map<String, String> midTermLocationMap = {
+  "서울특별시": '11B00000',
+  "인천광역시": '11B00000',
+  "경기도": '11B00000',
+  "강원영동지방": '11D20000',
+  "강원영서지방": '11D10000',
+  "충청남도": '11C20000',
+  "대전광역시": '11C20000',
+  "세종특별자치시": '11C20000',
+  "충청북도": '11C10000',
+  "경상북도": '11H10000',
+  "대구광역시": '11H10000',
+  "경상남도": '11H20000',
+  "부산광역시": '11H20000',
+  "울산광역시": '11H20000',
+  "전라북도": '11F10000',
+  "전라남도": '11F20000',
+  "광주광역시": '11F20000',
+  "제주특별자치도": '11G00000',
 };
-
-Map<String, String> kangwonYeongseoArea = {
-  // 강원도 영서지방
-  "강원영서지방": "11D10000",
-};
-
-Map<String, String> kangwonYeongdongArea = {
-  // 강원도 영동지방
-  "강원영동지방": "11D20000",
-};
-
-Map<String, String> daejeonChungnamArea = {
-  // 대전충남 지역
-  "대전광역시": "11C20000",
-  "세종특별자치시": "11C20000",
-  "충청남도": "11C20000",
-};
-
-Map<String, String> chungbukArea = {
-  // 충북지역
-  "충청북도": "11C10000",
-};
-
-Map<String, String> gwangjuJeonnamArea = {
-  // 광주, 전라남도 지역
-  "광주광역시": "11F20000",
-  "전라남도": "11F20000",
-};
-
-Map<String, String> jeonbukArea = {
-  // 전라북도지역
-  "전라북도": "11F10000",
-};
-
-Map<String, String> daeguGyeongbukArea = {
-  // 대구, 경상북도 지역
-  "대구광역시": "11H10000",
-  "경상북도": "11H10000",
-};
-
-Map<String, String> busanUlsanGyeongnamArea = {
-  // 부산, 울산, 경상남도 지역
-  "부산광역시": "11H20000",
-  "울산광역시": "11H20000",
-  "경상남도": "11H20000",
-};
-
-Map<String, String> jejuArea = {
-  // 제주도
-  "제주특별자치도": "11G00000",
-};
-
-class userLocationFunction {
-  static location() {
-    String userRegion = '제주특별자치도|서귀포시'; //user 데이터
-    List<String> value = jejuLocationMap[userRegion] != null
-        ? jejuLocationMap[userRegion].toString().split('|')
-        : [];
-    String dx = value.first;
-    String dy = value.last;
-  }
-}
