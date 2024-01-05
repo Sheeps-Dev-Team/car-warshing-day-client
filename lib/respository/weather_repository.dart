@@ -6,8 +6,8 @@ import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
 class UserRepository {
-  static const String networkURL = '/weather';
-  static const String washingURL = '/washingcarday';
+  static const String networkURL = 'v1/weather';
+  static const String washingURL = 'v1/washingcarday';
 
   //단기예보
   static Future<void> getShortForm(int nx,int ny) async {
