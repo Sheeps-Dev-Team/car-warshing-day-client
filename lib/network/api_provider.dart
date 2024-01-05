@@ -112,28 +112,19 @@ class ApiProvider {
         var responseJson = json.decode(response.body.toString());
         if (kDebugMode) print(responseJson.toString());
         return responseJson;
-      case 400:
-      //throw BadRequestException(response.body.toString());
-        BadRequestException(response.body.toString());
-        return null;
-      case 401: //토큰 정보 실패
-        BadRequestException(response.body.toString());
-        return null;
-      case 403:
-      //throw UnauthorisedException(response.body.toString());
-        BadRequestException(response.body.toString());
-        return null;
-      case 404: //토큰 정보 실패
-      // GlobalFunction.globalLogout(isSend: false);
-        throw BadRequestException('토큰 정보가 존재하지 않습니다.');
-        return null;
-      case 429: //API 한도 초과
-        throw BadRequestException("너무 잦은 요청으로 1시간동안 사용이 제한됩니다.");
-      case 500:
+      case 400: //잘못된 요청
+      case 401: //권한 없음
+      case 403: //토큰 오류
+      case 404: //찾을수 없음
+      case 405: //허용되지않은 호출
+      case 500: //서버 오류
+      case 501: //함수실행 실패
+      case 502: //잘못된 접근
+      case 503: //서비스를 사용할 수 없음
+        debugPrint(response.body);
         return null;
       default:
-      //throw FetchDataException('Error occured while Communication with Server with StatusCode : ${response.statusCode}');
-        FetchDataException('Error occured while Communication with Server with StatusCode : ${response.statusCode}');
+        debugPrint("Unknown response status");
         return null;
     }
   }
