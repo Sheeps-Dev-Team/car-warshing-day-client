@@ -6,7 +6,7 @@ import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
 class UserRepository {
-  static const String networkURL = '/user';
+  static const String networkURL = 'v1/user';
 
   //가입
   static Future<User?> create(User obj) async {
