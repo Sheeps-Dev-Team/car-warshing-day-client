@@ -1,3 +1,4 @@
+import 'package:car_washing_day/screens/main/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,13 +41,9 @@ class _SplashScreenState extends State<SplashScreen>
         GlobalFunction.globalLogin(
           email: email,
           loginType: loginType,
-          nullCallback: () {
-            storage.delete(key: 'email'); // 로컬 저장소 loginEmail 데이터 삭제
-            Get.off(() => LoginPage());
-          },
         );
       } else {
-        Get.off(() => LoginPage());
+        Get.off(() => MainPage());
       }
     });
 

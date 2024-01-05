@@ -31,12 +31,7 @@ class GlobalFunction {
     bool barrierDismissible = true,
   }) {
     // 버튼
-    Widget button(
-        {required String text,
-        required GestureTapCallback onTap,
-        required Color bgColor,
-        required Color borderColor,
-        required Color fontColor}) {
+    Widget button({required String text, required GestureTapCallback onTap, required Color bgColor, required Color borderColor, required Color fontColor}) {
       return Material(
         color: Colors.transparent,
         child: InkWell(
@@ -75,8 +70,7 @@ class GlobalFunction {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 24 * sizeUnit),
-                if (title.isNotEmpty)
-                  Text(title, style: $style.text.subTitle16),
+                if (title.isNotEmpty) Text(title, style: $style.text.subTitle16),
                 if (child != null) ...[
                   child,
                 ] else ...[
@@ -142,33 +136,27 @@ class GlobalFunction {
   }
 
   // 로그인
-  static Future<void> globalLogin(
-      {required String email,
-      required String loginType,
-      required Function nullCallback}) async {
+  static Future<void> globalLogin({
+    required String email,
+    required String loginType,
+  }) async {
     loadingDialog(); // 로딩 시작
 
     User? user = await UserRepository.login(email, loginType);
+    GlobalData.loginUser = user;
 
     if (user != null) {
-      GlobalData.loginUser = user;
-
+      // 필수 정보 있는 경우
+      Get.offAll(() => MainPage());
+    } else {
+      // 필수 정보 없는 경우
       // 자동 로그인 정보 저장
       const storage = FlutterSecureStorage();
       await storage.write(key: 'email', value: email);
       await storage.write(key: 'loginType', value: loginType);
 
-      // 필수 정보 없는 경우
-      if (user.nickName.isEmpty) {
-        Get.offAll(ProfilePage(isEditMode: false));
-      } else {
-        Get.offAll(MainPage());
-      }
-    } else {
-      await deleteLoginData(); // 로그인 정보 삭제
-      Get.close(1); // 로딩 종료
-
-      nullCallback();
+      GlobalData.loginUser = User(email: email, loginType: loginType, nickName: '', address: '', pop: 0);
+      Get.offAll(() => ProfilePage(isEditMode: false)); // 필수 정보 입력 페이지로 이동
     }
   }
 
@@ -181,10 +169,7 @@ class GlobalFunction {
   }
 
   // date picker
-  static Future<DateTime> datePicker(
-      {required BuildContext context,
-      DateTime? initialDateTime,
-      DateTime? minimumDateTime}) async {
+  static Future<DateTime> datePicker({required BuildContext context, DateTime? initialDateTime, DateTime? minimumDateTime}) async {
     unFocus(); // 포커스 해제
 
     final DateTime now = DateTime.now();
