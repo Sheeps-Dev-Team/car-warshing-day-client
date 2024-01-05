@@ -68,6 +68,7 @@ class User {
       'loginType' : loginType,
       'nickName' : nickName,
       'address' : address,
+      'custom_pop' : pop
     };
 
     return jsonEncode(map);
