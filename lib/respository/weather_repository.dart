@@ -6,8 +6,8 @@ import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
 class UserRepository {
-  static const String networkURL = '/weather';
-  static const String washingURL = '/washingcarday';
+  static const String networkURL = 'v1/weather';
+  static const String washingURL = 'v1/washingcarday';
 
   //단기예보
   static Future<void> getShortForm(int nx,int ny) async {
@@ -38,16 +38,18 @@ class UserRepository {
   }
 
   //세차일 등록
-  static Future<void> createWashing(WashingCarDay obj) async {
+  static Future<WashingCarDay?> createWashing(WashingCarDay obj) async {
+
+    WashingCarDay? washingCarDay;
     var res = await ApiProvider().post(
       washingURL,
-      jsonEncode(obj.toCreateJson()),urlParam: GlobalData.loginUser!.userId.toString()
+      obj.toCreateJsonEncode(),urlParam: GlobalData.loginUser!.userId.toString()
     );
 
     if (res != null) {
-      print(res);
+      washingCarDay = WashingCarDay.fromJson(res);
     }
 
-    // return user;
+    return washingCarDay;
   }
 }
