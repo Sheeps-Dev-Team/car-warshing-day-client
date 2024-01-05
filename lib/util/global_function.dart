@@ -2,6 +2,7 @@ import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/respository/user_repository.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/screens/main/main_page.dart';
+import 'package:car_washing_day/screens/main/splash_screen.dart';
 import 'package:car_washing_day/screens/profile/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -140,21 +141,21 @@ class GlobalFunction {
     required String email,
     required String loginType,
   }) async {
-    loadingDialog(); // 로딩 시작
+    if(Get.currentRoute != SplashScreen.route) loadingDialog(); // 로딩 시작
 
     User? user = await UserRepository.login(email, loginType);
     GlobalData.loginUser = user;
+
+    // 자동 로그인 정보 저장
+    const storage = FlutterSecureStorage();
+    await storage.write(key: 'email', value: email);
+    await storage.write(key: 'loginType', value: loginType);
 
     if (user != null) {
       // 필수 정보 있는 경우
       Get.offAll(() => MainPage());
     } else {
       // 필수 정보 없는 경우
-      // 자동 로그인 정보 저장
-      const storage = FlutterSecureStorage();
-      await storage.write(key: 'email', value: email);
-      await storage.write(key: 'loginType', value: loginType);
-
       GlobalData.loginUser = User(email: email, loginType: loginType, nickName: '', address: '', pop: 0);
       Get.offAll(() => ProfilePage(isEditMode: false)); // 필수 정보 입력 페이지로 이동
     }
