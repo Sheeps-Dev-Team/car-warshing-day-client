@@ -1,4 +1,5 @@
 import 'package:car_washing_day/config/constants.dart';
+import 'package:car_washing_day/config/global_assets.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/data/region_data.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
@@ -11,6 +12,7 @@ import 'package:car_washing_day/util/components/custom_switch_button.dart';
 import 'package:car_washing_day/util/components/custom_text_field.dart';
 import 'package:car_washing_day/util/global_function.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
@@ -30,73 +32,56 @@ class ProfilePage extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar(
           centerTitle: true,
-          title: GlobalData.loginUser != null
-              ? isEditMode
-                  ? ''
-                  : '필수 정보 입력'
-              : '로그인 해주세요',
-          titleWidget: GlobalData.loginUser != null
-              ? isEditMode
-                  ? RichText(
+          titleWidget: isEditMode
+              ? GlobalData.loginUser == null
+                  ? Text('로그인 해주세요', style: $style.text.headline20)
+                  : RichText(
                       text: TextSpan(
-                          style: $style.text.headline20.copyWith(
-                              color: $style.colors.primary,
-                              fontWeight: FontWeight.w700),
-                          children: [
-                            TextSpan(
-                              text: '어서오세요! ',
-                              style: $style.text.headline20
-                                  .copyWith(fontWeight: FontWeight.w700),
-                            ),
-                            TextSpan(
-                              text: GlobalData.loginUser!.nickName,
-                            ),
-                            TextSpan(
-                              text: '님',
-                              style: $style.text.headline20
-                                  .copyWith(fontWeight: FontWeight.w700),
-                            ),
-                          ]),
-                    )
-                  : null
-              : null,
-          leading: const SizedBox.shrink(),
-          actions: [
-            GlobalData.loginUser != null
-                ? isEditMode
-                    ? Row(
+                        style: $style.text.headline20.copyWith(color: $style.colors.primary, fontWeight: FontWeight.w700),
                         children: [
-                          InkWell(
-                              onTap: () {
-                                if (controller.isOk.value) {}
-                              },
-                              child: Obx(
-                                () => Text(
-                                  '수정하기',
-                                  style: $style.text.headline14.copyWith(
-                                      color: controller.isOk.value
-                                          ? $style.colors.primary
-                                          : $style.colors.grey),
-                                  textAlign: TextAlign.center,
-                                ),
-                              )),
-                          Gap($style.insets.$16),
-                        ],
-                      )
-                    : Row(
-                        children: [
-                          InkWell(
-                            onTap: () => Get.back(),
-                            child: Icon(
-                              Icons.close,
-                              size: 24 * sizeUnit,
-                            ),
+                          TextSpan(
+                            text: '어서오세요! ',
+                            style: $style.text.headline20.copyWith(fontWeight: FontWeight.w700),
                           ),
-                          Gap($style.insets.$16),
+                          TextSpan(
+                            text: GlobalData.loginUser!.nickName,
+                          ),
+                          TextSpan(
+                            text: '님',
+                            style: $style.text.headline20.copyWith(fontWeight: FontWeight.w700),
+                          ),
                         ],
-                      )
-                : const SizedBox.shrink(),
-          ],
+                      ),
+                    )
+              : Text('필수 정보 입력', style: $style.text.headline20),
+          leading: const SizedBox.shrink(),
+          actions: isEditMode
+              ? GlobalData.loginUser != null
+                  ? [
+                      InkWell(
+                          onTap: () {
+                            if (controller.isOk.value) {}
+                          },
+                          child: Obx(
+                            () => Text(
+                              '수정하기',
+                              style: $style.text.headline14.copyWith(color: controller.isOk.value ? $style.colors.primary : $style.colors.grey),
+                              textAlign: TextAlign.center,
+                            ),
+                          )),
+                      Gap($style.insets.$16),
+                    ]
+                  : null
+              : [
+                  InkWell(
+                    onTap: () => Get.offAll(() => LoginPage()),
+                    child: SvgPicture.asset(
+                      GlobalAssets.svgCancel,
+                      width: 24 * sizeUnit,
+                    ),
+                  ),
+                  Gap($style.insets.$16),
+                ],
         ),
         body: GetBuilder<ProfileController>(
             initState: (state) => controller.init(isEditMode),
@@ -104,16 +89,12 @@ class ProfilePage extends StatelessWidget {
               return GestureDetector(
                 onTap: GlobalFunction.unFocus,
                 child: Padding(
-                  padding: GlobalData.loginUser != null
-                      ? EdgeInsets.symmetric(horizontal: $style.insets.$16)
-                      : EdgeInsets.zero,
+                  padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: GlobalData.loginUser != null
-                        ? MainAxisAlignment.start
-                        : MainAxisAlignment.center,
+                    mainAxisAlignment: GlobalData.loginUser != null ? MainAxisAlignment.start : MainAxisAlignment.center,
                     children: [
-                      if (GlobalData.loginUser == null) ...{
+                      if (isEditMode && GlobalData.loginUser == null) ...{
                         Center(
                           child: InkWell(
                             onTap: () {
@@ -125,13 +106,11 @@ class ProfilePage extends StatelessWidget {
                               height: 32 * sizeUnit,
                               decoration: BoxDecoration(
                                 color: $style.colors.primary,
-                                borderRadius:
-                                    BorderRadius.circular(52 * sizeUnit),
+                                borderRadius: BorderRadius.circular(52 * sizeUnit),
                               ),
                               child: Text(
                                 '로그인 하기',
-                                style: $style.text.headline14
-                                    .copyWith(color: Colors.white),
+                                style: $style.text.headline14.copyWith(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -140,10 +119,9 @@ class ProfilePage extends StatelessWidget {
                         Gap($style.insets.$12),
                         Text(
                           '로그인 후 이용이 가능합니다:)',
-                          style: $style.text.subTitle12
-                              .copyWith(color: $style.colors.darkGrey),
+                          style: $style.text.subTitle12.copyWith(color: $style.colors.darkGrey),
                         ),
-                      } else if (GlobalData.loginUser != null) ...{
+                      } else ...{
                         Expanded(
                           child: SingleChildScrollView(
                             child: Column(
@@ -155,15 +133,13 @@ class ProfilePage extends StatelessWidget {
                                 ),
                                 Gap($style.insets.$16),
                                 CustomTextField(
-                                  hintText: isEditMode ? '' : '입력해 주세요.',
-                                  hintStyle: $style.text.subTitle14
-                                      .copyWith(color: $style.colors.grey),
+                                  hintText: '입력해 주세요.',
+                                  hintStyle: $style.text.subTitle14.copyWith(color: $style.colors.grey),
                                   controller: controller.nicknameController,
                                   style: $style.text.subTitle14,
                                   textAlign: TextAlign.center,
                                   width: 328 * sizeUnit,
-                                  borderRadius:
-                                      BorderRadius.circular(100 * sizeUnit),
+                                  borderRadius: BorderRadius.circular(100 * sizeUnit),
                                   borderColor: $style.colors.lightGrey,
                                   onChanged: (p0) => controller.nickname(p0),
                                 ),
@@ -177,11 +153,8 @@ class ProfilePage extends StatelessWidget {
                                   width: 328 * sizeUnit,
                                   child: Obx(
                                     () => CustomDropdownButton(
-                                      border: Border.all(
-                                          color: $style.colors.lightGrey),
-                                      value: controller.selectedArea.isEmpty
-                                          ? null
-                                          : controller.selectedArea.value,
+                                      border: Border.all(color: $style.colors.lightGrey),
+                                      value: controller.selectedArea.isEmpty ? null : controller.selectedArea.value,
                                       items: areaMap.keys.toList(),
                                       hintText: '시, 도 선택',
                                       onChanged: (value) {
@@ -197,15 +170,9 @@ class ProfilePage extends StatelessWidget {
                                   width: 328 * sizeUnit,
                                   child: Obx(
                                     () => CustomDropdownButton(
-                                      border: Border.all(
-                                          color: $style.colors.lightGrey),
-                                      value: controller.selectedSubArea.isEmpty
-                                          ? null
-                                          : controller.selectedSubArea.value,
-                                      items: controller.selectedArea.isEmpty
-                                          ? []
-                                          : areaMap[
-                                              controller.selectedArea.value]!,
+                                      border: Border.all(color: $style.colors.lightGrey),
+                                      value: controller.selectedSubArea.isEmpty ? null : controller.selectedSubArea.value,
+                                      items: controller.selectedArea.isEmpty ? [] : areaMap[controller.selectedArea.value]!,
                                       hintText: '구,군 선택',
                                       onChanged: (value) {
                                         controller.selectedSubArea(value);
@@ -221,46 +188,22 @@ class ProfilePage extends StatelessWidget {
                                 Gap($style.insets.$14),
                                 Text(
                                   '설정된 강수 확률 이하는 세차 지속일에 영향을 주지 않습니다.',
-                                  style: $style.text.subTitle12
-                                      .copyWith(color: $style.colors.darkGrey),
+                                  style: $style.text.subTitle12.copyWith(color: $style.colors.darkGrey),
                                 ),
                                 Gap($style.insets.$16),
                                 SizedBox(
                                   width: 328 * sizeUnit,
                                   child: Obx(
                                     () => CustomDropdownButton(
-                                      border: Border.all(
-                                          color: $style.colors.lightGrey),
-                                      value: controller
-                                              .selectedPrecipitationProbability
-                                              .isEmpty
-                                          ? null
-                                          : controller
-                                              .selectedPrecipitationProbability
-                                              .value,
-                                      items: const [
-                                        '0%',
-                                        '10%',
-                                        '20%',
-                                        '30%',
-                                        '40%',
-                                        '50%',
-                                        '60%',
-                                        '70%',
-                                        '80%',
-                                        '90%',
-                                        '100%'
-                                      ],
+                                      border: Border.all(color: $style.colors.lightGrey),
+                                      value: controller.selectedPrecipitationProbability.isEmpty ? null : controller.selectedPrecipitationProbability.value,
+                                      items: const ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'],
                                       hintText: '강수 확률 선택',
                                       onChanged: (value) {
                                         if (value == '강수 확률 선택') {
-                                          controller
-                                              .selectedPrecipitationProbability(
-                                                  '');
+                                          controller.selectedPrecipitationProbability('');
                                         } else {
-                                          controller
-                                              .selectedPrecipitationProbability(
-                                                  value);
+                                          controller.selectedPrecipitationProbability(value);
                                         }
                                       },
                                     ),
@@ -271,14 +214,12 @@ class ProfilePage extends StatelessWidget {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     '세차 추천일, 세차 예정일과 같은 유용한 알림을 받아보세요.',
-                                    style: $style.text.subTitle12.copyWith(
-                                        color: $style.colors.darkGrey),
+                                    style: $style.text.subTitle12.copyWith(color: $style.colors.darkGrey),
                                   ),
                                 ),
                                 Gap($style.insets.$8),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       '알림 설정',
@@ -304,8 +245,7 @@ class ProfilePage extends StatelessWidget {
                               },
                               child: Text(
                                 '회원탈퇴',
-                                style: $style.text.subTitle12
-                                    .copyWith(color: $style.colors.grey),
+                                style: $style.text.subTitle12.copyWith(color: $style.colors.grey),
                               ),
                             ),
                           ),
@@ -313,7 +253,7 @@ class ProfilePage extends StatelessWidget {
                           Obx(() => CustomButton(
                                 text: '입력 완료',
                                 isOk: controller.isOk.value,
-                                onTap: () {},
+                                onTap: controller.createUser,
                               )),
                         },
                         if (MediaQuery.of(context).padding.bottom == 0) ...[

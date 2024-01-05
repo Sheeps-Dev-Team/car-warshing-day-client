@@ -53,7 +53,7 @@ class User {
       loginType: json['loginType'] ?? '',
       nickName: json['nickName'] ?? '',
       address: json['address'] ?? '',
-      pop: json['pop'] ?? 0,
+      pop: json['custom_pop'] ?? defaultPop,
       washingCarDay: washingCarDay,
       createdAt: DateTime.parse(json['createdAt']),
       lastModifiedAt: json['lastModifiedAt'] == null

@@ -13,7 +13,7 @@ class UserRepository {
     User? user;
     var res = await ApiProvider().post(
         networkURL,
-        obj.toCreateJsonEncode);
+        obj.toCreateJsonEncode());
 
     if (res != null) {
       user = User.fromJson(res);
