@@ -1,4 +1,3 @@
-import 'package:car_washing_day/data/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,7 +7,6 @@ import '../../config/constants.dart';
 import '../../config/global_assets.dart';
 import '../../util/global_function.dart';
 import '../login/login_page.dart';
-import 'main_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -44,11 +42,11 @@ class _SplashScreenState extends State<SplashScreen>
           loginType: loginType,
           nullCallback: () {
             storage.delete(key: 'email'); // 로컬 저장소 loginEmail 데이터 삭제
-            Get.off(() => LoginPage(GlobalData.loginUser));
+            Get.off(() => LoginPage());
           },
         );
       } else {
-        Get.off(() => LoginPage(GlobalData.loginUser));
+        Get.off(() => LoginPage());
       }
     });
 
