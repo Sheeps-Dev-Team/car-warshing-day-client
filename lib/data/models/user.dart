@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/data/location_data.dart';
@@ -60,20 +62,28 @@ class User {
     );
   }
 
-  Map<String, dynamic> toCreateJson() => {
-        'email': email,
-        'loginType': loginType,
-        'nickName': nickName,
-        'address': address,
-        'custom_pop': pop,
-      };
+  String toCreateJsonEncode() {
+    Map<String, dynamic> map = {
+      'email' : email,
+      'loginType' : loginType,
+      'nickName' : nickName,
+      'address' : address,
+      'custom_pop' : pop
+    };
 
-  Map<String, dynamic> toUpdateJson() => {
-        'loginType': loginType,
-        'nickName': nickName,
-        'address': address,
-        'custom_pop': pop
-      };
+    return jsonEncode(map);
+  }
+
+  String toUpdateJsonEncode() {
+    Map<String, dynamic> map = {
+      'loginType' : loginType,
+      'nickName' : nickName,
+      'address' : address,
+      'custom_pop' : pop
+    };
+
+    return jsonEncode(map);
+  }
 
 //단기 좌표
   String get getShortTerm {

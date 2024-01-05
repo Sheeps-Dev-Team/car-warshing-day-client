@@ -6,14 +6,14 @@ import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
 class UserRepository {
-  static const String networkURL = '/user';
+  static const String networkURL = 'v1/user';
 
   //가입
   static Future<User?> create(User obj) async {
     User? user;
     var res = await ApiProvider().post(
         networkURL,
-        jsonEncode(obj.toCreateJson()));
+        obj.toCreateJsonEncode);
 
     if (res != null) {
       user = User.fromJson(res);
@@ -60,7 +60,7 @@ class UserRepository {
   static Future<String?> update(User obj) async {
     var res = await ApiProvider().patch(
         networkURL,
-        jsonEncode(obj.toUpdateJson()), urlParam: GlobalData.loginUser!.userId.toString() );
+        obj.toUpdateJsonEncode(), urlParam: GlobalData.loginUser!.userId.toString() );
 
     if (res != null) {
       GlobalData.loginUser = obj;
