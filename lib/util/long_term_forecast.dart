@@ -34,13 +34,16 @@ class LongTermForecast {
   /// 기준 일자의 날씨를 입력하세요. 비가 안오면 true, 비오면 false
   final bool baseIsSunny;
 
-  LongTermForecast({required this.locCode, required this.baseDate, required this.baseIsSunny});
+  LongTermForecast(
+      {required this.locCode,
+      required this.baseDate,
+      required this.baseIsSunny});
 
   /// 며칠 뒤 까지 맑을 확률을 응답합니다. [days]에 며칠 뒤의 확률이 필요한지 입력하세요.
   /// [days]는 1이상이어야 합니다.
   double getProbability(int days) {
     // 지역코드가 존재하지 않으면 리턴
-    if (!locRainData.containsKey(locCode)||days < 1) {
+    if (!locRainData.containsKey(locCode) || days < 1) {
       return 0;
     }
     double probability = 1;

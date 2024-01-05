@@ -49,7 +49,7 @@ class ProfilePage extends StatelessWidget {
                                   .copyWith(fontWeight: FontWeight.w700),
                             ),
                             TextSpan(
-                              text: controller.user.nickName,
+                              text: GlobalData.loginUser!.nickName,
                             ),
                             TextSpan(
                               text: '님',

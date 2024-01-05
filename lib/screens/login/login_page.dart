@@ -11,7 +11,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage(User? loginUser, {super.key});
+  LoginPage({super.key});
 
   final LoginController controller = Get.put(LoginController());
 
