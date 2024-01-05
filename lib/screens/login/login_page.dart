@@ -1,7 +1,7 @@
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/config/global_assets.dart';
+import 'package:car_washing_day/data/models/user.dart';
 import 'package:car_washing_day/screens/login/controllers/login_controller.dart';
-import 'package:car_washing_day/screens/login/login_detail_page.dart';
 import 'package:car_washing_day/screens/profile/profile_page.dart';
 import 'package:car_washing_day/util/components/base_widget.dart';
 import 'package:flutter/gestures.dart';
@@ -11,7 +11,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+  LoginPage(User? loginUser, {super.key});
 
   final LoginController controller = Get.put(LoginController());
 
@@ -59,13 +59,13 @@ class LoginPage extends StatelessWidget {
                 loginBtn(
                     path: GlobalAssets.svgAppleLogin,
                     onTap: () {
-                      Get.to(() => LoginDetailPage());
+                      Get.to(() => ProfilePage(isEditMode: true));
                     }),
                 Gap($style.insets.$15),
                 loginBtn(
                     path: GlobalAssets.svgGoogleLogin,
                     onTap: () {
-                      Get.to(() => ProfilePage());
+                      // Get.to(() => ProfilePage());
                     }),
                 const Spacer(),
                 RichText(

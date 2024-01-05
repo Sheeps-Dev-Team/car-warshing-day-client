@@ -1,9 +1,11 @@
 import 'package:car_washing_day/config/constants.dart';
+import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/data/region_data.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/screens/profile/controllers/profile_controller.dart';
 import 'package:car_washing_day/util/components/base_widget.dart';
 import 'package:car_washing_day/util/components/custom_app_bar.dart';
+import 'package:car_washing_day/util/components/custom_button.dart';
 import 'package:car_washing_day/util/components/custom_dropdown_button.dart';
 import 'package:car_washing_day/util/components/custom_switch_button.dart';
 import 'package:car_washing_day/util/components/custom_text_field.dart';
@@ -13,277 +15,316 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
-  ProfilePage({super.key});
+  ProfilePage({
+    super.key,
+    required this.isEditMode,
+  });
+
+  final bool isEditMode; //회원가입 후 상태
 
   final ProfileController controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
-    bool isLogin = false;
-
     return BaseWidget(
       child: Scaffold(
         appBar: CustomAppBar(
           centerTitle: true,
-          title: isLogin ? '로그인 해주세요' : '',
-          titleWidget: isLogin
-              ? null
-              : RichText(
-                  text: TextSpan(
-                      style: $style.text.headline20.copyWith(
-                          color: $style.colors.primary,
-                          fontWeight: FontWeight.w700),
-                      children: [
-                        TextSpan(
-                          text: '어서오세요! ',
-                          style: $style.text.headline20
-                              .copyWith(fontWeight: FontWeight.w700),
-                        ),
-                        TextSpan(
-                          text: controller.user.nickName,
-                        ),
-                        TextSpan(
-                          text: '님',
-                          style: $style.text.headline20
-                              .copyWith(fontWeight: FontWeight.w700),
-                        ),
-                      ]),
-                ),
+          title: GlobalData.loginUser != null
+              ? isEditMode
+                  ? ''
+                  : '필수 정보 입력'
+              : '로그인 해주세요',
+          titleWidget: GlobalData.loginUser != null
+              ? isEditMode
+                  ? RichText(
+                      text: TextSpan(
+                          style: $style.text.headline20.copyWith(
+                              color: $style.colors.primary,
+                              fontWeight: FontWeight.w700),
+                          children: [
+                            TextSpan(
+                              text: '어서오세요! ',
+                              style: $style.text.headline20
+                                  .copyWith(fontWeight: FontWeight.w700),
+                            ),
+                            TextSpan(
+                              text: controller.user.nickName,
+                            ),
+                            TextSpan(
+                              text: '님',
+                              style: $style.text.headline20
+                                  .copyWith(fontWeight: FontWeight.w700),
+                            ),
+                          ]),
+                    )
+                  : null
+              : null,
           leading: const SizedBox.shrink(),
           actions: [
-            isLogin
-                ? const SizedBox.shrink()
-                : Row(
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        child: Text(
-                          '수정하기',
-                          style: $style.text.headline14
-                              .copyWith(color: $style.colors.grey),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Gap($style.insets.$16),
-                    ],
-                  )
+            GlobalData.loginUser != null
+                ? isEditMode
+                    ? Row(
+                        children: [
+                          InkWell(
+                              onTap: () {
+                                if (controller.isOk.value) {}
+                              },
+                              child: Obx(
+                                () => Text(
+                                  '수정하기',
+                                  style: $style.text.headline14.copyWith(
+                                      color: controller.isOk.value
+                                          ? $style.colors.primary
+                                          : $style.colors.grey),
+                                  textAlign: TextAlign.center,
+                                ),
+                              )),
+                          Gap($style.insets.$16),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          InkWell(
+                            onTap: () => Get.back(),
+                            child: Icon(
+                              Icons.close,
+                              size: 24 * sizeUnit,
+                            ),
+                          ),
+                          Gap($style.insets.$16),
+                        ],
+                      )
+                : const SizedBox.shrink(),
           ],
         ),
-        body: GestureDetector(
-          onTap: GlobalFunction.unFocus,
-          child: Padding(
-            padding: isLogin
-                ? EdgeInsets.zero
-                : EdgeInsets.symmetric(horizontal: $style.insets.$16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment:
-                  isLogin ? MainAxisAlignment.center : MainAxisAlignment.start,
-              children: [
-                if (isLogin) ...{
-                  Center(
-                    child: InkWell(
-                      onTap: () {
-                        Get.to(() => LoginPage());
-                      },
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 80 * sizeUnit,
-                        height: 32 * sizeUnit,
-                        decoration: BoxDecoration(
-                          color: $style.colors.primary,
-                          borderRadius: BorderRadius.circular(52 * sizeUnit),
+        body: GetBuilder<ProfileController>(
+            initState: (state) => controller.init(isEditMode),
+            builder: (_) {
+              return GestureDetector(
+                onTap: GlobalFunction.unFocus,
+                child: Padding(
+                  padding: GlobalData.loginUser != null
+                      ? EdgeInsets.symmetric(horizontal: $style.insets.$16)
+                      : EdgeInsets.zero,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: GlobalData.loginUser != null
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.center,
+                    children: [
+                      if (GlobalData.loginUser == null) ...{
+                        Center(
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(() => LoginPage());
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: 80 * sizeUnit,
+                              height: 32 * sizeUnit,
+                              decoration: BoxDecoration(
+                                color: $style.colors.primary,
+                                borderRadius:
+                                    BorderRadius.circular(52 * sizeUnit),
+                              ),
+                              child: Text(
+                                '로그인 하기',
+                                style: $style.text.headline14
+                                    .copyWith(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
                         ),
-                        child: Text(
-                          '로그인 하기',
-                          style: $style.text.headline14
-                              .copyWith(color: Colors.white),
-                          textAlign: TextAlign.center,
+                        Gap($style.insets.$12),
+                        Text(
+                          '로그인 후 이용이 가능합니다:)',
+                          style: $style.text.subTitle12
+                              .copyWith(color: $style.colors.darkGrey),
                         ),
-                      ),
-                    ),
-                  ),
-                  Gap($style.insets.$12),
-                  Text(
-                    '로그인 후 이용이 가능합니다:)',
-                    style: $style.text.subTitle12
-                        .copyWith(color: $style.colors.darkGrey),
-                  ),
-                } else if (!isLogin) ...{
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Gap($style.insets.$24),
-                          Text(
-                            '닉네임',
-                            style: $style.text.headline16,
-                          ),
-                          Gap($style.insets.$16),
-                          CustomTextField(
-                            controller: controller.nicknameController,
-                            hintText: controller.user.nickName,
-                            hintStyle: $style.text.subTitle14
-                                .copyWith(color: $style.colors.grey),
-                            textAlign: TextAlign.center,
-                            width: 328 * sizeUnit,
-                            borderRadius: BorderRadius.circular(100 * sizeUnit),
-                            borderColor: $style.colors.lightGrey,
-                          ),
-                          Gap($style.insets.$24),
-                          Text(
-                            '위치',
-                            style: $style.text.headline16,
-                          ),
-                          Gap($style.insets.$16),
-                          SizedBox(
-                            width: 328 * sizeUnit,
-                            child: Obx(
-                              () => CustomDropdownButton(
-                                border:
-                                    Border.all(color: $style.colors.lightGrey),
-                                value: controller.selectedArea.isEmpty
-                                    ? null
-                                    : controller.selectedArea.value,
-                                items: ['시, 도 선택', ...areaMap.keys],
-                                hintText: '시, 도 선택',
-                                onChanged: (value) {
-                                  controller.selectedSubArea('');
+                      } else if (GlobalData.loginUser != null) ...{
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Gap($style.insets.$24),
+                                Text(
+                                  '닉네임',
+                                  style: $style.text.headline16,
+                                ),
+                                Gap($style.insets.$16),
+                                CustomTextField(
+                                  hintText: isEditMode ? '' : '입력해 주세요.',
+                                  hintStyle: $style.text.subTitle14
+                                      .copyWith(color: $style.colors.grey),
+                                  controller: controller.nicknameController,
+                                  style: $style.text.subTitle14,
+                                  textAlign: TextAlign.center,
+                                  width: 328 * sizeUnit,
+                                  borderRadius:
+                                      BorderRadius.circular(100 * sizeUnit),
+                                  borderColor: $style.colors.lightGrey,
+                                  onChanged: (p0) => controller.nickname(p0),
+                                ),
+                                Gap($style.insets.$24),
+                                Text(
+                                  '위치',
+                                  style: $style.text.headline16,
+                                ),
+                                Gap($style.insets.$16),
+                                SizedBox(
+                                  width: 328 * sizeUnit,
+                                  child: Obx(
+                                    () => CustomDropdownButton(
+                                      border: Border.all(
+                                          color: $style.colors.lightGrey),
+                                      value: controller.selectedArea.isEmpty
+                                          ? null
+                                          : controller.selectedArea.value,
+                                      items: areaMap.keys.toList(),
+                                      hintText: '시, 도 선택',
+                                      onChanged: (value) {
+                                        controller.selectedSubArea('');
 
-                                  if (value == '시, 도 선택') {
-                                    controller.selectedArea('');
-                                  } else {
-                                    controller.selectedArea(value);
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                          Gap($style.insets.$12),
-                          SizedBox(
-                            width: 328 * sizeUnit,
-                            child: Obx(
-                              () => CustomDropdownButton(
-                                border:
-                                    Border.all(color: $style.colors.lightGrey),
-                                value: controller.selectedSubArea.isEmpty
-                                    ? null
-                                    : controller.selectedSubArea.value,
-                                items: controller.selectedArea.isEmpty
-                                    ? []
-                                    : [
-                                        '구, 군 선택',
-                                        ...areaMap[
-                                            controller.selectedArea.value]!
+                                        controller.selectedArea(value);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Gap($style.insets.$12),
+                                SizedBox(
+                                  width: 328 * sizeUnit,
+                                  child: Obx(
+                                    () => CustomDropdownButton(
+                                      border: Border.all(
+                                          color: $style.colors.lightGrey),
+                                      value: controller.selectedSubArea.isEmpty
+                                          ? null
+                                          : controller.selectedSubArea.value,
+                                      items: controller.selectedArea.isEmpty
+                                          ? []
+                                          : areaMap[
+                                              controller.selectedArea.value]!,
+                                      hintText: '구,군 선택',
+                                      onChanged: (value) {
+                                        controller.selectedSubArea(value);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Gap($style.insets.$24),
+                                Text(
+                                  '강수 확률 설정',
+                                  style: $style.text.headline16,
+                                ),
+                                Gap($style.insets.$14),
+                                Text(
+                                  '설정된 강수 확률 이하는 세차 지속일에 영향을 주지 않습니다.',
+                                  style: $style.text.subTitle12
+                                      .copyWith(color: $style.colors.darkGrey),
+                                ),
+                                Gap($style.insets.$16),
+                                SizedBox(
+                                  width: 328 * sizeUnit,
+                                  child: Obx(
+                                    () => CustomDropdownButton(
+                                      border: Border.all(
+                                          color: $style.colors.lightGrey),
+                                      value: controller
+                                              .selectedPrecipitationProbability
+                                              .isEmpty
+                                          ? null
+                                          : controller
+                                              .selectedPrecipitationProbability
+                                              .value,
+                                      items: const [
+                                        '0%',
+                                        '10%',
+                                        '20%',
+                                        '30%',
+                                        '40%',
+                                        '50%',
+                                        '60%',
+                                        '70%',
+                                        '80%',
+                                        '90%',
+                                        '100%'
                                       ],
-                                hintText: '구,군 선택',
-                                onChanged: (value) {
-                                  if (value == '구, 군 선택') {
-                                    controller.selectedSubArea('');
-                                  } else {
-                                    controller.selectedSubArea(value);
-                                  }
-                                },
-                              ),
+                                      hintText: '강수 확률 선택',
+                                      onChanged: (value) {
+                                        if (value == '강수 확률 선택') {
+                                          controller
+                                              .selectedPrecipitationProbability(
+                                                  '');
+                                        } else {
+                                          controller
+                                              .selectedPrecipitationProbability(
+                                                  value);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Gap($style.insets.$24),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    '세차 추천일, 세차 예정일과 같은 유용한 알림을 받아보세요.',
+                                    style: $style.text.subTitle12.copyWith(
+                                        color: $style.colors.darkGrey),
+                                  ),
+                                ),
+                                Gap($style.insets.$8),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '알림 설정',
+                                      style: $style.text.headline16,
+                                    ),
+                                    Gap(119 * sizeUnit),
+                                    CustomSwitchButton(
+                                      values: const ['ON', 'OFF'],
+                                      onToggleCallback: (index) {},
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          Gap($style.insets.$24),
-                          Text(
-                            '강수 확률 설정',
-                            style: $style.text.headline16,
-                          ),
-                          Gap($style.insets.$14),
-                          Text(
-                            '설정된 강수 확률 이하는 세차 지속일에 영향을 주지 않습니다.',
-                            style: $style.text.subTitle12
-                                .copyWith(color: $style.colors.darkGrey),
-                          ),
-                          Gap($style.insets.$16),
-                          SizedBox(
-                            width: 328 * sizeUnit,
-                            child: Obx(
-                              () => CustomDropdownButton(
-                                border:
-                                    Border.all(color: $style.colors.lightGrey),
-                                value: controller
-                                        .selectedPrecipitationProbability
-                                        .isEmpty
-                                    ? null
-                                    : controller
-                                        .selectedPrecipitationProbability.value,
-                                items: [
-                                  '강수 확률 선택',
-                                  '10%',
-                                  '20%',
-                                  '30%',
-                                  '40%',
-                                  '50%',
-                                  '60%',
-                                  '70%',
-                                  '80%',
-                                  '90%',
-                                  '100%'
-                                ],
-                                hintText: '강수 확률 선택',
-                                onChanged: (value) {
-                                  if (value == '강수 확률 선택') {
-                                    controller
-                                        .selectedPrecipitationProbability('');
-                                  } else {
-                                    controller.selectedPrecipitationProbability(
-                                        value);
-                                  }
-                                },
-                              ),
-                            ),
-                          ),
-                          Gap($style.insets.$24),
+                        ),
+                        if (isEditMode) ...{
                           Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '세차 추천일, 세차 예정일과 같은 유용한 알림을 받아보세요.',
-                              style: $style.text.subTitle12
-                                  .copyWith(color: $style.colors.darkGrey),
+                            alignment: Alignment.center,
+                            child: InkWell(
+                              onTap: () {
+                                Get.offAll(() => LoginPage());
+                              },
+                              child: Text(
+                                '회원탈퇴',
+                                style: $style.text.subTitle12
+                                    .copyWith(color: $style.colors.grey),
+                              ),
                             ),
                           ),
-                          Gap($style.insets.$8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '알림 설정',
-                                style: $style.text.headline16,
-                              ),
-                              Gap(119 * sizeUnit),
-                              CustomSwitchButton(
-                                values: const ['ON', 'OFF'],
-                                onToggleCallback: (index) {},
-                              ),
-                            ],
-                          ),
+                        } else ...{
+                          Obx(() => CustomButton(
+                                text: '입력 완료',
+                                isOk: controller.isOk.value,
+                                onTap: () {},
+                              )),
+                        },
+                        if (MediaQuery.of(context).padding.bottom == 0) ...[
+                          Gap($style.insets.$20),
                         ],
-                      ),
-                    ),
+                      },
+                    ],
                   ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: InkWell(
-                      onTap: () {},
-                      child: Text(
-                        '회원탈퇴',
-                        style: $style.text.subTitle12
-                            .copyWith(color: $style.colors.grey),
-                      ),
-                    ),
-                  ),
-                  if (MediaQuery.of(context).padding.bottom == 0) ...[
-                    Gap($style.insets.$20),
-                  ],
-                },
-              ],
-            ),
-          ),
-        ),
+                ),
+              );
+            }),
       ),
     );
   }
