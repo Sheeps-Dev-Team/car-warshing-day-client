@@ -65,6 +65,7 @@ class User {
         'loginType': loginType,
         'nickName': nickName,
         'address': address,
+        'custom_pop': pop,
       };
 
   Map<String, dynamic> toUpdateJson() => {

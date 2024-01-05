@@ -1,8 +1,8 @@
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/respository/user_repository.dart';
-import 'package:car_washing_day/screens/login/login_detail_page.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/screens/main/main_page.dart';
+import 'package:car_washing_day/screens/profile/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -75,7 +75,8 @@ class GlobalFunction {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 24 * sizeUnit),
-                if(title.isNotEmpty) Text(title, style: $style.text.subTitle16),
+                if (title.isNotEmpty)
+                  Text(title, style: $style.text.subTitle16),
                 if (child != null) ...[
                   child,
                 ] else ...[
@@ -141,12 +142,15 @@ class GlobalFunction {
   }
 
   // 로그인
-  static Future<void> globalLogin({required String email, required String loginType, required Function nullCallback}) async {
+  static Future<void> globalLogin(
+      {required String email,
+      required String loginType,
+      required Function nullCallback}) async {
     loadingDialog(); // 로딩 시작
 
     User? user = await UserRepository.login(email, loginType);
 
-    if(user != null) {
+    if (user != null) {
       GlobalData.loginUser = user;
 
       // 자동 로그인 정보 저장
@@ -155,8 +159,8 @@ class GlobalFunction {
       await storage.write(key: 'loginType', value: loginType);
 
       // 필수 정보 없는 경우
-      if(user.nickName.isEmpty) {
-        Get.offAll(LoginDetailPage());
+      if (user.nickName.isEmpty) {
+        Get.offAll(ProfilePage(isEditMode: false));
       } else {
         Get.offAll(MainPage());
       }
@@ -169,7 +173,7 @@ class GlobalFunction {
   }
 
   // 로그아웃
-  static Future<void> logout() async{
+  static Future<void> logout() async {
     await deleteLoginData(); // 로그인 정보 삭제
     GlobalData.resetData(); // 글로벌 데이터 리셋
 
@@ -177,7 +181,10 @@ class GlobalFunction {
   }
 
   // date picker
-  static Future<DateTime> datePicker({required BuildContext context, DateTime? initialDateTime, DateTime? minimumDateTime}) async {
+  static Future<DateTime> datePicker(
+      {required BuildContext context,
+      DateTime? initialDateTime,
+      DateTime? minimumDateTime}) async {
     unFocus(); // 포커스 해제
 
     final DateTime now = DateTime.now();
@@ -187,18 +194,18 @@ class GlobalFunction {
     await showCupertinoModalPopup(
         context: context,
         builder: (_) => Container(
-          height: 200 * sizeUnit,
-          width: double.infinity,
-          color: Colors.white,
-          child: CupertinoDatePicker(
-            backgroundColor: Colors.white,
-            initialDateTime: initDateTime,
-            mode: CupertinoDatePickerMode.date,
-            minimumDate: minimumDateTime,
-            maximumYear: now.year,
-            onDateTimeChanged: (val) => date = val,
-          ),
-        ));
+              height: 200 * sizeUnit,
+              width: double.infinity,
+              color: Colors.white,
+              child: CupertinoDatePicker(
+                backgroundColor: Colors.white,
+                initialDateTime: initDateTime,
+                mode: CupertinoDatePickerMode.date,
+                minimumDate: minimumDateTime,
+                maximumYear: now.year,
+                onDateTimeChanged: (val) => date = val,
+              ),
+            ));
 
     date ??= initDateTime;
     return DateTime(date!.year, date!.month, date!.day, 12);
@@ -235,7 +242,7 @@ class GlobalFunction {
   }
 
   // 로그인 정보 삭제
-  static Future<void> deleteLoginData() async{
+  static Future<void> deleteLoginData() async {
     const storage = FlutterSecureStorage();
 
     await storage.delete(key: 'email');

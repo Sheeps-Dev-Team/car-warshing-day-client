@@ -1,3 +1,4 @@
+import 'package:car_washing_day/data/global_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,7 +18,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late Animation<double> animation;
   late AnimationController animationController;
 
@@ -25,28 +27,30 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   initState() {
     super.initState();
 
-    animationController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
-    animation = CurvedAnimation(parent: animationController, curve: Curves.easeIn);
+    animationController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.easeIn);
     animationController.forward();
 
-      Future.delayed(const Duration(milliseconds: 2000), () async {
-        const FlutterSecureStorage storage = FlutterSecureStorage();
-        final String? email = await storage.read(key: 'email');
-        final String? loginType = await storage.read(key: 'loginType');
+    Future.delayed(const Duration(milliseconds: 2000), () async {
+      const FlutterSecureStorage storage = FlutterSecureStorage();
+      final String? email = await storage.read(key: 'email');
+      final String? loginType = await storage.read(key: 'loginType');
 
-        if(email != null && loginType != null) {
-          GlobalFunction.globalLogin(
-            email: email,
-            loginType: loginType,
-            nullCallback: () {
-              storage.delete(key: 'email'); // 로컬 저장소 loginEmail 데이터 삭제
-              Get.off(() => LoginPage());
-            },
-          );
-        } else {
-          Get.off(() => LoginPage());
-        }
-      });
+      if (email != null && loginType != null) {
+        GlobalFunction.globalLogin(
+          email: email,
+          loginType: loginType,
+          nullCallback: () {
+            storage.delete(key: 'email'); // 로컬 저장소 loginEmail 데이터 삭제
+            Get.off(() => LoginPage(GlobalData.loginUser));
+          },
+        );
+      } else {
+        Get.off(() => LoginPage(GlobalData.loginUser));
+      }
+    });
 
     // Future.delayed(
     //   const Duration(milliseconds: 2000),
@@ -73,7 +77,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 class AnimatedLogo extends AnimatedWidget {
   static final _opacityTween = Tween<double>(begin: 0.1, end: 1);
 
-  const AnimatedLogo({Key? key, required Animation<double> animation}) : super(key: key, listenable: animation);
+  const AnimatedLogo({Key? key, required Animation<double> animation})
+      : super(key: key, listenable: animation);
 
   @override
   Widget build(BuildContext context) {

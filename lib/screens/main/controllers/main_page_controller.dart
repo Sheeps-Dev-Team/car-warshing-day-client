@@ -18,8 +18,7 @@ class MainPageController extends GetxController {
       'iconPath': GlobalAssets.svgCalendar,
     },
     {
-      'page': () => ProfilePage(),
-      //'page': () => LoginPage(),
+      'page': () => ProfilePage(isEditMode: true),
       'iconPath': GlobalAssets.svgPerson,
     },
   ];
