@@ -101,6 +101,15 @@ class ProfileController extends GetxController {
     }
   }
 
+  // 로그아웃
+  void logout() {
+    GlobalFunction.showCustomDialog(
+      title: '로그아웃 하시겠어요?',
+      showCancelBtn: true,
+      okFunc: GlobalFunction.logout,
+    );
+  }
+
   // 회원 탈퇴
   void deleteUser() {
     GlobalFunction.showCustomDialog(

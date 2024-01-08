@@ -239,16 +239,31 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ),
                         if (isEditMode) ...{
-                          Align(
-                            alignment: Alignment.center,
-                            child: InkWell(
-                              onTap: controller.deleteUser,
-                              child: Text(
-                                '회원탈퇴',
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: controller.logout,
+                                child: Text(
+                                  '로그아웃',
+                                  style: $style.text.subTitle12.copyWith(color: $style.colors.grey),
+                                ),
+                              ),
+                              Gap($style.insets.$16),
+                              Text(
+                                '|',
                                 style: $style.text.subTitle12.copyWith(color: $style.colors.grey),
                               ),
-                            ),
-                          ),
+                              Gap($style.insets.$16),
+                              InkWell(
+                                onTap: controller.deleteUser,
+                                child: Text(
+                                  '회원탈퇴',
+                                  style: $style.text.subTitle12.copyWith(color: $style.colors.grey),
+                                ),
+                              ),
+                            ],
+                          )
                         } else ...{
                           Obx(() => CustomButton(
                                 text: '입력 완료',
