@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:car_washing_day/config/global_assets.dart';
-import 'package:car_washing_day/respository/user_repository.dart';
+import 'package:car_washing_day/repository/user_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';

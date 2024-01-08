@@ -60,7 +60,7 @@ class ProfilePage extends StatelessWidget {
                   ? [
                       InkWell(
                           onTap: () {
-                            if (controller.isOk.value) {}
+                            if (controller.isOk.value) controller.updateUser();
                           },
                           child: Obx(
                             () => Text(
@@ -141,6 +141,8 @@ class ProfilePage extends StatelessWidget {
                                   width: 328 * sizeUnit,
                                   borderRadius: BorderRadius.circular(100 * sizeUnit),
                                   borderColor: $style.colors.lightGrey,
+                                  maxLength: 7,
+                                  counterText: '',
                                   onChanged: (p0) => controller.nickname(p0),
                                 ),
                                 Gap($style.insets.$24),
@@ -240,9 +242,7 @@ class ProfilePage extends StatelessWidget {
                           Align(
                             alignment: Alignment.center,
                             child: InkWell(
-                              onTap: () {
-                                Get.offAll(() => LoginPage());
-                              },
+                              onTap: controller.deleteUser,
                               child: Text(
                                 '회원탈퇴',
                                 style: $style.text.subTitle12.copyWith(color: $style.colors.grey),

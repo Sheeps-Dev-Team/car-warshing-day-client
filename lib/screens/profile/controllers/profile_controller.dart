@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/data/models/user.dart';
-import 'package:car_washing_day/respository/user_repository.dart';
+import 'package:car_washing_day/repository/user_repository.dart';
 import 'package:car_washing_day/screens/main/main_page.dart';
 import 'package:car_washing_day/util/global_function.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class ProfileController extends GetxController {
     '지속일',
   ];
 
-  late final bool isEditMode; //회원가입 후 상태
+  bool isEditMode = false; //회원가입 후 상태
 
   RxString nickname = ''.obs; // 닉네임
   RxString selectedArea = ''.obs; // 선택된 시, 도
@@ -71,11 +71,52 @@ class ProfileController extends GetxController {
     User? user = await UserRepository.create(obj);
 
     Get.close(1); // 로딩 끝
-    if(user != null) {
+    if (user != null) {
       GlobalData.loginUser = user;
       Get.offAll(() => MainPage());
     } else {
       GlobalFunction.showToast(msg: '잠시 후 다시 시도해 주세요.');
     }
+  }
+
+  // 유저 수정
+  void updateUser() async {
+    final User obj = User(
+      email: GlobalData.loginUser!.email,
+      loginType: GlobalData.loginUser!.loginType,
+      nickName: nickname.value,
+      address: '${selectedArea.value}$division${selectedSubArea.value}',
+      pop: int.parse(selectedPrecipitationProbability.value.replaceFirst('%', '')),
+    );
+
+    String? res = await UserRepository.update(obj);
+
+    if (res != null) {
+      GlobalData.loginUser!.nickName = obj.nickName;
+      GlobalData.loginUser!.address = obj.address;
+      GlobalData.loginUser!.pop = obj.pop;
+      GlobalFunction.showToast(msg: '수정이 완료되었습니다.');
+    } else {
+      GlobalFunction.showToast(msg: '잠시후 다시 시도해 주세요.');
+    }
+  }
+
+  // 회원 탈퇴
+  void deleteUser() {
+    GlobalFunction.showCustomDialog(
+      title: '정말 탈퇴하시겠어요?',
+      description: '회원 탈퇴 시 데이터 복구는 불가능합니다.',
+      showCancelBtn: true,
+      okText: '탈퇴',
+      okFunc: () async {
+        String? res = await UserRepository.delete(GlobalData.loginUser!.userId);
+
+        if (res != null) {
+          GlobalFunction.logout();
+        } else {
+          GlobalFunction.showToast(msg: '잠시후 다시 시도해 주세요.');
+        }
+      },
+    );
   }
 }
