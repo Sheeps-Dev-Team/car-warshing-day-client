@@ -6,16 +6,18 @@ import 'package:car_washing_day/data/location_data.dart';
 import '../_model.dart';
 
 class User {
-  User(
-      {this.userId = nullInt,
-      required this.email,
-      required this.loginType,
-      required this.nickName,
-      required this.address,
-      required this.pop,
-      this.washingCarDay,
-      this.createdAt,
-      this.lastModifiedAt});
+  User({
+    this.userId = nullInt,
+    required this.email,
+    required this.loginType,
+    required this.nickName,
+    required this.address,
+    required this.pop,
+    this.washingCarDay,
+    this.isExit = false,
+    this.createdAt,
+    this.lastModifiedAt,
+  });
 
   int userId;
   String email;
@@ -24,6 +26,7 @@ class User {
   String address;
   int pop;
   WashingCarDay? washingCarDay;
+  bool isExit; // 탈퇴 여부
   DateTime? createdAt;
   DateTime? lastModifiedAt;
 
@@ -55,20 +58,19 @@ class User {
       address: json['address'] ?? '',
       pop: json['custom_pop'] ?? defaultPop,
       washingCarDay: washingCarDay,
+      isExit: json['is_exit'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
-      lastModifiedAt: json['lastModifiedAt'] == null
-          ? null
-          : DateTime.parse(json['lastModifiedAt']),
+      lastModifiedAt: json['lastModifiedAt'] == null ? null : DateTime.parse(json['lastModifiedAt']),
     );
   }
 
   String toCreateJsonEncode() {
     Map<String, dynamic> map = {
-      'email' : email,
-      'loginType' : loginType,
-      'nickName' : nickName,
-      'address' : address,
-      'custom_pop' : pop
+      'email': email,
+      'loginType': loginType,
+      'nickName': nickName,
+      'address': address,
+      'custom_pop': pop,
     };
 
     return jsonEncode(map);
@@ -76,10 +78,10 @@ class User {
 
   String toUpdateJsonEncode() {
     Map<String, dynamic> map = {
-      'loginType' : loginType,
-      'nickName' : nickName,
-      'address' : address,
-      'custom_pop' : pop
+      'loginType': loginType,
+      'nickName': nickName,
+      'address': address,
+      'custom_pop': pop,
     };
 
     return jsonEncode(map);

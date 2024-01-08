@@ -77,7 +77,7 @@ class ApiProvider {
     return responseJson;
   }
 
-  //post
+  //patch
   Future<dynamic> patch(String url, dynamic data, {String? urlParam}) async {
     var responseJson;
 
@@ -86,6 +86,32 @@ class ApiProvider {
     var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
     try {
       final response = await http.patch(uri,
+          headers: {
+            'Content-Type' : 'application/json',
+            'Authorization' : GlobalData.accessToken ?? ""
+          },
+          body: data,
+          encoding: Encoding.getByName('utf-8'));
+
+      if(response.body == "") return null;
+
+      responseJson = _response(response);
+    } on SocketException {
+      throw FetchDataException('인터넷 접속이 원활하지 않습니다');
+    }
+
+    return responseJson;
+  }
+
+  //delete
+  Future<dynamic> delete(String url, dynamic data, {String? urlParam}) async {
+    var responseJson;
+
+    String tempUri = _baseUrl + port;
+
+    var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
+    try {
+      final response = await http.delete(uri,
           headers: {
             'Content-Type' : 'application/json',
             'Authorization' : GlobalData.accessToken ?? ""

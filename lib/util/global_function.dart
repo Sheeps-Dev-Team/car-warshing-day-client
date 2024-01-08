@@ -1,5 +1,5 @@
 import 'package:car_washing_day/data/global_data.dart';
-import 'package:car_washing_day/respository/user_repository.dart';
+import 'package:car_washing_day/repository/user_repository.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/screens/main/main_page.dart';
 import 'package:car_washing_day/screens/main/splash_screen.dart';
@@ -151,9 +151,17 @@ class GlobalFunction {
     await storage.write(key: 'email', value: email);
     await storage.write(key: 'loginType', value: loginType);
 
+    // 필수 정보 있는 경우
     if (user != null) {
-      // 필수 정보 있는 경우
-      Get.offAll(() => MainPage());
+      // 탈퇴한 경우
+      if(user.isExit) {
+        await deleteLoginData(); // 로그인 데이터 삭제
+        if(Get.currentRoute != SplashScreen.route) Get.close(1); // 로딩 끝
+
+        showCustomDialog(description: '탈퇴된 계정입니다.');
+      } else {
+        Get.offAll(() => MainPage());
+      }
     } else {
       // 필수 정보 없는 경우
       GlobalData.loginUser = User(email: email, loginType: loginType, nickName: '', address: '', pop: 0);
