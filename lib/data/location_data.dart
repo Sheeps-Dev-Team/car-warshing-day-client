@@ -435,3 +435,141 @@ Map<String, String> midTermLocationMap = {
   "광주광역시": '11F20000',
   "제주특별자치도": '11G00000',
 };
+
+// 장기 지역코드
+Map<String, int> seoulGyeonggiLongTermCodeMap = {
+  '서울특별시': 108,
+  '수원시': 119,
+  '양평군': 202,
+  '이천시': 203,
+};
+
+Map<String, int> incheonLongTermCodeMap = {
+  '인천광역시': 112,
+  '강화군': 201,
+};
+
+Map<String, int> kangwonYeongdongLongTermCodeMap = {
+  '강릉시': 105,
+  '속초시': 90,
+  '태백시': 216,
+};
+Map<String, int> kangwonYeongseoLongTermCodeMap = {
+  '원주시': 114,
+  '철원군': 95,
+  '평창군 대관령면': 100,
+  '춘천시': 101,
+  '인제군': 211,
+  '홍천군': 212,
+};
+Map<String, int> chungbukLongTermCodeMap = {
+  '청주시': 131,
+  '충주시': 127,
+  '영동군 추풍령면': 135,
+  '제천시': 221,
+  '보은군': 226,
+};
+Map<String, int> chungnamLongTermCodeMap = {
+  '천안시': 232,
+  '서산시': 129,
+  '보령시': 235,
+  '부여군': 236,
+  '금산군': 238,
+};
+Map<String, int> daejeonLongTermCodeMap = {
+  '대전광역시': 133,
+};
+
+Map<String, int> gyeongbukLongTermCodeMap = {
+  '포항시': 138,
+  '울진군': 130,
+  '안동시': 136,
+  '봉화군': 271,
+  '영주시': 272,
+  '문경시': 273,
+  '영덕군': 277,
+  '의성군': 278,
+  '구미시': 279,
+  '영천시': 281,
+};
+
+Map<String, int> daeguLongTermCodeMap = {
+  '대구광역시': 143,
+};
+
+Map<String, int> gyeongnamLongTermCodeMap = {
+  '창원시': 155,
+  '통영시': 162,
+  '진주시': 192,
+  '거창군': 284,
+  '합천군': 285,
+  '밀양시': 288,
+  '산청군': 289,
+  '거제시': 294,
+  '남해군': 295,
+};
+
+Map<String, int> ulsanLongTermCodeMap = {
+  '울산광역시': 152,
+};
+
+Map<String, int> busanLongTermCodeMap = {
+  '부산광역시': 159,
+};
+
+Map<String, int> jeonbukLongTermCodeMap = {
+  '전주시': 146,
+  '군산시': 140,
+  '부안군': 243,
+  '임실군': 244,
+  '정읍시': 245,
+  '남원시': 247,
+  '장수군': 248,
+};
+
+Map<String, int> jeonnamLongTermCodeMap = {
+  '여수시': 168,
+  '목포시': 165,
+  '완도군': 170,
+  '장흥군': 260,
+  '해남군': 261,
+  '고흥군': 262,
+};
+
+Map<String, int> gwangjuLongTermCodeMap = {
+  '광주광역시': 156,
+};
+
+Map<String, int> jejuLongTermCodeMap = {
+  '제주시': 184,
+  '제주시 한경면 고산리': 185,
+  '서귀포시 성산읍': 188,
+  '서귀포시': 189,
+};
+
+// 장기 지역코드
+List<Map<String, int>> longTermLocationMap = [
+  seoulGyeonggiLongTermCodeMap, //서울특별시
+  incheonLongTermCodeMap, //인천광역시
+  seoulGyeonggiLongTermCodeMap, //경기도
+  kangwonYeongdongLongTermCodeMap, //강원도영동
+  kangwonYeongseoLongTermCodeMap, //강원도영서
+  chungnamLongTermCodeMap, //충청남도
+  chungbukLongTermCodeMap, //충청북도
+  chungnamLongTermCodeMap, //세종특별자치시
+  daejeonLongTermCodeMap, //대전광역시
+  gyeongbukLongTermCodeMap, //경상북도
+  gyeongnamLongTermCodeMap, //경상남도
+  daeguLongTermCodeMap, //대구광역시
+  busanLongTermCodeMap, //부산광역시
+  jeonbukLongTermCodeMap, //전라북도
+  jeonnamLongTermCodeMap, //전라남도
+  gwangjuLongTermCodeMap, //광주광역시
+  ulsanLongTermCodeMap, //울산광역시
+  jejuLongTermCodeMap, //제주특별자치도
+];
+
+Map<String, Map<String, int>> regionLongTermLocationMap = {
+  for (int i = 0; i < areaMap.length; i++)
+    areaMap.keys.toList()[i]: longTermLocationMap[i],
+};

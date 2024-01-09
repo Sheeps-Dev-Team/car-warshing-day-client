@@ -24,7 +24,11 @@ class ProfileController extends GetxController {
   RxString selectedSubArea = ''.obs; // 선택된 구, 군
   RxString selectedPrecipitationProbability = '$defaultPop%'.obs; // 선택된 강수 확률
 
-  RxBool get isOk => (nickname.isNotEmpty && selectedArea.isNotEmpty && selectedSubArea.isNotEmpty && selectedPrecipitationProbability.isNotEmpty).obs;
+  RxBool get isOk => (nickname.isNotEmpty &&
+          selectedArea.isNotEmpty &&
+          selectedSubArea.isNotEmpty &&
+          selectedPrecipitationProbability.isNotEmpty)
+      .obs;
 
   void init(bool value) {
     isEditMode = value;
@@ -52,7 +56,10 @@ class ProfileController extends GetxController {
 
   //입력완료 확인 함수
   bool isInputComplete() {
-    return nicknameController.text.isNotEmpty && selectedArea.isNotEmpty && selectedSubArea.isNotEmpty && selectedPrecipitationProbability.isNotEmpty;
+    return nicknameController.text.isNotEmpty &&
+        selectedArea.isNotEmpty &&
+        selectedSubArea.isNotEmpty &&
+        selectedPrecipitationProbability.isNotEmpty;
   }
 
   // 유저 생성
@@ -64,7 +71,8 @@ class ProfileController extends GetxController {
       loginType: GlobalData.loginUser!.loginType,
       nickName: nickname.value,
       address: '${selectedArea.value}$division${selectedSubArea.value}',
-      pop: int.parse(selectedPrecipitationProbability.value.replaceFirst('%', '')),
+      pop: int.parse(
+          selectedPrecipitationProbability.value.replaceFirst('%', '')),
     );
 
     User? user = await UserRepository.create(obj);
@@ -89,7 +97,8 @@ class ProfileController extends GetxController {
       loginType: GlobalData.loginUser!.loginType,
       nickName: nickname.value,
       address: '${selectedArea.value}$division${selectedSubArea.value}',
-      pop: int.parse(selectedPrecipitationProbability.value.replaceFirst('%', '')),
+      pop: int.parse(
+          selectedPrecipitationProbability.value.replaceFirst('%', '')),
     );
 
     String? res = await UserRepository.update(obj);

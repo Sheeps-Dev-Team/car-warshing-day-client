@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/data/global_data.dart';
-import 'package:car_washing_day/data/location_data.dart';
 import '../_model.dart';
 
 class User {
@@ -60,7 +59,9 @@ class User {
       washingCarDay: washingCarDay,
       isExit: json['is_exit'] ?? false,
       createdAt: DateTime.parse(json['createdAt']),
-      lastModifiedAt: json['lastModifiedAt'] == null ? null : DateTime.parse(json['lastModifiedAt']),
+      lastModifiedAt: json['lastModifiedAt'] == null
+          ? null
+          : DateTime.parse(json['lastModifiedAt']),
     );
   }
 
