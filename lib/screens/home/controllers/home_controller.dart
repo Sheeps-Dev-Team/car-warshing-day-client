@@ -1,4 +1,4 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:car_washing_day/config/storage.dart';
 import 'package:get/get.dart';
 
 import '../../../data/global_data.dart';
@@ -10,7 +10,6 @@ class HomeController extends GetxController {
 
   // 위치 세팅
   void setAddress() async{
-    const FlutterSecureStorage storage = FlutterSecureStorage();
-    address(GlobalData.loginUser?.address ?? await storage.read(key: 'address'));
+    address(GlobalData.loginUser?.address ?? await Storage.getAddress());
   }
 }
