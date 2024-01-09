@@ -256,8 +256,8 @@ class GlobalFunction {
     return midTermValue;
   }
 
-  // 날씨 데이터 가져오기
-  static Future<List<Weather>> getWeatherList(String address) async {
+  // 날씨 데이터 세팅
+  static Future<void> setWeatherList(String address) async {
     List<Weather> list = [];
 
     // 단기
@@ -271,6 +271,33 @@ class GlobalFunction {
     final String regId = getMidTerm(address);
     list.addAll(await WeatherRepository.getMiddleForm(regId));
 
-    return list;
+    // 데이터 세팅
+    if(list.isNotEmpty) {
+      GlobalData.currentWeather = list.first; // 현재 날씨
+
+      // 예보 날씨 세팅
+      list.removeAt(0);
+      GlobalData.weatherList = list;
+    }
+  }
+
+  // 예상 지속일
+  static int getContinuousDays({int startIdx = 0}){
+    if(GlobalData.weatherList.isEmpty) return 0;
+
+    final int userPop = GlobalData.loginUser?.pop ?? defaultPop; // 유저 강수 확률 없으면 기본
+    int value = 0;
+
+    for(int i = startIdx; i < GlobalData.weatherList.length; i++) {
+      final int pop = GlobalData.weatherList[i].pop; // 강수 확률
+
+      if(pop <= userPop) {
+        value++;
+      } else {
+        return value;
+      }
+    }
+
+    return value;
   }
 }

@@ -102,7 +102,7 @@ class ProfileController extends GetxController {
       await Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
 
       // 날씨 데이터 세팅
-      GlobalData.weatherList = await GlobalFunction.getWeatherList(obj.address);
+      await GlobalFunction.setWeatherList(obj.address);
       Get.close(1); // 로딩 끝
       GlobalFunction.showToast(msg: '수정이 완료되었습니다.');
     } else {
