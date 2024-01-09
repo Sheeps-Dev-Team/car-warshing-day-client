@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/data/global_data.dart';
-import 'package:car_washing_day/data/location_data.dart';
 import '../_model.dart';
 
 class User {
@@ -87,47 +86,5 @@ class User {
     };
 
     return jsonEncode(map);
-  }
-
-//단기 좌표
-  String get getShortTerm {
-    final List<String> splitList = address.split('|');
-
-    final String userArea = splitList.first; //user의 시, 도
-    final String userSubArea = splitList.last; //user의 구, 군
-
-    final String shortTermValue = locationMap[userArea]![userSubArea]!;
-    return shortTermValue;
-  }
-
-//중기 좌표
-  String get getMidTerm {
-    final String userArea = address.split('|').first; //user의 시, 도
-
-    final String midTermValue = midTermLocationMap[userArea]!; //중기 코드 추출
-    return midTermValue;
-  }
-
-  //장기 좌표
-  int? get getLongTerm {
-    final List<String> splitList = address.split('|');
-    final String userArea = splitList.first; //user의 시, 도
-    final String userSubArea = splitList.last; //user의 구, 군
-
-    int? longTermValue =
-        regionLongTermLocationMap[userArea]![userSubArea]; //구,군까지 있을때
-    int? longTermValue2 =
-        regionLongTermLocationMap[userArea]?.values.first; //구,군값이 없을 때
-
-    if (longTermValue != null) {
-      //userArea, userSubArea 값이 둘다 존재할때
-      return longTermValue;
-    } else if (regionLongTermLocationMap[userArea] != null &&
-        regionLongTermLocationMap[userArea]![userSubArea] == null) {
-      //userArea만 존재할 때 userSubArea == null 일 때
-      return longTermValue2;
-    }
-
-    return null;
   }
 }
