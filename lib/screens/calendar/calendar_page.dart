@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:car_washing_day/config/global_assets.dart';
 import 'package:car_washing_day/repository/user_repository.dart';
+import 'package:car_washing_day/util/global_function.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -47,13 +48,13 @@ class CalendarPage extends StatelessWidget {
               Gap($style.insets.$16),
               SizedBox(
                 height: 97 * sizeUnit,
-                child: controller.weatherList.isNotEmpty
+                child: GlobalData.weatherList.isNotEmpty
                     ? ScrollablePositionedList.builder(
                         itemScrollController: controller.itemScrollController,
                         scrollDirection: Axis.horizontal,
-                        itemCount: controller.weatherList.length,
+                        itemCount: GlobalData.weatherList.length,
                         itemBuilder: (context, index) {
-                          final Weather weather = controller.weatherList[index];
+                          final Weather weather = GlobalData.weatherList[index];
 
                           return weatherItem(
                             index: index,
@@ -320,7 +321,10 @@ class CalendarPage extends StatelessWidget {
                 children: [
                   const TextSpan(text: '예상 지속일'),
                   TextSpan(text: ' 은\n약 ', style: $style.text.title16),
-                  TextSpan(text: '5 ', style: TextStyle(fontSize: 24 * sizeUnit)),
+                  TextSpan(
+                    text: '${GlobalFunction.getContinuousDays(startIdx: controller.selectedDate.difference(controller.now).inDays)} ',
+                    style: TextStyle(fontSize: 24 * sizeUnit),
+                  ),
                   TextSpan(text: '일 입니다.', style: $style.text.title16),
                 ],
               ),
@@ -341,8 +345,8 @@ class CalendarPage extends StatelessWidget {
                       child: BubbleLump(width: 110 * sizeUnit),
                     ),
                     const CarAnimation(),
-                    if (GlobalData.todayWeather != null) ...[
-                      Rain(rainingType: GlobalData.todayWeather!.rainingType),
+                    if (GlobalData.currentWeather != null) ...[
+                      Rain(rainingType: GlobalData.currentWeather!.rainingType),
                     ],
                   ],
                 ),

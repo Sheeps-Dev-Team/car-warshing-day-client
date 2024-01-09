@@ -44,7 +44,7 @@ class MainPageController extends GetxController {
 
     // 위치 데이터 있는 경우
     if(address != null) {
-      GlobalData.weatherList = await GlobalFunction.getWeatherList(address);
+      await GlobalFunction.setWeatherList(address);
       update();
     } else {
       // 위치 데이터 없는 경우

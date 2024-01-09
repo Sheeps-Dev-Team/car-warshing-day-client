@@ -4,6 +4,7 @@ import 'package:car_washing_day/screens/home/controllers/home_controller.dart';
 import 'package:car_washing_day/screens/main/address_input_page.dart';
 import 'package:car_washing_day/util/components/bubble/bubble.dart';
 import 'package:car_washing_day/util/components/car_animation.dart';
+import 'package:car_washing_day/util/global_function.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,7 @@ class HomePage extends StatelessWidget {
             const Spacer(),
             Text('오늘 세차하면?', style: $style.text.subTitle16.copyWith(height: 1.15)),
             Gap($style.insets.$8),
-            Text('20일 지속', style: $style.text.headline40.copyWith(height: 1.15)),
+            Text('${GlobalFunction.getContinuousDays()}일 지속', style: $style.text.headline40.copyWith(height: 1.15)),
             const Spacer(),
             SizedBox(
               width: 260 * sizeUnit,
@@ -43,8 +44,8 @@ class HomePage extends StatelessWidget {
                       child: BubbleLump(width: 260 * sizeUnit),
                     ),
                     const CarAnimation(),
-                    if (GlobalData.todayWeather != null) ...[
-                      Rain(rainingType: GlobalData.todayWeather!.rainingType),
+                    if (GlobalData.currentWeather != null) ...[
+                      Rain(rainingType: GlobalData.currentWeather!.rainingType),
                     ],
                   ],
                 ),

@@ -16,7 +16,7 @@ class GlobalData {
 
   static String? address; // user address or local address
   static List<Weather> weatherList = []; // 날씨 리스트
-  static Weather? get todayWeather => weatherList.isEmpty ? null : weatherList.first; // 오늘 날씨
+  static Weather? currentWeather; // 현재 날씨
 
   // 데이터 리셋
   static void resetData() {

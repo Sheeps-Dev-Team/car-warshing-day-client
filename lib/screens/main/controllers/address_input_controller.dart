@@ -27,7 +27,7 @@ class AddressInputController extends GetxController {
     final String address = '${selectedArea.value}$division${selectedSubArea.value}';
 
     await Storage.setAddressData(address); // 로컬에 저장
-    GlobalData.weatherList = await GlobalFunction.getWeatherList(address); // 날씨 리스트 세팅
+    await GlobalFunction.setWeatherList(address); // 날씨 리스트 세팅
     MainPageController.to.update();
 
     Get.back(); // 메인 페이지로 이동
