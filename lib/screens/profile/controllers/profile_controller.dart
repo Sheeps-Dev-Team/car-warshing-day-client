@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/data/models/user.dart';
@@ -81,6 +79,8 @@ class ProfileController extends GetxController {
 
   // 유저 수정
   void updateUser() async {
+    GlobalFunction.loadingDialog(); // 로딩 시작
+
     final User obj = User(
       email: GlobalData.loginUser!.email,
       loginType: GlobalData.loginUser!.loginType,
@@ -95,6 +95,9 @@ class ProfileController extends GetxController {
       GlobalData.loginUser!.nickName = obj.nickName;
       GlobalData.loginUser!.address = obj.address;
       GlobalData.loginUser!.pop = obj.pop;
+
+      await GlobalFunction.setWeatherData(); // 날씨 데이터 세팅
+      Get.close(1); // 로딩 끝
       GlobalFunction.showToast(msg: '수정이 완료되었습니다.');
     } else {
       GlobalFunction.showToast(msg: '잠시후 다시 시도해 주세요.');

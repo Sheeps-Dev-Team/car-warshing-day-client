@@ -5,36 +5,40 @@ import '../data/_model.dart';
 import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
-class UserRepository {
+class WeatherRepository {
   static const String networkURL = '/v1/weather';
   static const String washingURL = '/v1/washingcarday';
 
   //단기예보
-  static Future<void> getShortForm(int nx,int ny) async {
+  static Future<List<Weather>> getShortForm(int nx, int ny) async {
+    List<Weather> list = [];
+
     var res = await ApiProvider().get(
       networkURL,
       urlParam: 'short/$nx/$ny'
     );
 
     if (res != null) {
-      print(res);
+      list = Weather.fromJsonForList(res);
     }
 
-    // return user;
+    return list;
   }
 
   //중기예보
-  static Future<void> getMiddleForm(String regId) async {
+  static Future<List<Weather>> getMiddleForm(String regId) async {
+    List<Weather> list = [];
+
     var res = await ApiProvider().get(
         networkURL,
         urlParam: 'middle/$regId'
     );
 
     if (res != null) {
-      print(res);
+      list = Weather.fromJsonForList(res, addDays: 3);
     }
 
-    // return user;
+    return list;
   }
 
   //세차일 등록
