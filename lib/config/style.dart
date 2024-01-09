@@ -90,6 +90,7 @@ class Insets {
 
   late final double $2 = 2 * scale;
   late final double $4 = 4 * scale;
+  late final double $6 = 6 * scale;
   late final double $8 = 8 * scale;
   late final double $10 = 10 * scale;
   late final double $12 = 12 * scale;

@@ -23,3 +23,5 @@ const String loginTypeGoogle = '구글';
 const int defaultPop = 40; // 기본 강수 확률 (사용자 설정 강수 확률 없을 시 쓰임)
 
 const String kakaoNativeAppKey = '4f451a05b4a5ae8d4a209c2dcc387d1a';
+
+const String dmSans = 'DMSans'; // font name

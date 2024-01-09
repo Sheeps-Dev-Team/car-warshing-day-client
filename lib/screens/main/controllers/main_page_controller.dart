@@ -1,6 +1,7 @@
 import 'package:car_washing_day/screens/calendar/calendar_page.dart';
 import 'package:car_washing_day/screens/home/home_page.dart';
 import 'package:car_washing_day/screens/profile/profile_page.dart';
+import 'package:car_washing_day/util/global_function.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,8 +24,16 @@ class MainPageController extends GetxController {
   ];
 
   int pageIndex = 0;
+
   Widget get page => navList[pageIndex]['page']();
 
+  @override
+  void onInit() {
+    GlobalFunction.setWeatherData().then((value) => update()); // 날씨 데이터 세팅
+    super.onInit();
+  }
+
+  // 페이지 변경
   void onChangedPage(int index) {
     pageIndex = index;
     update();

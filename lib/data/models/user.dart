@@ -86,23 +86,4 @@ class User {
 
     return jsonEncode(map);
   }
-
-//단기 좌표
-  String get getShortTerm {
-    final List<String> splitList = address.split('|');
-
-    final String userArea = splitList.first; //user의 시, 도
-    final String userSubArea = splitList.last; //user의 구, 군
-
-    final String shortTermValue = locationMap[userArea]![userSubArea]!;
-    return shortTermValue;
-  }
-
-//중기 좌표
-  String get getMidTerm {
-    final String userArea = address.split('|').first; //user의 시, 도
-
-    final String midTermValue = midTermLocationMap[userArea]!; //중기 코드 추출
-    return midTermValue;
-  }
 }

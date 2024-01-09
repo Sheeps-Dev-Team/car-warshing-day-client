@@ -14,6 +14,8 @@ class Rain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(rainingType == RainingType.none) return const SizedBox();
+
     return LayoutBuilder(
       builder: (context, constrains) {
         return GetBuilder<RainController>(
