@@ -92,7 +92,7 @@ class CalendarPage extends StatelessWidget {
                       estimatedDateItem(
                         label: '예상 지속일',
                         periodStart: controller.selectedDate,
-                        continuousDay: 2,
+                        continuousDay: controller.continuousDays,
                         color: $style.colors.primary,
                       ),
                       Gap($style.insets.$24),
@@ -322,7 +322,7 @@ class CalendarPage extends StatelessWidget {
                   const TextSpan(text: '예상 지속일'),
                   TextSpan(text: ' 은\n약 ', style: $style.text.title16),
                   TextSpan(
-                    text: '${GlobalFunction.getContinuousDays(startIdx: controller.selectedDate.difference(controller.now).inDays)} ',
+                    text: '${controller.continuousDays} ',
                     style: TextStyle(fontSize: 24 * sizeUnit),
                   ),
                   TextSpan(text: '일 입니다.', style: $style.text.title16),
