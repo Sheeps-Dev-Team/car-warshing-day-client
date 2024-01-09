@@ -13,4 +13,5 @@ class GlobalAssets {
   static const String svgPin = 'assets/images/global/pin.svg'; // 핀
   static const String svgMinusInCircle = 'assets/images/global/minus_in_circle.svg'; // 원 안에 마이너스
   static const String svgPlusInCircle = 'assets/images/global/plus_in_circle.svg'; // 원 안에 플러스
+  static const String svgCancel = 'assets/images/global/cancel.svg'; // x
 }

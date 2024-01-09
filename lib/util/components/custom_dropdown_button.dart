@@ -27,7 +27,7 @@ class CustomDropdownButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: $style.insets.$8),
-      width: 328 * sizeUnit,
+      width: double.infinity,
       height: 48 * sizeUnit,
       decoration: BoxDecoration(
         color: Colors.white,

@@ -66,10 +66,6 @@ class LoginController extends GetxController {
     GlobalFunction.globalLogin(
       email: email,
       loginType: loginType,
-      nullCallback: () {
-        GlobalFunction.showCustomDialog(
-            title: '로그인 실패', description: '로그인에 실패하였습니다.\n잠시 후 다시 시도해 주세요.');
-      },
     );
   }
 

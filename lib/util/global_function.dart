@@ -1,7 +1,9 @@
+import 'package:car_washing_day/config/storage.dart';
 import 'package:car_washing_day/data/global_data.dart';
-import 'package:car_washing_day/respository/user_repository.dart';
+import 'package:car_washing_day/repository/user_repository.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/screens/main/main_page.dart';
+import 'package:car_washing_day/screens/main/splash_screen.dart';
 import 'package:car_washing_day/screens/profile/profile_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../config/constants.dart';
+import '../data/location_data.dart';
 import '../data/models/user.dart';
+import '../data/models/weather.dart';
+import '../repository/weather_repository.dart';
 
 class GlobalFunction {
   // 포커스 해제 함수
@@ -31,12 +36,7 @@ class GlobalFunction {
     bool barrierDismissible = true,
   }) {
     // 버튼
-    Widget button(
-        {required String text,
-        required GestureTapCallback onTap,
-        required Color bgColor,
-        required Color borderColor,
-        required Color fontColor}) {
+    Widget button({required String text, required GestureTapCallback onTap, required Color bgColor, required Color borderColor, required Color fontColor}) {
       return Material(
         color: Colors.transparent,
         child: InkWell(
@@ -75,8 +75,7 @@ class GlobalFunction {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 24 * sizeUnit),
-                if (title.isNotEmpty)
-                  Text(title, style: $style.text.subTitle16),
+                if (title.isNotEmpty) Text(title, style: $style.text.subTitle16),
                 if (child != null) ...[
                   child,
                 ] else ...[
@@ -142,49 +141,46 @@ class GlobalFunction {
   }
 
   // 로그인
-  static Future<void> globalLogin(
-      {required String email,
-      required String loginType,
-      required Function nullCallback}) async {
-    loadingDialog(); // 로딩 시작
+  static Future<void> globalLogin({
+    required String email,
+    required String loginType,
+  }) async {
+    if (Get.currentRoute != SplashScreen.route) loadingDialog(); // 로딩 시작
 
     User? user = await UserRepository.login(email, loginType);
+    GlobalData.loginUser = user;
 
+    // 자동 로그인 정보 저장
+    Storage.setLoginData(email: email, loginType: loginType);
+
+    // 필수 정보 있는 경우
     if (user != null) {
-      GlobalData.loginUser = user;
+      // 탈퇴한 경우
+      if (user.isExit) {
+        await Storage.deleteLoginData(); // 로그인 데이터 삭제
+        if (Get.currentRoute != SplashScreen.route) Get.close(1); // 로딩 끝
 
-      // 자동 로그인 정보 저장
-      const storage = FlutterSecureStorage();
-      await storage.write(key: 'email', value: email);
-      await storage.write(key: 'loginType', value: loginType);
-
-      // 필수 정보 없는 경우
-      if (user.nickName.isEmpty) {
-        Get.offAll(ProfilePage(isEditMode: false));
+        showCustomDialog(description: '탈퇴된 계정입니다.');
       } else {
-        Get.offAll(MainPage());
+        Get.offAll(() => MainPage());
       }
     } else {
-      await deleteLoginData(); // 로그인 정보 삭제
-      Get.close(1); // 로딩 종료
-
-      nullCallback();
+      // 필수 정보 없는 경우
+      GlobalData.loginUser = User(email: email, loginType: loginType, nickName: '', address: '', pop: 0);
+      Get.offAll(() => ProfilePage(isEditMode: false)); // 필수 정보 입력 페이지로 이동
     }
   }
 
   // 로그아웃
   static Future<void> logout() async {
-    await deleteLoginData(); // 로그인 정보 삭제
+    await Storage.deleteLoginData(); // 로그인 정보 삭제
     GlobalData.resetData(); // 글로벌 데이터 리셋
 
-    Get.offAll(LoginPage());
+    Get.offAll(MainPage());
   }
 
   // date picker
-  static Future<DateTime> datePicker(
-      {required BuildContext context,
-      DateTime? initialDateTime,
-      DateTime? minimumDateTime}) async {
+  static Future<DateTime> datePicker({required BuildContext context, DateTime? initialDateTime, DateTime? minimumDateTime}) async {
     unFocus(); // 포커스 해제
 
     final DateTime now = DateTime.now();
@@ -241,11 +237,67 @@ class GlobalFunction {
     );
   }
 
-  // 로그인 정보 삭제
-  static Future<void> deleteLoginData() async {
-    const storage = FlutterSecureStorage();
+  // 단기 좌표
+  static String getShortTerm(String address) {
+    final List<String> splitList = address.split('|');
 
-    await storage.delete(key: 'email');
-    await storage.delete(key: 'loginType');
+    final String userArea = splitList.first; //user의 시, 도
+    final String userSubArea = splitList.last; //user의 구, 군
+
+    final String shortTermValue = locationMap[userArea]![userSubArea]!;
+    return shortTermValue;
+  }
+
+  //중기 좌표
+  static String getMidTerm(address) {
+    final String userArea = address.split('|').first; //user의 시, 도
+
+    final String midTermValue = midTermLocationMap[userArea]!; //중기 코드 추출
+    return midTermValue;
+  }
+
+  // 날씨 데이터 세팅
+  static Future<void> setWeatherList(String address) async {
+    List<Weather> list = [];
+
+    // 단기
+    final List<String> shortTermCodeList = getShortTerm(address).split(division);
+    list.addAll(await WeatherRepository.getShortForm(
+      int.parse(shortTermCodeList.first),
+      int.parse(shortTermCodeList.last),
+    ));
+
+    // 중기
+    final String regId = getMidTerm(address);
+    list.addAll(await WeatherRepository.getMiddleForm(regId));
+
+    // 데이터 세팅
+    if(list.isNotEmpty) {
+      GlobalData.currentWeather = list.first; // 현재 날씨
+
+      // 예보 날씨 세팅
+      list.removeAt(0);
+      GlobalData.weatherList = list;
+    }
+  }
+
+  // 예상 지속일
+  static int getContinuousDays({int startIdx = 0}){
+    if(GlobalData.weatherList.isEmpty) return 0;
+
+    final int userPop = GlobalData.loginUser?.pop ?? defaultPop; // 유저 강수 확률 없으면 기본
+    int value = 0;
+
+    for(int i = startIdx; i < GlobalData.weatherList.length; i++) {
+      final int pop = GlobalData.weatherList[i].pop; // 강수 확률
+
+      if(pop <= userPop) {
+        value++;
+      } else {
+        return value;
+      }
+    }
+
+    return value;
   }
 }

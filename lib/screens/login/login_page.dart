@@ -65,6 +65,7 @@ class LoginPage extends StatelessWidget {
                 loginBtn(
                     path: GlobalAssets.svgGoogleLogin,
                     onTap: () {
+                      controller.googleLoginFunc();
                       // Get.to(() => ProfilePage());
                     }),
                 const Spacer(),

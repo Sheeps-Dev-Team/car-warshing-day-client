@@ -1,13 +1,15 @@
 import 'package:car_washing_day/config/constants.dart';
+import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/screens/home/controllers/home_controller.dart';
+import 'package:car_washing_day/screens/main/address_input_page.dart';
 import 'package:car_washing_day/util/components/bubble/bubble.dart';
 import 'package:car_washing_day/util/components/car_animation.dart';
+import 'package:car_washing_day/util/global_function.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../data/models/weather.dart';
 import '../../util/components/bubble/bubble_lump.dart';
 import '../../util/components/rain/rain.dart';
 
@@ -18,6 +20,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.setAddress(); // 위치 세팅
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -25,7 +29,7 @@ class HomePage extends StatelessWidget {
             const Spacer(),
             Text('오늘 세차하면?', style: $style.text.subTitle16.copyWith(height: 1.15)),
             Gap($style.insets.$8),
-            Text('20일 지속', style: $style.text.headline40.copyWith(height: 1.15)),
+            Text('${GlobalFunction.getContinuousDays()}일 지속', style: $style.text.headline40.copyWith(height: 1.15)),
             const Spacer(),
             SizedBox(
               width: 260 * sizeUnit,
@@ -40,13 +44,41 @@ class HomePage extends StatelessWidget {
                       child: BubbleLump(width: 260 * sizeUnit),
                     ),
                     const CarAnimation(),
-                    Rain(rainingType: RainingType.rainAndSnow),
+                    if (GlobalData.currentWeather != null) ...[
+                      Rain(rainingType: GlobalData.currentWeather!.rainingType),
+                    ],
                   ],
                 ),
               ),
             ),
             const Spacer(),
-            Text('인천 광역시 연수구', style: $style.text.subTitle12),
+            Obx(() => controller.address.value.isNotEmpty
+                ? Text(
+                    controller.address.value.replaceFirst(division, ' '),
+                    style: $style.text.subTitle12,
+                  )
+                : GestureDetector(
+                    onTap: () => Get.to(() => AddressInputPage()),
+                    child: Column(
+                      children: [
+                        Text(
+                          '위치를 설정해 주세요',
+                          style: $style.text.subTitle12.copyWith(
+                            color: $style.colors.primary,
+                            height: 1,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100 * sizeUnit,
+                          child: Divider(
+                            height: 1 * sizeUnit,
+                            thickness: 1 * sizeUnit,
+                            color: $style.colors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
             Gap($style.insets.$8),
             SizedBox(
               height: 16 * sizeUnit,
