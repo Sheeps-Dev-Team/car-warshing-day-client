@@ -1,5 +1,4 @@
 import 'package:car_washing_day/data/global_data.dart';
-import 'package:car_washing_day/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

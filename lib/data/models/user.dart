@@ -64,11 +64,11 @@ class User {
 
   String toCreateJsonEncode() {
     Map<String, dynamic> map = {
-      'email' : email,
-      'loginType' : loginType,
-      'nickName' : nickName,
-      'address' : address,
-      'custom_pop' : pop
+      'email': email,
+      'loginType': loginType,
+      'nickName': nickName,
+      'address': address,
+      'custom_pop': pop
     };
 
     return jsonEncode(map);
@@ -76,10 +76,10 @@ class User {
 
   String toUpdateJsonEncode() {
     Map<String, dynamic> map = {
-      'loginType' : loginType,
-      'nickName' : nickName,
-      'address' : address,
-      'custom_pop' : pop
+      'loginType': loginType,
+      'nickName': nickName,
+      'address': address,
+      'custom_pop': pop
     };
 
     return jsonEncode(map);
@@ -102,5 +102,28 @@ class User {
 
     final String midTermValue = midTermLocationMap[userArea]!; //중기 코드 추출
     return midTermValue;
+  }
+
+  //장기 좌표
+  int? get getLongTerm {
+    final List<String> splitList = address.split('|');
+    final String userArea = splitList.first; //user의 시, 도
+    final String userSubArea = splitList.last; //user의 구, 군
+
+    int? longTermValue =
+        regionLongTermLocationMap[userArea]![userSubArea]; //구,군까지 있을때
+    int? longTermValue2 =
+        regionLongTermLocationMap[userArea]?.values.first; //구,군값이 없을 때
+
+    if (longTermValue != null) {
+      //userArea, userSubArea 값이 둘다 존재할때
+      return longTermValue;
+    } else if (regionLongTermLocationMap[userArea] != null &&
+        regionLongTermLocationMap[userArea]![userSubArea] == null) {
+      //userArea만 존재할 때 userSubArea == null 일 때
+      return longTermValue2;
+    }
+
+    return null;
   }
 }
