@@ -1,6 +1,7 @@
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/screens/home/controllers/home_controller.dart';
+import 'package:car_washing_day/screens/main/address_input_page.dart';
 import 'package:car_washing_day/util/components/bubble/bubble.dart';
 import 'package:car_washing_day/util/components/car_animation.dart';
 import 'package:flutter/material.dart';
@@ -50,10 +51,33 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Obx(() => Text(
-                  controller.address.value.replaceFirst(division, ' '),
-                  style: $style.text.subTitle12,
-                )),
+            Obx(() => controller.address.value.isNotEmpty
+                ? Text(
+                    controller.address.value.replaceFirst(division, ' '),
+                    style: $style.text.subTitle12,
+                  )
+                : GestureDetector(
+                    onTap: () => Get.to(() => AddressInputPage()),
+                    child: Column(
+                      children: [
+                        Text(
+                          '위치를 설정해 주세요',
+                          style: $style.text.subTitle12.copyWith(
+                            color: $style.colors.primary,
+                            height: 1,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100 * sizeUnit,
+                          child: Divider(
+                            height: 1 * sizeUnit,
+                            thickness: 1 * sizeUnit,
+                            color: $style.colors.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
             Gap($style.insets.$8),
             SizedBox(
               height: 16 * sizeUnit,

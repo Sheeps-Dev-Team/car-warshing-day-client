@@ -14,11 +14,15 @@ class CalendarPageController extends GetxController {
   late DateTime selectedDate = now;
 
   List<Weather> get weatherList {
-    List<Weather> list = [...GlobalData.weatherList];
+    if(GlobalData.weatherList.isNotEmpty) {
+      List<Weather> list = [...GlobalData.weatherList];
 
-    list.removeAt(0);
+      list.removeAt(0);
 
-    return list;
+      return list;
+    } else {
+      return [];
+    }
   }
 
   // 선택 날짜 변경

@@ -19,6 +19,7 @@ import '../../util/components/bubble/bubble_lump.dart';
 import '../../util/components/car_animation.dart';
 import '../../util/components/custom_button.dart';
 import '../../util/components/rain/rain.dart';
+import '../main/address_input_page.dart';
 import 'controllers/calendar_page_controller.dart';
 
 import 'package:http/http.dart' as http;
@@ -46,20 +47,22 @@ class CalendarPage extends StatelessWidget {
               Gap($style.insets.$16),
               SizedBox(
                 height: 97 * sizeUnit,
-                child: ScrollablePositionedList.builder(
-                  itemScrollController: controller.itemScrollController,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controller.weatherList.length,
-                  itemBuilder: (context, index) {
-                    final Weather weather = controller.weatherList[index];
+                child: controller.weatherList.isNotEmpty
+                    ? ScrollablePositionedList.builder(
+                        itemScrollController: controller.itemScrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.weatherList.length,
+                        itemBuilder: (context, index) {
+                          final Weather weather = controller.weatherList[index];
 
-                    return weatherItem(
-                      index: index,
-                      weather: weather,
-                      onTap: () => controller.onSelectionChanged(weather.dateTime),
-                    );
-                  },
-                ),
+                          return weatherItem(
+                            index: index,
+                            weather: weather,
+                            onTap: () => controller.onSelectionChanged(weather.dateTime),
+                          );
+                        },
+                      )
+                    : plzAddressWidget(),
               ),
 
               Padding(
@@ -370,6 +373,33 @@ class CalendarPage extends StatelessWidget {
                     // );
                   })
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 위치를 설정해 주세요
+  Widget plzAddressWidget() {
+    return GestureDetector(
+      onTap: () => Get.to(() => AddressInputPage()),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '위치를 설정해 주세요',
+            style: $style.text.subTitle12.copyWith(
+              color: $style.colors.primary,
+              height: 1,
+            ),
+          ),
+          SizedBox(
+            width: 100 * sizeUnit,
+            child: Divider(
+              height: 1 * sizeUnit,
+              thickness: 1 * sizeUnit,
+              color: $style.colors.primary,
+            ),
           ),
         ],
       ),

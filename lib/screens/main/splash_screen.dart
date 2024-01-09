@@ -1,13 +1,12 @@
+import 'package:car_washing_day/config/storage.dart';
 import 'package:car_washing_day/screens/main/main_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../config/constants.dart';
 import '../../config/global_assets.dart';
 import '../../util/global_function.dart';
-import '../login/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -33,9 +32,8 @@ class _SplashScreenState extends State<SplashScreen>
     animationController.forward();
 
     Future.delayed(const Duration(milliseconds: 2000), () async {
-      const FlutterSecureStorage storage = FlutterSecureStorage();
-      final String? email = await storage.read(key: 'email');
-      final String? loginType = await storage.read(key: 'loginType');
+      final String? email = await Storage.getEmail();
+      final String? loginType = await Storage.getLoginType();
 
       if (email != null && loginType != null) {
         GlobalFunction.globalLogin(

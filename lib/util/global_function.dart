@@ -1,3 +1,4 @@
+import 'package:car_washing_day/config/storage.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/repository/user_repository.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
@@ -150,15 +151,13 @@ class GlobalFunction {
     GlobalData.loginUser = user;
 
     // 자동 로그인 정보 저장
-    const storage = FlutterSecureStorage();
-    await storage.write(key: 'email', value: email);
-    await storage.write(key: 'loginType', value: loginType);
+    Storage.setLoginData(email: email, loginType: loginType);
 
     // 필수 정보 있는 경우
     if (user != null) {
       // 탈퇴한 경우
       if (user.isExit) {
-        await deleteLoginData(); // 로그인 데이터 삭제
+        await Storage.deleteLoginData(); // 로그인 데이터 삭제
         if (Get.currentRoute != SplashScreen.route) Get.close(1); // 로딩 끝
 
         showCustomDialog(description: '탈퇴된 계정입니다.');
@@ -174,10 +173,10 @@ class GlobalFunction {
 
   // 로그아웃
   static Future<void> logout() async {
-    await deleteLoginData(); // 로그인 정보 삭제
+    await Storage.deleteLoginData(); // 로그인 정보 삭제
     GlobalData.resetData(); // 글로벌 데이터 리셋
 
-    Get.offAll(LoginPage());
+    Get.offAll(MainPage());
   }
 
   // date picker
@@ -238,14 +237,6 @@ class GlobalFunction {
     );
   }
 
-  // 로그인 정보 삭제
-  static Future<void> deleteLoginData() async {
-    const storage = FlutterSecureStorage();
-
-    await storage.delete(key: 'email');
-    await storage.delete(key: 'loginType');
-  }
-
   // 단기 좌표
   static String getShortTerm(String address) {
     final List<String> splitList = address.split('|');
@@ -265,35 +256,21 @@ class GlobalFunction {
     return midTermValue;
   }
 
-  // 날씨 데이터 세팅
-  static Future<void> setWeatherData() async {
-    // 날씨 데이터 가져오기
-    Future<List<Weather>> getList(String address) async {
-      List<Weather> list = [];
+  // 날씨 데이터 가져오기
+  static Future<List<Weather>> getWeatherList(String address) async {
+    List<Weather> list = [];
 
-      // 단기
-      final List<String> shortTermCodeList = getShortTerm(address).split(division);
-      list.addAll(await WeatherRepository.getShortForm(
-        int.parse(shortTermCodeList.first),
-        int.parse(shortTermCodeList.last),
-      ));
+    // 단기
+    final List<String> shortTermCodeList = getShortTerm(address).split(division);
+    list.addAll(await WeatherRepository.getShortForm(
+      int.parse(shortTermCodeList.first),
+      int.parse(shortTermCodeList.last),
+    ));
 
-      // 중기
-      final String regId = getMidTerm(address);
-      list.addAll(await WeatherRepository.getMiddleForm(regId));
+    // 중기
+    final String regId = getMidTerm(address);
+    list.addAll(await WeatherRepository.getMiddleForm(regId));
 
-      return list;
-    }
-
-    const FlutterSecureStorage storage = FlutterSecureStorage();
-    String? address = GlobalData.loginUser?.address ?? await storage.read(key: 'address');
-
-    // 위치 데이터 있는 경우
-    if(address != null) {
-      GlobalData.weatherList = await getList(address);
-    } else {
-      // 위치 데이터 없는 경우
-      // todo 위치 설정 페이지로 이동
-    }
+    return list;
   }
 }

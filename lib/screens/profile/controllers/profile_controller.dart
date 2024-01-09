@@ -1,4 +1,5 @@
 import 'package:car_washing_day/config/constants.dart';
+import 'package:car_washing_day/config/storage.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/data/models/user.dart';
 import 'package:car_washing_day/repository/user_repository.dart';
@@ -71,6 +72,8 @@ class ProfileController extends GetxController {
     Get.close(1); // 로딩 끝
     if (user != null) {
       GlobalData.loginUser = user;
+      Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
+
       Get.offAll(() => MainPage());
     } else {
       GlobalFunction.showToast(msg: '잠시 후 다시 시도해 주세요.');
@@ -96,10 +99,14 @@ class ProfileController extends GetxController {
       GlobalData.loginUser!.address = obj.address;
       GlobalData.loginUser!.pop = obj.pop;
 
-      await GlobalFunction.setWeatherData(); // 날씨 데이터 세팅
+      await Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
+
+      // 날씨 데이터 세팅
+      GlobalData.weatherList = await GlobalFunction.getWeatherList(obj.address);
       Get.close(1); // 로딩 끝
       GlobalFunction.showToast(msg: '수정이 완료되었습니다.');
     } else {
+      Get.close(1); // 로딩 끝
       GlobalFunction.showToast(msg: '잠시후 다시 시도해 주세요.');
     }
   }
