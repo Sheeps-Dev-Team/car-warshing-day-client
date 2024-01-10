@@ -336,8 +336,8 @@ class GlobalFunction {
   }
 
   // 추천일
-  static DateTime getRecommendDays() {
-    DateTime recomendedDate = GlobalData.weatherList.first.dateTime;
+  static DateTime getRecommendDate() {
+    DateTime recommendDate = GlobalData.weatherList.first.dateTime;
     int maxContinuousDays = 0;
 
     for (int i = 0; i < GlobalData.weatherList.length; i++) {
@@ -345,11 +345,11 @@ class GlobalFunction {
       final int continuousDays = getContinuousDays(startIdx: i);
 
       if (maxContinuousDays < continuousDays) {
-        recomendedDate = weather.dateTime;
+        recommendDate = weather.dateTime;
         maxContinuousDays = continuousDays;
       }
     }
 
-    return recomendedDate;
+    return recommendDate;
   }
 }
