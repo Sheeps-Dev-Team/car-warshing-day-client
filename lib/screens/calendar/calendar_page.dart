@@ -72,39 +72,44 @@ class CalendarPage extends StatelessWidget {
               ),
 
               /// estimatedDate
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
-                  child: ListView(
-                    children: [
-                      Gap($style.insets.$24),
-                      estimatedDateItem(
-                        label: '세차일',
-                        periodStart: controller.now.add(const Duration(days: 5)),
-                        continuousDay: 5,
-                        color: $style.colors.red,
-                        trailingIconPath: GlobalAssets.svgMinusInCircle,
-                        isWashingDay: true,
-                      ),
-                      Gap($style.insets.$24),
-                      Divider(color: $style.colors.lightGrey, height: 1 * sizeUnit),
-                      Gap($style.insets.$24),
-                      estimatedDateItem(
-                        label: '예상 지속일',
-                        periodStart: controller.selectedDate,
-                        continuousDay: controller.continuousDays,
-                        color: $style.colors.primary,
-                      ),
-                      Gap($style.insets.$24),
-                      estimatedDateItem(
-                        label: '추천일',
-                        periodStart: controller.now,
-                        continuousDay: 6,
-                      ),
-                    ],
+              if (GlobalData.weatherList.isNotEmpty) ...[
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
+                    child: ListView(
+                      children: [
+                        Gap($style.insets.$24),
+                        if (GlobalData.loginUser?.washingCarDay != null) ...[
+                          estimatedDateItem(
+                            label: '세차일',
+                            periodStart: GlobalData.loginUser!.washingCarDay!.startedAt,
+                            continuousDay:
+                                GlobalFunction.getContinuousDays(startIdx: GlobalData.loginUser!.washingCarDay!.startedAt.difference(GlobalData.weatherList.first.dateTime).inDays),
+                            color: $style.colors.red,
+                            trailingIconPath: GlobalAssets.svgMinusInCircle,
+                            isWashingDay: true,
+                          ),
+                          Gap($style.insets.$24),
+                          Divider(color: $style.colors.lightGrey, height: 1 * sizeUnit),
+                          Gap($style.insets.$24),
+                        ],
+                        estimatedDateItem(
+                          label: '예상 지속일',
+                          periodStart: controller.selectedDate,
+                          continuousDay: controller.continuousDays,
+                          color: $style.colors.primary,
+                        ),
+                        Gap($style.insets.$24),
+                        estimatedDateItem(
+                          label: '추천일',
+                          periodStart: controller.recommendationDate,
+                          continuousDay: controller.recommendedContinuousDays,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ],
           );
         },
@@ -191,9 +196,19 @@ class CalendarPage extends StatelessWidget {
                   style: $style.text.title18.copyWith(color: color ?? $style.colors.darkGrey),
                 ),
                 Gap($style.insets.$12),
-                SvgPicture.asset(
-                  trailingIconPath ?? GlobalAssets.svgPlusInCircle,
-                  width: 20 * sizeUnit,
+                InkWell(
+                  onTap: () => controller.openDetailDialog(
+                    detailDialogWidget(
+                      periodStart: periodStart,
+                      continuousDay: continuousDay,
+                      color: label == '추천일' ? $style.colors.primary : color,
+                      isWashingDay: isWashingDay,
+                    ),
+                  ),
+                  child: SvgPicture.asset(
+                    trailingIconPath ?? GlobalAssets.svgPlusInCircle,
+                    width: 20 * sizeUnit,
+                  ),
                 ),
                 Gap($style.insets.$8),
               ],
@@ -207,6 +222,9 @@ class CalendarPage extends StatelessWidget {
   // 날씨 아이템
   Padding weatherItem({required int index, required Weather weather, required GestureTapCallback onTap}) {
     final bool isSelected = weather.dateTime == controller.selectedDate;
+    final bool isWashingDay = weather.dateTime.year == GlobalData.loginUser?.washingCarDay?.startedAt.year &&
+        weather.dateTime.month == GlobalData.loginUser?.washingCarDay?.startedAt.month &&
+        weather.dateTime.day == GlobalData.loginUser?.washingCarDay?.startedAt.day;
 
     return Padding(
       padding: EdgeInsets.only(
@@ -234,14 +252,18 @@ class CalendarPage extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular($style.corners.$4),
                 boxShadow: $style.boxShadows.bs1,
-                color: isSelected ? $style.colors.primary : Colors.white,
+                color: isWashingDay
+                    ? $style.colors.red
+                    : isSelected
+                        ? $style.colors.primary
+                        : Colors.white,
               ),
               child: Column(
                 children: [
                   SvgPicture.asset(
                     weather.getWeatherIcon,
                     width: 24 * sizeUnit,
-                    colorFilter: isSelected && weather.getWeatherIcon == WeatherAssets.snowy
+                    colorFilter: (isWashingDay || isSelected) && weather.getWeatherIcon == WeatherAssets.snowy
                         ? const ColorFilter.mode(
                             Colors.white,
                             BlendMode.srcIn,
@@ -253,8 +275,8 @@ class CalendarPage extends StatelessWidget {
                     '${weather.pop}%',
                     style: $style.text.subTitle10.copyWith(
                       fontFamily: dmSans,
-                      color: isSelected ? Colors.white : $style.colors.primary,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                      color: isWashingDay || isSelected ? Colors.white : $style.colors.primary,
+                      fontWeight: isWashingDay || isSelected ? FontWeight.bold : FontWeight.w500,
                       height: 1.15,
                     ),
                   ),
@@ -405,6 +427,169 @@ class CalendarPage extends StatelessWidget {
               color: $style.colors.primary,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  // 디테일 다이얼로그 위젯
+  Widget detailDialogWidget({
+    required DateTime periodStart,
+    required int continuousDay,
+    Color? color,
+    bool isWashingDay = false,
+  }) {
+    final DateTime periodEnd = periodStart.add(Duration(days: continuousDay));
+    final bool isShowLongTerm = periodEnd.difference(GlobalData.weatherList.last.dateTime).inDays >= 0;
+
+    return GetBuilder<CalendarPageController>(
+        id: 'detailDialog',
+        initState: (state) {
+          if (isShowLongTerm) controller.setLongTerm(); // 장기 예보 세팅
+        },
+        builder: (_) {
+          return Material(
+            type: MaterialType.transparency,
+            child: Center(
+              child: Stack(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: $style.insets.$24),
+                    padding: EdgeInsets.symmetric(horizontal: $style.insets.$16, vertical: $style.insets.$24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular($style.corners.$8),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('상세 정보', style: $style.text.headline18),
+                        Gap($style.insets.$24),
+                        detailEstimatedDateItem(
+                          periodStart: periodStart,
+                          continuousDay: continuousDay,
+                          color: color,
+                        ),
+                        // 장기까지 지속일이 이어진 경우
+                        if (isShowLongTerm && controller.longTermForecast != null) ...[
+                          Gap($style.insets.$16),
+                          // 장기 +2
+                          detailEstimatedDateItem(
+                            periodStart: controller.longTermForecast!.baseDate,
+                            continuousDay: 2,
+                            longTermProbability: controller.longTermForecast!.getProbability(2),
+                          ),
+                          Gap($style.insets.$16),
+                          // 장기 +4
+                          detailEstimatedDateItem(
+                            periodStart: controller.longTermForecast!.baseDate,
+                            continuousDay: 4,
+                            longTermProbability: controller.longTermForecast!.getProbability(4),
+                          ),
+                        ],
+                        Gap($style.insets.$24),
+                        CustomButton(
+                          text: isWashingDay ? '등록 해제' : '세차일 등록',
+                          color: color,
+                          onTap: () => isWashingDay ? controller.deleteWashingCarDay() : controller.setWashingCarDay(periodStart: periodStart, periodEnd: periodEnd),
+                        ),
+                        Gap($style.insets.$12),
+                        Text(
+                          isWashingDay ? '예상 지속 기간 변경 푸시 알림이 해제돼요!' : '예상 지속 기간 변경 시 자동 푸시 알림이 가요!',
+                          style: $style.text.subTitle12.copyWith(color: $style.colors.darkGrey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: $style.insets.$16,
+                    right: $style.insets.$40,
+                    child: InkWell(
+                      onTap: Get.back,
+                      child: SvgPicture.asset(GlobalAssets.svgCancel, width: 24 * sizeUnit),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  // 디테일 에상 지속일 아이템
+  Widget detailEstimatedDateItem({
+    required DateTime periodStart,
+    required int continuousDay,
+    Color? color,
+    double? longTermProbability,
+  }) {
+    return Container(
+      height: 48 * sizeUnit,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular($style.corners.$4),
+        boxShadow: $style.boxShadows.bs2,
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 4 * sizeUnit,
+            height: 48 * sizeUnit,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular($style.corners.$4),
+                bottomLeft: Radius.circular($style.corners.$4),
+              ),
+            ),
+          ),
+          Gap($style.insets.$12),
+          Expanded(
+            child: longTermProbability == null
+                ? Text(
+                    DateFormat('MM.dd').format(periodStart),
+                    style: $style.text.subTitle12.copyWith(fontFamily: dmSans, height: 1.15),
+                  )
+                : Text(
+                    '${(longTermProbability * 100).round()}%',
+                    style: $style.text.subTitle14.copyWith(height: 1.15),
+                  ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text('예상 지속 기간', style: $style.text.subTitle12.copyWith(height: 1.15)),
+                Gap($style.insets.$2),
+                RichText(
+                  text: TextSpan(
+                    style: $style.text.body12.copyWith(
+                      fontFamily: dmSans,
+                      color: $style.colors.darkGrey,
+                      height: 1.15,
+                    ),
+                    children: [
+                      TextSpan(text: DateFormat('MM.dd').format(periodStart)),
+                      const TextSpan(text: ' - '),
+                      TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay)))),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '${longTermProbability != null ? '+' : ''}$continuousDay일',
+                style: $style.text.title18.copyWith(color: color ?? $style.colors.darkGrey),
+              ),
+            ),
+          ),
+          Gap($style.insets.$20),
         ],
       ),
     );

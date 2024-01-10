@@ -250,14 +250,15 @@ class GlobalFunction {
   }
 
   // 단기 좌표
-  static String getShortTerm(String address) {
+  static List<int> getShortTerm(String address) {
     final List<String> splitList = address.split('|');
 
     final String userArea = splitList.first; //user의 시, 도
     final String userSubArea = splitList.last; //user의 구, 군
 
-    final String shortTermValue = locationMap[userArea]![userSubArea]!;
-    return shortTermValue;
+    final List<String> shortTermValue = locationMap[userArea]![userSubArea]!.split(division);
+    final List<int> shortTermList = [int.parse(shortTermValue.first), int.parse(shortTermValue.last)];
+    return shortTermList;
   }
 
   //중기 좌표
@@ -269,7 +270,7 @@ class GlobalFunction {
   }
 
   //장기 좌표
-  static int? getLongTerm(String address) {
+  static String getLongTerm(String address) {
     final List<String> splitList = address.split('|');
     final String userArea = splitList.first; //user의 시, 도
     final String userSubArea = splitList.last; //user의 구, 군
@@ -281,10 +282,10 @@ class GlobalFunction {
 
     if (longTermValue != null) {
       //userArea, userSubArea 값이 둘다 존재할때
-      return longTermValue;
+      return longTermValue.toString();
     } else {
       //userArea만 존재할 때 userSubArea == null 일 때
-      return longTermValue2;
+      return longTermValue2.toString();
     }
   }
 
@@ -293,11 +294,10 @@ class GlobalFunction {
     List<Weather> list = [];
 
     // 단기
-    final List<String> shortTermCodeList =
-        getShortTerm(address).split(division);
+    final List<int> shortTermCodeList = getShortTerm(address);
     list.addAll(await WeatherRepository.getShortForm(
-      int.parse(shortTermCodeList.first),
-      int.parse(shortTermCodeList.last),
+      shortTermCodeList.first,
+      shortTermCodeList.last,
     ));
 
     // 중기
