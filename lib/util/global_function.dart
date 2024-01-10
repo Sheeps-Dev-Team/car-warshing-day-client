@@ -334,4 +334,22 @@ class GlobalFunction {
 
     return value;
   }
+
+  // 추천일
+  static DateTime getRecommendDays() {
+    DateTime recomendedDate = GlobalData.weatherList.first.dateTime;
+    int maxContinuousDays = 0;
+
+    for (int i = 0; i < GlobalData.weatherList.length; i++) {
+      final Weather weather = GlobalData.weatherList[i];
+      final int continuousDays = getContinuousDays(startIdx: i);
+
+      if (maxContinuousDays < continuousDays) {
+        recomendedDate = weather.dateTime;
+        maxContinuousDays = continuousDays;
+      }
+    }
+
+    return recomendedDate;
+  }
 }
