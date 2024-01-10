@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 import '../../config/constants.dart';
 
 class WashingCarDay {
@@ -28,34 +30,25 @@ class WashingCarDay {
   factory WashingCarDay.fromJson(Map<String, dynamic> json) {
     return WashingCarDay(
       id: json['id'],
-      startedAt: DateTime.parse(json['startedAt']),
-      finishedAt: DateTime.parse(json['finishedAt']),
+      startedAt: DateTime.parse(json['started_at']).add(const Duration(hours: 9)),
+      finishedAt: DateTime.parse(json['finished_at']).add(const Duration(hours: 9)),
       nx: json['nx'] ?? 0,
       ny: json['ny'] ?? 0,
       regId: json['regId'] ?? '',
-      customPop: json['customPop'] ?? 0,
-      checkUpdate: json['checkUpdate'] ?? false,
-      createdAt: DateTime.parse(json['createdAt']),
+      customPop: json['custom_pop'] ?? 0,
+      checkUpdate: json['check_update'] ?? false,
+      // createdAt: DateTime.parse(json['createdAt']),
     );
   }
 
-  Map<String, dynamic> toCreateJson() => {
-    'startedAt' : startedAt.toString().substring(0,9).replaceAll(('-'), ''),
-    'finishedAt' : startedAt.toString().substring(0,9).replaceAll(('-'), ''),
-    'nx' : nx,
-    'ny' : ny,
-    'regId' : regId,
-    'customPop' : customPop
-  };
-
   String toCreateJsonEncode() {
     Map<String, dynamic> map = {
-      'startedAt' : startedAt.toString().substring(0,9).replaceAll(('-'), ''),
-      'finishedAt' : startedAt.toString().substring(0,9).replaceAll(('-'), ''),
-      'nx' : nx,
-      'ny' : ny,
-      'regId' : regId,
-      'customPop' : customPop
+      'started_at': DateFormat('yyyy-MM-dd').format(startedAt),
+      'finished_at': DateFormat('yyyy-MM-dd').format(finishedAt),
+      'nx': nx,
+      'ny': ny,
+      'regId': regId,
+      'custom_pop': customPop,
     };
 
     return jsonEncode(map);

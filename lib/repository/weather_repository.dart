@@ -43,8 +43,8 @@ class WeatherRepository {
 
   //세차일 등록
   static Future<WashingCarDay?> createWashing(WashingCarDay obj) async {
-
     WashingCarDay? washingCarDay;
+
     var res = await ApiProvider().post(
       washingURL,
       obj.toCreateJsonEncode(),urlParam: GlobalData.loginUser!.userId.toString()
@@ -55,5 +55,16 @@ class WeatherRepository {
     }
 
     return washingCarDay;
+  }
+
+  // 세차일 삭제
+  static Future<String?> deleteWashing(int washingDayId) async {
+    var res = await ApiProvider().delete(
+      washingURL,
+      jsonEncode({}),
+      urlParam: '${GlobalData.loginUser!.userId}/$washingDayId',
+    );
+
+    return res["message"];
   }
 }
