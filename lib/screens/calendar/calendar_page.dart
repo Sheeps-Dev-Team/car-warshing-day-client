@@ -34,6 +34,7 @@ class CalendarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GetBuilder<CalendarPageController>(
+        initState: (state) => controller.init(),
         builder: (_) {
           return Column(
             children: [
@@ -102,8 +103,8 @@ class CalendarPage extends StatelessWidget {
                         Gap($style.insets.$24),
                         estimatedDateItem(
                           label: '추천일',
-                          periodStart: controller.recommendationDate,
-                          continuousDay: controller.recommendedContinuousDays,
+                          periodStart: controller.recommendDate,
+                          continuousDay: controller.recommendContinuousDays,
                         ),
                       ],
                     ),
@@ -184,7 +185,7 @@ class CalendarPage extends StatelessWidget {
                           children: [
                             TextSpan(text: DateFormat('MM.dd').format(periodStart)),
                             const TextSpan(text: ' - '),
-                            TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay)))),
+                            TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay == 0 ? 0 : continuousDay - 1)))),
                           ],
                         ),
                       ),
@@ -476,14 +477,14 @@ class CalendarPage extends StatelessWidget {
                           Gap($style.insets.$16),
                           // 장기 +2
                           detailEstimatedDateItem(
-                            periodStart: controller.longTermForecast!.baseDate,
+                            periodStart: controller.longTermForecast!.baseDate.add(const Duration(days: 1)),
                             continuousDay: 2,
                             longTermProbability: controller.longTermForecast!.getProbability(2),
                           ),
                           Gap($style.insets.$16),
                           // 장기 +4
                           detailEstimatedDateItem(
-                            periodStart: controller.longTermForecast!.baseDate,
+                            periodStart: controller.longTermForecast!.baseDate.add(const Duration(days: 1)),
                             continuousDay: 4,
                             longTermProbability: controller.longTermForecast!.getProbability(4),
                           ),
@@ -573,7 +574,7 @@ class CalendarPage extends StatelessWidget {
                     children: [
                       TextSpan(text: DateFormat('MM.dd').format(periodStart)),
                       const TextSpan(text: ' - '),
-                      TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay)))),
+                      TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay == 0 ? 0 : continuousDay - 1)))),
                     ],
                   ),
                 ),

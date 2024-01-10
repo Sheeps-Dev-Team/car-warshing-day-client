@@ -20,12 +20,16 @@ class CalendarPageController extends GetxController {
   late final DateTime now = DateTime(n.year, n.month, n.day);
 
   late DateTime selectedDate = now; // 선택된 날짜
-  late DateTime recommendationDate = now.add(const Duration(days: 5)); // 추천일
+  late DateTime recommendDate; // 추천일
 
   int get continuousDays => GlobalFunction.getContinuousDays(startIdx: selectedDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 예상 지속일
-  int get recommendedContinuousDays => GlobalFunction.getContinuousDays(startIdx: recommendationDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 추천 예상 지속일
+  int get recommendContinuousDays => GlobalFunction.getContinuousDays(startIdx: recommendDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 추천 예상 지속일
 
   LongTermForecast? longTermForecast; // 장기 예보
+
+  void init(){
+    recommendDate = GlobalFunction.getRecommendDate(); // 추천일 세팅
+  }
 
   // 선택 날짜 변경
   void onSelectionChanged(DateTime dateTime) {
@@ -46,7 +50,7 @@ class CalendarPageController extends GetxController {
     if (GlobalData.weatherList.isNotEmpty) {
       longTermForecast = LongTermForecast(
         locCode: GlobalFunction.getLongTerm((GlobalData.loginUser?.address ?? await Storage.getAddress())!),
-        baseDate: GlobalData.weatherList.last.dateTime.add(const Duration(days: 1)),
+        baseDate: GlobalData.weatherList.last.dateTime,
         baseIsSunny: GlobalData.weatherList.last.rainingType == RainingType.none,
       );
 
