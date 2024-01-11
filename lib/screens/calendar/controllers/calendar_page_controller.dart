@@ -19,7 +19,7 @@ class CalendarPageController extends GetxController {
   final DateTime n = DateTime.now();
   late final DateTime now = DateTime(n.year, n.month, n.day);
 
-  late DateTime selectedDate = now; // 선택된 날짜
+  late DateTime selectedDate = GlobalData.weatherList.isEmpty ? now : GlobalData.weatherList.first.dateTime; // 선택된 날짜
   late DateTime recommendDate; // 추천일
 
   int get continuousDays => GlobalFunction.getContinuousDays(startIdx: selectedDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 예상 지속일
