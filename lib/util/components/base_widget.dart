@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class BaseWidget extends StatelessWidget {
-  const BaseWidget(
-      {super.key,
-      required this.child,
-      this.onPopInvoked,
-      this.selectedCategory});
+  const BaseWidget({super.key, required this.child, this.onPopInvoked, this.selectedCategory});
 
   final Widget child;
   final Function(bool didPop)? onPopInvoked;

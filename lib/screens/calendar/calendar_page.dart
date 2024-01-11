@@ -1,9 +1,8 @@
 import 'dart:convert';
 
 import 'package:car_washing_day/config/global_assets.dart';
-import 'package:car_washing_day/repository/user_repository.dart';
+import 'package:car_washing_day/screens/home/controllers/home_controller.dart';
 import 'package:car_washing_day/util/global_function.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -34,6 +33,7 @@ class CalendarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GetBuilder<CalendarPageController>(
+        initState: (state) => controller.init(),
         builder: (_) {
           return Column(
             children: [
@@ -63,7 +63,7 @@ class CalendarPage extends StatelessWidget {
                           );
                         },
                       )
-                    : plzAddressWidget(),
+                    : exceptionText(),
               ),
 
               Padding(
@@ -102,8 +102,8 @@ class CalendarPage extends StatelessWidget {
                         Gap($style.insets.$24),
                         estimatedDateItem(
                           label: '추천일',
-                          periodStart: controller.recommendationDate,
-                          continuousDay: controller.recommendedContinuousDays,
+                          periodStart: controller.recommendDate,
+                          continuousDay: controller.recommendContinuousDays,
                         ),
                       ],
                     ),
@@ -184,7 +184,7 @@ class CalendarPage extends StatelessWidget {
                           children: [
                             TextSpan(text: DateFormat('MM.dd').format(periodStart)),
                             const TextSpan(text: ' - '),
-                            TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay)))),
+                            TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay == 0 ? 0 : continuousDay - 1)))),
                           ],
                         ),
                       ),
@@ -375,58 +375,64 @@ class CalendarPage extends StatelessWidget {
               ),
             ),
           ),
-          Column(
-            children: [
-              CustomButton.small(
-                text: '로그인 하기',
-                onTap: () {
-                  UserRepository.login('test@gmail.com', '구글');
-                },
-              ),
-              CustomButton.small(
-                  text: '토큰 보내기',
-                  onTap: () {
-                    FirebaseMessaging.instance.getToken().then((token) {
-                      if (token != null) {
-                        print(token);
-                        UserRepository.updateFcmToken(token);
-                      }
-                    });
-                    // sendNotificationToDevice(deviceToken: 'dyTkhibS3k8hji9IIXgj0N:APA91bEEPJEnfGJwzPWYgFy50Wfc_eYekwIlWT8xJM7sh-AqvOl1MpJbdvoJiePNPpSfDqQw46FfTWhhg7ubOYZ-S23lHrV-zf1GLlHOWWo6FpztEyGaL0AuToIupdkvqGy9FHVIue0q',
-                    //   title: 'test',
-                    //   content: 'contents',
-                    //   data: {'test_parameter1': 1, 'test_parameter2': '테스트1'},
-                    // );
-                  })
-            ],
-          ),
+          // Column(
+          //   children: [
+          //     CustomButton.small(
+          //       text: '로그인 하기',
+          //       onTap: () {
+          //         UserRepository.login('test@gmail.com', '구글');
+          //       },
+          //     ),
+          //     CustomButton.small(
+          //         text: '토큰 보내기',
+          //         onTap: () {
+          //           FirebaseMessaging.instance.getToken().then((token) {
+          //             if (token != null) {
+          //               print(token);
+          //               UserRepository.updateFcmToken(token);
+          //             }
+          //           });
+          //           // sendNotificationToDevice(deviceToken: 'dyTkhibS3k8hji9IIXgj0N:APA91bEEPJEnfGJwzPWYgFy50Wfc_eYekwIlWT8xJM7sh-AqvOl1MpJbdvoJiePNPpSfDqQw46FfTWhhg7ubOYZ-S23lHrV-zf1GLlHOWWo6FpztEyGaL0AuToIupdkvqGy9FHVIue0q',
+          //           //   title: 'test',
+          //           //   content: 'contents',
+          //           //   data: {'test_parameter1': 1, 'test_parameter2': '테스트1'},
+          //           // );
+          //         })
+          //   ],
+          // ),
         ],
       ),
     );
   }
 
-  // 위치를 설정해 주세요
-  Widget plzAddressWidget() {
+  // 예외 텍스트
+  Widget exceptionText() {
+    final HomeController homeController = Get.find<HomeController>();
+    final bool isEmptyAddress = homeController.address.isEmpty;
+
     return GestureDetector(
-      onTap: () => Get.to(() => AddressInputPage()),
+      onTap: () => isEmptyAddress ? Get.to(() => AddressInputPage()) : GlobalFunction.setWeatherList(homeController.address.value),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '위치를 설정해 주세요',
+            isEmptyAddress ? '위치를 설정해 주세요' : '날씨 정보를 받아오지 못했습니다.\n잠시후 다시 시도해 주세요.',
             style: $style.text.subTitle12.copyWith(
               color: $style.colors.primary,
-              height: 1,
+              height: isEmptyAddress ? 1 : 1.3,
             ),
+            textAlign: TextAlign.center,
           ),
-          SizedBox(
-            width: 100 * sizeUnit,
-            child: Divider(
-              height: 1 * sizeUnit,
-              thickness: 1 * sizeUnit,
-              color: $style.colors.primary,
+          if (isEmptyAddress) ...[
+            SizedBox(
+              width: 100 * sizeUnit,
+              child: Divider(
+                height: 1 * sizeUnit,
+                thickness: 1 * sizeUnit,
+                color: $style.colors.primary,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -476,14 +482,14 @@ class CalendarPage extends StatelessWidget {
                           Gap($style.insets.$16),
                           // 장기 +2
                           detailEstimatedDateItem(
-                            periodStart: controller.longTermForecast!.baseDate,
+                            periodStart: controller.longTermForecast!.baseDate.add(const Duration(days: 1)),
                             continuousDay: 2,
                             longTermProbability: controller.longTermForecast!.getProbability(2),
                           ),
                           Gap($style.insets.$16),
                           // 장기 +4
                           detailEstimatedDateItem(
-                            periodStart: controller.longTermForecast!.baseDate,
+                            periodStart: controller.longTermForecast!.baseDate.add(const Duration(days: 1)),
                             continuousDay: 4,
                             longTermProbability: controller.longTermForecast!.getProbability(4),
                           ),
@@ -573,7 +579,7 @@ class CalendarPage extends StatelessWidget {
                     children: [
                       TextSpan(text: DateFormat('MM.dd').format(periodStart)),
                       const TextSpan(text: ' - '),
-                      TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay)))),
+                      TextSpan(text: DateFormat('MM.dd').format(periodStart.add(Duration(days: continuousDay == 0 ? 0 : continuousDay - 1)))),
                     ],
                   ),
                 ),
