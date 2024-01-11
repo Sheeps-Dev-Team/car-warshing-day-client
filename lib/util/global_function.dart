@@ -294,10 +294,11 @@ class GlobalFunction {
 
       // 예보 날씨 세팅
       list.removeAt(0);
-      GlobalData.weatherList = list;
     } else {
       GlobalFunction.showToast(msg: '날씨 정보를 받아오지 못했습니다.');
     }
+
+    GlobalData.weatherList = list;
   }
 
   // 예상 지속일
