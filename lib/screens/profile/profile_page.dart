@@ -37,18 +37,22 @@ class ProfilePage extends StatelessWidget {
                   ? Text('로그인 해주세요', style: $style.text.headline20)
                   : RichText(
                       text: TextSpan(
-                        style: $style.text.headline20.copyWith(color: $style.colors.primary, fontWeight: FontWeight.w700),
+                        style: $style.text.headline20.copyWith(
+                            color: $style.colors.primary,
+                            fontWeight: FontWeight.w700),
                         children: [
                           TextSpan(
                             text: '어서오세요! ',
-                            style: $style.text.headline20.copyWith(fontWeight: FontWeight.w700),
+                            style: $style.text.headline20
+                                .copyWith(fontWeight: FontWeight.w700),
                           ),
                           TextSpan(
                             text: GlobalData.loginUser!.nickName,
                           ),
                           TextSpan(
                             text: '님',
-                            style: $style.text.headline20.copyWith(fontWeight: FontWeight.w700),
+                            style: $style.text.headline20
+                                .copyWith(fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
@@ -65,7 +69,10 @@ class ProfilePage extends StatelessWidget {
                           child: Obx(
                             () => Text(
                               '수정하기',
-                              style: $style.text.headline14.copyWith(color: controller.isOk.value ? $style.colors.primary : $style.colors.grey),
+                              style: $style.text.headline14.copyWith(
+                                  color: controller.isOk.value
+                                      ? $style.colors.primary
+                                      : $style.colors.grey),
                               textAlign: TextAlign.center,
                             ),
                           )),
@@ -92,7 +99,9 @@ class ProfilePage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: GlobalData.loginUser != null ? MainAxisAlignment.start : MainAxisAlignment.center,
+                    mainAxisAlignment: GlobalData.loginUser != null
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.center,
                     children: [
                       if (isEditMode && GlobalData.loginUser == null) ...{
                         Center(
@@ -106,11 +115,13 @@ class ProfilePage extends StatelessWidget {
                               height: 32 * sizeUnit,
                               decoration: BoxDecoration(
                                 color: $style.colors.primary,
-                                borderRadius: BorderRadius.circular(52 * sizeUnit),
+                                borderRadius:
+                                    BorderRadius.circular(52 * sizeUnit),
                               ),
                               child: Text(
                                 '로그인 하기',
-                                style: $style.text.headline14.copyWith(color: Colors.white),
+                                style: $style.text.headline14
+                                    .copyWith(color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -119,7 +130,8 @@ class ProfilePage extends StatelessWidget {
                         Gap($style.insets.$12),
                         Text(
                           '로그인 후 이용이 가능합니다:)',
-                          style: $style.text.subTitle12.copyWith(color: $style.colors.darkGrey),
+                          style: $style.text.subTitle12
+                              .copyWith(color: $style.colors.darkGrey),
                         ),
                       } else ...{
                         Expanded(
@@ -134,12 +146,14 @@ class ProfilePage extends StatelessWidget {
                                 Gap($style.insets.$16),
                                 CustomTextField(
                                   hintText: '입력해 주세요.',
-                                  hintStyle: $style.text.subTitle14.copyWith(color: $style.colors.grey),
+                                  hintStyle: $style.text.subTitle14
+                                      .copyWith(color: $style.colors.grey),
                                   controller: controller.nicknameController,
                                   style: $style.text.subTitle14,
                                   textAlign: TextAlign.center,
                                   width: 328 * sizeUnit,
-                                  borderRadius: BorderRadius.circular(100 * sizeUnit),
+                                  borderRadius:
+                                      BorderRadius.circular(100 * sizeUnit),
                                   borderColor: $style.colors.lightGrey,
                                   maxLength: 7,
                                   counterText: '',
@@ -155,8 +169,11 @@ class ProfilePage extends StatelessWidget {
                                   width: 328 * sizeUnit,
                                   child: Obx(
                                     () => CustomDropdownButton(
-                                      border: Border.all(color: $style.colors.lightGrey),
-                                      value: controller.selectedArea.isEmpty ? null : controller.selectedArea.value,
+                                      border: Border.all(
+                                          color: $style.colors.lightGrey),
+                                      value: controller.selectedArea.isEmpty
+                                          ? null
+                                          : controller.selectedArea.value,
                                       items: areaMap.keys.toList(),
                                       hintText: '시, 도 선택',
                                       onChanged: (value) {
@@ -172,9 +189,15 @@ class ProfilePage extends StatelessWidget {
                                   width: 328 * sizeUnit,
                                   child: Obx(
                                     () => CustomDropdownButton(
-                                      border: Border.all(color: $style.colors.lightGrey),
-                                      value: controller.selectedSubArea.isEmpty ? null : controller.selectedSubArea.value,
-                                      items: controller.selectedArea.isEmpty ? [] : areaMap[controller.selectedArea.value]!,
+                                      border: Border.all(
+                                          color: $style.colors.lightGrey),
+                                      value: controller.selectedSubArea.isEmpty
+                                          ? null
+                                          : controller.selectedSubArea.value,
+                                      items: controller.selectedArea.isEmpty
+                                          ? []
+                                          : areaMap[
+                                              controller.selectedArea.value]!,
                                       hintText: '구,군 선택',
                                       onChanged: (value) {
                                         controller.selectedSubArea(value);
@@ -190,22 +213,46 @@ class ProfilePage extends StatelessWidget {
                                 Gap($style.insets.$14),
                                 Text(
                                   '설정된 강수 확률 이하는 세차 지속일에 영향을 주지 않습니다.',
-                                  style: $style.text.subTitle12.copyWith(color: $style.colors.darkGrey),
+                                  style: $style.text.subTitle12
+                                      .copyWith(color: $style.colors.darkGrey),
                                 ),
                                 Gap($style.insets.$16),
                                 SizedBox(
                                   width: 328 * sizeUnit,
                                   child: Obx(
                                     () => CustomDropdownButton(
-                                      border: Border.all(color: $style.colors.lightGrey),
-                                      value: controller.selectedPrecipitationProbability.isEmpty ? null : controller.selectedPrecipitationProbability.value,
-                                      items: const ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'],
+                                      border: Border.all(
+                                          color: $style.colors.lightGrey),
+                                      value: controller
+                                              .selectedPrecipitationProbability
+                                              .isEmpty
+                                          ? null
+                                          : controller
+                                              .selectedPrecipitationProbability
+                                              .value,
+                                      items: const [
+                                        '0%',
+                                        '10%',
+                                        '20%',
+                                        '30%',
+                                        '40%',
+                                        '50%',
+                                        '60%',
+                                        '70%',
+                                        '80%',
+                                        '90%',
+                                        '100%'
+                                      ],
                                       hintText: '강수 확률 선택',
                                       onChanged: (value) {
                                         if (value == '강수 확률 선택') {
-                                          controller.selectedPrecipitationProbability('');
+                                          controller
+                                              .selectedPrecipitationProbability(
+                                                  '');
                                         } else {
-                                          controller.selectedPrecipitationProbability(value);
+                                          controller
+                                              .selectedPrecipitationProbability(
+                                                  value);
                                         }
                                       },
                                     ),
@@ -216,12 +263,14 @@ class ProfilePage extends StatelessWidget {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     '세차 추천일, 세차 예정일과 같은 유용한 알림을 받아보세요.',
-                                    style: $style.text.subTitle12.copyWith(color: $style.colors.darkGrey),
+                                    style: $style.text.subTitle12.copyWith(
+                                        color: $style.colors.darkGrey),
                                   ),
                                 ),
                                 Gap($style.insets.$8),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       '알림 설정',
@@ -234,46 +283,55 @@ class ProfilePage extends StatelessWidget {
                                     ),
                                   ],
                                 ),
+                                Gap($style.insets.$32),
+                                if (isEditMode) ...{
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      InkWell(
+                                        onTap: controller.logout,
+                                        child: Text(
+                                          '로그아웃',
+                                          style: $style.text.subTitle12
+                                              .copyWith(
+                                                  color: $style.colors.grey),
+                                        ),
+                                      ),
+                                      Gap($style.insets.$16),
+                                      Text(
+                                        '|',
+                                        style: $style.text.subTitle12.copyWith(
+                                            color: $style.colors.grey),
+                                      ),
+                                      Gap($style.insets.$16),
+                                      InkWell(
+                                        onTap: controller.deleteUser,
+                                        child: Text(
+                                          '회원탈퇴',
+                                          style: $style.text.subTitle12
+                                              .copyWith(
+                                                  color: $style.colors.grey),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                } else ...{
+                                  Obx(() => CustomButton(
+                                        text: '입력 완료',
+                                        isOk: controller.isOk.value,
+                                        onTap: controller.createUser,
+                                      )),
+                                },
+                                if (MediaQuery.of(context).padding.bottom ==
+                                    0) ...[
+                                  Gap($style.insets.$20),
+                                ],
                               ],
                             ),
                           ),
                         ),
-                        if (isEditMode) ...{
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: controller.logout,
-                                child: Text(
-                                  '로그아웃',
-                                  style: $style.text.subTitle12.copyWith(color: $style.colors.grey),
-                                ),
-                              ),
-                              Gap($style.insets.$16),
-                              Text(
-                                '|',
-                                style: $style.text.subTitle12.copyWith(color: $style.colors.grey),
-                              ),
-                              Gap($style.insets.$16),
-                              InkWell(
-                                onTap: controller.deleteUser,
-                                child: Text(
-                                  '회원탈퇴',
-                                  style: $style.text.subTitle12.copyWith(color: $style.colors.grey),
-                                ),
-                              ),
-                            ],
-                          )
-                        } else ...{
-                          Obx(() => CustomButton(
-                                text: '입력 완료',
-                                isOk: controller.isOk.value,
-                                onTap: controller.createUser,
-                              )),
-                        },
-                        if (MediaQuery.of(context).padding.bottom == 0) ...[
-                          Gap($style.insets.$20),
-                        ],
                       },
                     ],
                   ),

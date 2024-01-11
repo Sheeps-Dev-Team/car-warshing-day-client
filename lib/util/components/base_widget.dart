@@ -17,7 +17,8 @@ class BaseWidget extends StatelessWidget {
         child: Container(
           color: Colors.white,
           child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0), //사용자 스케일팩터 무시
+            data: MediaQuery.of(context)
+                .copyWith(textScaleFactor: 1.0), //사용자 스케일팩터 무시
             child: SafeArea(
               child: child,
             ),
