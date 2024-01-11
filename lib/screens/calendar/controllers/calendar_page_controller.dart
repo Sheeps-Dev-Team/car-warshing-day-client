@@ -22,13 +22,16 @@ class CalendarPageController extends GetxController {
   late DateTime selectedDate = GlobalData.weatherList.isEmpty ? now : GlobalData.weatherList.first.dateTime; // 선택된 날짜
   late DateTime recommendDate; // 추천일
 
-  int get continuousDays => GlobalFunction.getContinuousDays(startIdx: selectedDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 예상 지속일
-  int get recommendContinuousDays => GlobalFunction.getContinuousDays(startIdx: recommendDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 추천 예상 지속일
+  int get continuousDays => GlobalData.weatherList.isEmpty ? 0 : GlobalFunction.getContinuousDays(startIdx: selectedDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 예상 지속일
+  int get recommendContinuousDays => GlobalData.weatherList.isEmpty ? 0 : GlobalFunction.getContinuousDays(startIdx: recommendDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 추천 예상 지속일
 
   LongTermForecast? longTermForecast; // 장기 예보
 
   void init(){
-    recommendDate = GlobalFunction.getRecommendDate(); // 추천일 세팅
+    // 추천일 세팅
+    if(GlobalData.weatherList.isNotEmpty) {
+      recommendDate = GlobalFunction.getRecommendDate();
+    }
   }
 
   // 선택 날짜 변경
