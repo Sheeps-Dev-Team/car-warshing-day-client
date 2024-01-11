@@ -34,12 +34,7 @@ class GlobalFunction {
     bool barrierDismissible = true,
   }) {
     // 버튼
-    Widget button(
-        {required String text,
-        required GestureTapCallback onTap,
-        required Color bgColor,
-        required Color borderColor,
-        required Color fontColor}) {
+    Widget button({required String text, required GestureTapCallback onTap, required Color bgColor, required Color borderColor, required Color fontColor}) {
       return Material(
         color: Colors.transparent,
         child: InkWell(
@@ -78,8 +73,7 @@ class GlobalFunction {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 24 * sizeUnit),
-                if (title.isNotEmpty)
-                  Text(title, style: $style.text.subTitle16),
+                if (title.isNotEmpty) Text(title, style: $style.text.subTitle16),
                 if (child != null) ...[
                   child,
                 ] else ...[
@@ -170,12 +164,7 @@ class GlobalFunction {
       }
     } else {
       // 필수 정보 없는 경우
-      GlobalData.loginUser = User(
-          email: email,
-          loginType: loginType,
-          nickName: '',
-          address: '',
-          pop: 0);
+      GlobalData.loginUser = User(email: email, loginType: loginType, nickName: '', address: '', pop: 0);
       Get.offAll(() => ProfilePage(isEditMode: false)); // 필수 정보 입력 페이지로 이동
     }
   }
@@ -189,10 +178,7 @@ class GlobalFunction {
   }
 
   // date picker
-  static Future<DateTime> datePicker(
-      {required BuildContext context,
-      DateTime? initialDateTime,
-      DateTime? minimumDateTime}) async {
+  static Future<DateTime> datePicker({required BuildContext context, DateTime? initialDateTime, DateTime? minimumDateTime}) async {
     unFocus(); // 포커스 해제
 
     final DateTime now = DateTime.now();
@@ -275,10 +261,8 @@ class GlobalFunction {
     final String userArea = splitList.first; //user의 시, 도
     final String userSubArea = splitList.last; //user의 구, 군
 
-    int? longTermValue =
-        regionLongTermLocationMap[userArea]![userSubArea]; //구,군까지 있을때
-    int longTermValue2 =
-        regionLongTermLocationMap[userArea]!.values.first; //구,군값이 없을 때
+    int? longTermValue = regionLongTermLocationMap[userArea]![userSubArea]; //구,군까지 있을때
+    int longTermValue2 = regionLongTermLocationMap[userArea]!.values.first; //구,군값이 없을 때
 
     if (longTermValue != null) {
       //userArea, userSubArea 값이 둘다 존재할때
@@ -300,17 +284,19 @@ class GlobalFunction {
       shortTermCodeList.last,
     ));
 
-    // 중기
-    final String regId = getMidTerm(address);
-    list.addAll(await WeatherRepository.getMiddleForm(regId));
-
-    // 데이터 세팅
     if (list.isNotEmpty) {
+      // 중기
+      final String regId = getMidTerm(address);
+      list.addAll(await WeatherRepository.getMiddleForm(regId));
+
+      // 데이터 세팅
       GlobalData.currentWeather = list.first; // 현재 날씨
 
       // 예보 날씨 세팅
       list.removeAt(0);
       GlobalData.weatherList = list;
+    } else {
+      GlobalFunction.showToast(msg: '날씨 정보를 받아오지 못했습니다.');
     }
   }
 
@@ -318,8 +304,7 @@ class GlobalFunction {
   static int getContinuousDays({int startIdx = 0}) {
     if (GlobalData.weatherList.isEmpty) return 0;
 
-    final int userPop =
-        GlobalData.loginUser?.pop ?? defaultPop; // 유저 강수 확률 없으면 기본
+    final int userPop = GlobalData.loginUser?.pop ?? defaultPop; // 유저 강수 확률 없으면 기본
     int value = 0;
 
     for (int i = startIdx; i < GlobalData.weatherList.length; i++) {
