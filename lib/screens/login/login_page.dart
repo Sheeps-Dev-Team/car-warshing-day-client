@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/config/global_assets.dart';
 import 'package:car_washing_day/data/models/user.dart';
@@ -56,12 +58,14 @@ class LoginPage extends StatelessWidget {
                   },
                 ),
                 Gap($style.insets.$15),
-                loginBtn(
-                    path: GlobalAssets.svgAppleLogin,
-                    onTap: () {
-                      Get.to(() => ProfilePage(isEditMode: true));
-                    }),
-                Gap($style.insets.$15),
+                if (Platform.isIOS) ...{
+                  loginBtn(
+                      path: GlobalAssets.svgAppleLogin,
+                      onTap: () {
+                        Get.to(() => ProfilePage(isEditMode: true));
+                      }),
+                  Gap($style.insets.$15),
+                },
                 loginBtn(
                     path: GlobalAssets.svgGoogleLogin,
                     onTap: () {

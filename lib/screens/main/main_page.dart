@@ -27,7 +27,7 @@ class MainPage extends StatelessWidget {
 
   Widget bottomNavigationBar() {
     return Container(
-      height: 56 * sizeUnit,
+      //height: 56 * sizeUnit,
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
