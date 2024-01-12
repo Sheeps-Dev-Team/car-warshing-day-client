@@ -242,8 +242,12 @@ class GlobalFunction {
     final String userArea = splitList.first; //user의 시, 도
     final String userSubArea = splitList.last; //user의 구, 군
 
-    final List<String> shortTermValue = locationMap[userArea]![userSubArea]!.split(division);
-    final List<int> shortTermList = [int.parse(shortTermValue.first), int.parse(shortTermValue.last)];
+    final List<String> shortTermValue =
+        locationMap[userArea]![userSubArea]!.split(division);
+    final List<int> shortTermList = [
+      int.parse(shortTermValue.first),
+      int.parse(shortTermValue.last)
+    ];
     return shortTermList;
   }
 
