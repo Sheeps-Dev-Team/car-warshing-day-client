@@ -14,6 +14,7 @@ class User {
     required this.pop,
     this.washingCarDay,
     this.isExit = false,
+    this.alarm = true,
     this.createdAt,
     this.lastModifiedAt,
   });
@@ -26,6 +27,7 @@ class User {
   int pop;
   WashingCarDay? washingCarDay;
   bool isExit; // 탈퇴 여부
+  bool alarm;
   DateTime? createdAt;
   DateTime? lastModifiedAt;
 
@@ -58,6 +60,7 @@ class User {
       pop: json['custom_pop'] ?? defaultPop,
       washingCarDay: washingCarDay,
       isExit: json['is_exit'] ?? false,
+      alarm: json['alarm'] ?? true,
       createdAt: DateTime.parse(json['createdAt']),
       lastModifiedAt: json['lastModifiedAt'] == null
           ? null
@@ -72,6 +75,7 @@ class User {
       'nickName': nickName,
       'address': address,
       'custom_pop': pop,
+      'alarm': alarm,
     };
 
     return jsonEncode(map);
@@ -83,6 +87,7 @@ class User {
       'nickName': nickName,
       'address': address,
       'custom_pop': pop,
+      'alarm': alarm,
     };
 
     return jsonEncode(map);

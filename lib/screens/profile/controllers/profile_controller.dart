@@ -23,12 +23,21 @@ class ProfileController extends GetxController {
   RxString selectedArea = ''.obs; // 선택된 시, 도
   RxString selectedSubArea = ''.obs; // 선택된 구, 군
   RxString selectedPrecipitationProbability = '$defaultPop%'.obs; // 선택된 강수 확률
+  RxBool isAlarm = true.obs; // 알림
 
-  RxBool get isOk => (nickname.isNotEmpty &&
-          selectedArea.isNotEmpty &&
-          selectedSubArea.isNotEmpty &&
-          selectedPrecipitationProbability.isNotEmpty)
-      .obs;
+  // 기본 isOk
+  RxBool get isOk => (nickname.isNotEmpty && selectedArea.isNotEmpty && selectedSubArea.isNotEmpty && selectedPrecipitationProbability.isNotEmpty).obs;
+
+  // 수정 isOk
+  RxBool get isEditOk {
+    final User user = GlobalData.loginUser!;
+
+    return (isOk.value && (nickname.value != user.nickName ||
+            '${selectedArea.value}$division${selectedSubArea.value}' != user.address ||
+            int.parse(selectedPrecipitationProbability.value.replaceFirst('%', '')) != user.pop ||
+            isAlarm.value != user.alarm))
+        .obs;
+  }
 
   void init(bool value) {
     isEditMode = value;
@@ -37,7 +46,7 @@ class ProfileController extends GetxController {
     setUserData();
   }
 
-// 유저 데이터 세팅
+  // 유저 데이터 세팅
   void setUserData() {
     if (isEditMode && GlobalData.loginUser != null) {
       // 닉네임
@@ -51,15 +60,10 @@ class ProfileController extends GetxController {
 
       // 강수 확률
       selectedPrecipitationProbability('${GlobalData.loginUser!.pop}%');
-    }
-  }
 
-  //입력완료 확인 함수
-  bool isInputComplete() {
-    return nicknameController.text.isNotEmpty &&
-        selectedArea.isNotEmpty &&
-        selectedSubArea.isNotEmpty &&
-        selectedPrecipitationProbability.isNotEmpty;
+      // 알림
+      isAlarm(GlobalData.loginUser!.alarm);
+    }
   }
 
   // 유저 생성
@@ -71,8 +75,8 @@ class ProfileController extends GetxController {
       loginType: GlobalData.loginUser!.loginType,
       nickName: nickname.value,
       address: '${selectedArea.value}$division${selectedSubArea.value}',
-      pop: int.parse(
-          selectedPrecipitationProbability.value.replaceFirst('%', '')),
+      pop: int.parse(selectedPrecipitationProbability.value.replaceFirst('%', '')),
+      alarm: isAlarm.value,
     );
 
     User? user = await UserRepository.create(obj);
@@ -97,8 +101,8 @@ class ProfileController extends GetxController {
       loginType: GlobalData.loginUser!.loginType,
       nickName: nickname.value,
       address: '${selectedArea.value}$division${selectedSubArea.value}',
-      pop: int.parse(
-          selectedPrecipitationProbability.value.replaceFirst('%', '')),
+      pop: int.parse(selectedPrecipitationProbability.value.replaceFirst('%', '')),
+      alarm: isAlarm.value,
     );
 
     String? res = await UserRepository.update(obj);
@@ -107,6 +111,11 @@ class ProfileController extends GetxController {
       GlobalData.loginUser!.nickName = obj.nickName;
       GlobalData.loginUser!.address = obj.address;
       GlobalData.loginUser!.pop = obj.pop;
+      GlobalData.loginUser!.alarm = obj.alarm;
+
+      // 수정 후 상태 관리용
+      isAlarm.toggle();
+      isAlarm.toggle();
 
       await Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
 
@@ -146,5 +155,10 @@ class ProfileController extends GetxController {
         }
       },
     );
+  }
+
+  // 알림 변경
+  void onChangedAlarm(bool value) {
+    isAlarm(value);
   }
 }

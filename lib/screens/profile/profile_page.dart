@@ -64,15 +64,12 @@ class ProfilePage extends StatelessWidget {
                   ? [
                       InkWell(
                           onTap: () {
-                            if (controller.isOk.value) controller.updateUser();
+                            if (controller.isEditOk.value) controller.updateUser();
                           },
                           child: Obx(
                             () => Text(
                               '수정하기',
-                              style: $style.text.headline14.copyWith(
-                                  color: controller.isOk.value
-                                      ? $style.colors.primary
-                                      : $style.colors.grey),
+                              style: $style.text.headline14.copyWith(color: controller.isEditOk.value ? $style.colors.primary : $style.colors.grey),
                               textAlign: TextAlign.center,
                             ),
                           )),
@@ -277,10 +274,11 @@ class ProfilePage extends StatelessWidget {
                                       style: $style.text.headline16,
                                     ),
                                     Gap(119 * sizeUnit),
-                                    CustomSwitchButton(
-                                      values: const ['ON', 'OFF'],
-                                      onToggleCallback: (index) {},
-                                    ),
+                                    Obx(() => CustomSwitchButton(
+                                          values: const ['ON', 'OFF'],
+                                          value: controller.isAlarm.value,
+                                          onToggleCallback: controller.onChangedAlarm,
+                                        )),
                                   ],
                                 ),
                                 Gap($style.insets.$32),
