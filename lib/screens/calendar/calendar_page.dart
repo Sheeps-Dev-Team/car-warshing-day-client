@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -46,25 +47,29 @@ class CalendarPage extends StatelessWidget {
               /// calendar
               yearAndMonth(), // 년도. 달
               Gap($style.insets.$16),
-              SizedBox(
-                height: 97 * sizeUnit,
-                child: GlobalData.weatherList.isNotEmpty
-                    ? ScrollablePositionedList.builder(
-                        itemScrollController: controller.itemScrollController,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: GlobalData.weatherList.length,
-                        itemBuilder: (context, index) {
-                          final Weather weather = GlobalData.weatherList[index];
+              GetBuilder<CalendarPageController>(
+                  id: 'washingDay',
+                  builder: (_) {
+                    return SizedBox(
+                      height: 97 * sizeUnit,
+                      child: GlobalData.weatherList.isNotEmpty
+                          ? ScrollablePositionedList.builder(
+                              itemScrollController: controller.itemScrollController,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: GlobalData.weatherList.length,
+                              itemBuilder: (context, index) {
+                                final Weather weather = GlobalData.weatherList[index];
 
-                          return weatherItem(
-                            index: index,
-                            weather: weather,
-                            onTap: () => controller.onSelectionChanged(weather.dateTime),
-                          );
-                        },
-                      )
-                    : exceptionText(),
-              ),
+                                return weatherItem(
+                                  index: index,
+                                  weather: weather,
+                                  onTap: () => controller.onSelectionChanged(weather.dateTime),
+                                );
+                              },
+                            )
+                          : exceptionText(),
+                    );
+                  }),
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: $style.insets.$16),
@@ -79,20 +84,31 @@ class CalendarPage extends StatelessWidget {
                     child: ListView(
                       children: [
                         Gap($style.insets.$24),
-                        if (GlobalData.loginUser?.washingCarDay != null) ...[
-                          estimatedDateItem(
-                            label: '세차일',
-                            periodStart: GlobalData.loginUser!.washingCarDay!.startedAt,
-                            continuousDay:
-                                GlobalFunction.getContinuousDays(startIdx: GlobalData.loginUser!.washingCarDay!.startedAt.difference(GlobalData.weatherList.first.dateTime).inDays),
-                            color: $style.colors.red,
-                            trailingIconPath: GlobalAssets.svgMinusInCircle,
-                            isWashingDay: true,
-                          ),
-                          Gap($style.insets.$24),
-                          Divider(color: $style.colors.lightGrey, height: 1 * sizeUnit),
-                          Gap($style.insets.$24),
-                        ],
+                        GetBuilder<CalendarPageController>(
+                          id: 'washingDay',
+                          builder: (_) {
+                            if (GlobalData.loginUser?.washingCarDay != null) {
+                              return Column(
+                                children: [
+                                  estimatedDateItem(
+                                    label: '세차일',
+                                    periodStart: GlobalData.loginUser!.washingCarDay!.startedAt,
+                                    continuousDay: GlobalFunction.getContinuousDays(
+                                        startIdx: GlobalData.loginUser!.washingCarDay!.startedAt.difference(GlobalData.weatherList.first.dateTime).inDays),
+                                    color: $style.colors.red,
+                                    trailingIconPath: GlobalAssets.svgMinusInCircle,
+                                    isWashingDay: true,
+                                  ),
+                                  Gap($style.insets.$24),
+                                  Divider(color: $style.colors.lightGrey, height: 1 * sizeUnit),
+                                  Gap($style.insets.$24),
+                                ],
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                        ),
                         estimatedDateItem(
                           label: '예상 지속일',
                           periodStart: controller.selectedDate,
@@ -105,6 +121,24 @@ class CalendarPage extends StatelessWidget {
                           periodStart: controller.recommendDate,
                           continuousDay: controller.recommendContinuousDays,
                         ),
+
+                        /// 배너
+                        if (controller.banner != null) ...[
+                          Gap($style.insets.$24),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ConstrainedBox(
+                                constraints: BoxConstraints(minWidth: 34 * sizeUnit),
+                                child: Text('AD', style: $style.text.subTitle12),
+                              ),
+                              Gap($style.insets.$16),
+                              Expanded(
+                                child: banner(controller.banner!),
+                              ),
+                            ],
+                          )
+                        ],
                       ],
                     ),
                   ),
@@ -113,6 +147,20 @@ class CalendarPage extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  // 배너
+  Widget banner(BannerAd bannerAd) {
+    return AspectRatio(
+      aspectRatio: 320 / 50,
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: $style.boxShadows.bs2,
+          color: Colors.white
+        ),
+        child: AdWidget(ad: bannerAd),
       ),
     );
   }
@@ -448,6 +496,9 @@ class CalendarPage extends StatelessWidget {
     final DateTime periodEnd = periodStart.add(Duration(days: continuousDay));
     final bool isShowLongTerm = periodEnd.difference(GlobalData.weatherList.last.dateTime).inDays >= 0;
 
+    // admob 세팅
+    controller.dialogBanner ??= controller.getBannerAd();
+
     return GetBuilder<CalendarPageController>(
         id: 'detailDialog',
         initState: (state) {
@@ -505,6 +556,11 @@ class CalendarPage extends StatelessWidget {
                           isWashingDay ? '예상 지속 기간 변경 푸시 알림이 해제돼요!' : '예상 지속 기간 변경 시 자동 푸시 알림이 가요!',
                           style: $style.text.subTitle12.copyWith(color: $style.colors.darkGrey),
                         ),
+                        // 배너
+                        if (controller.dialogBanner != null) ...[
+                          Gap($style.insets.$24),
+                          banner(controller.dialogBanner!),
+                        ],
                       ],
                     ),
                   ),

@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:io';
 
 import 'package:car_washing_day/config/constants.dart';
 import 'package:car_washing_day/config/storage.dart';
@@ -8,10 +8,11 @@ import 'package:car_washing_day/repository/weather_repository.dart';
 import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/util/long_term_forecast.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../../../data/models/weather.dart';
 import '../../../util/global_function.dart';
 
 class CalendarPageController extends GetxController {
@@ -20,16 +21,29 @@ class CalendarPageController extends GetxController {
   late final DateTime now = DateTime(n.year, n.month, n.day);
 
   late DateTime selectedDate = GlobalData.weatherList.isEmpty ? now : GlobalData.weatherList.first.dateTime; // 선택된 날짜
-  late DateTime recommendDate; // 추천일
+  late DateTime recommendDate = now; // 추천일
 
-  int get continuousDays => GlobalData.weatherList.isEmpty ? 0 : GlobalFunction.getContinuousDays(startIdx: selectedDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 예상 지속일
-  int get recommendContinuousDays => GlobalData.weatherList.isEmpty ? 0 : GlobalFunction.getContinuousDays(startIdx: recommendDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 추천 예상 지속일
+  int get continuousDays =>
+      GlobalData.weatherList.isEmpty ? 0 : GlobalFunction.getContinuousDays(startIdx: selectedDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 예상 지속일
+  int get recommendContinuousDays =>
+      GlobalData.weatherList.isEmpty ? 0 : GlobalFunction.getContinuousDays(startIdx: recommendDate.difference(GlobalData.weatherList.first.dateTime).inDays); // 추천 예상 지속일
 
   LongTermForecast? longTermForecast; // 장기 예보
 
-  void init(){
+  BannerAd? banner; // admob banner
+  BannerAd? dialogBanner; // admob banner
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    // admob 세팅
+    banner = getBannerAd();
+  }
+
+  void init() {
     // 추천일 세팅
-    if(GlobalData.weatherList.isNotEmpty) {
+    if (GlobalData.weatherList.isNotEmpty) {
       recommendDate = GlobalFunction.getRecommendDate();
     }
   }
@@ -63,7 +77,7 @@ class CalendarPageController extends GetxController {
 
   // 세차일 등록
   void setWashingCarDay({required DateTime periodStart, required DateTime periodEnd}) async {
-    if(GlobalData.loginUser != null) {
+    if (GlobalData.loginUser != null) {
       GlobalFunction.loadingDialog(); // 로딩 시작
 
       final List<int> shortTermCodeList = GlobalFunction.getShortTerm(GlobalData.loginUser!.address);
@@ -81,9 +95,9 @@ class CalendarPageController extends GetxController {
       );
 
       Get.close(1); // 로딩 끝
-      if(washingCarDay != null) {
+      if (washingCarDay != null) {
         GlobalData.loginUser!.washingCarDay = washingCarDay;
-        update();
+        update(['washingDay']);
 
         Get.close(1); // 디테일 다이얼로그 닫기
         GlobalFunction.showToast(msg: '세차일 등록이 완료되었습니다.');
@@ -102,19 +116,41 @@ class CalendarPageController extends GetxController {
   }
 
   // 세차 등록 해제
-  void deleteWashingCarDay() async{
+  void deleteWashingCarDay() async {
     GlobalFunction.loadingDialog(); // 로딩 시작
     String? res = await WeatherRepository.deleteWashing(GlobalData.loginUser!.washingCarDay!.id);
 
     Get.close(1); // 로딩 끝
-    if(res != null) {
+    if (res != null) {
       Get.close(1); // 디테일 다이얼로그 닫기
 
       GlobalData.loginUser!.washingCarDay = null;
-      update();
+      update(['washingDay']);
       GlobalFunction.showToast(msg: '세차일 등록 해제가 완료되었습니다.');
     } else {
       GlobalFunction.showToast(msg: '잠시 후 다시 시도해 주세요.');
     }
+  }
+
+  // 배너 광고 불러오기
+  BannerAd getBannerAd() {
+    // admob id
+    const String iosId = 'ca-app-pub-5743388954735511/7513278459';
+    const String iosTestId = 'ca-app-pub-3940256099942544/2934735716';
+    const String androidId = 'ca-app-pub-5743388954735511/8033837417';
+    const String androidTestId = 'ca-app-pub-3940256099942544/6300978111';
+
+    return BannerAd(
+      size: AdSize.banner,
+      adUnitId: kDebugMode
+          ? Platform.isIOS
+              ? iosTestId
+              : androidTestId
+          : Platform.isIOS
+              ? iosId
+              : androidId,
+      listener: const BannerAdListener(),
+      request: const AdRequest(),
+    )..load();
   }
 }
