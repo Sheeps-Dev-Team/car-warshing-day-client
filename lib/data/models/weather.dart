@@ -88,8 +88,8 @@ class Weather {
       // 오늘 날씨 세팅
       if (key == 'now') {
         currentWeather = Weather(
-          skyType: intToSkyType(int.parse(value['sky'] ?? '1')),
-          rainingType: RainingType.values[int.parse(value['pty'] ?? '0')],
+          skyType: intToSkyType(int.parse(value['sky'] ?? 1)),
+          rainingType: RainingType.values[int.parse(value['pty'] ?? 0)],
           pop: int.parse(value['pop']),
           dateTime: n,
         );

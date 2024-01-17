@@ -1,3 +1,4 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:car_washing_day/config/storage.dart';
 import 'package:car_washing_day/screens/calendar/calendar_page.dart';
 import 'package:car_washing_day/screens/home/home_page.dart';
@@ -34,6 +35,7 @@ class MainPageController extends GetxController {
 
   @override
   void onInit() {
+    requestAppTracking(); // 앱 추척 허용
     setWeatherData(); // 날씨 데이터 세팅
     super.onInit();
   }
@@ -56,5 +58,14 @@ class MainPageController extends GetxController {
   void onChangedPage(int index) {
     pageIndex = index;
     update();
+  }
+
+  // 앱 추적 허용
+  Future<void> requestAppTracking() async {
+    final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
+
+    if (status == TrackingStatus.notDetermined) {
+      AppTrackingTransparency.requestTrackingAuthorization();
+    }
   }
 }
