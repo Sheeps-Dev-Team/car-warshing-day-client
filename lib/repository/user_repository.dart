@@ -13,7 +13,12 @@ class UserRepository {
     var res = await ApiProvider().post(networkURL, obj.toCreateJsonEncode());
 
     if (res != null) {
-      user = User.fromJson(res);
+      if(res == 409) {
+        // 중복된 이메일 처리
+        user = User(email: '409', loginType: '', nickName: '', address: '', pop: 0);
+      } else {
+        user = User.fromJson(res);
+      }
     }
 
     return user;
@@ -30,7 +35,6 @@ class UserRepository {
 
     if (res != null) {
       user = User.fromJson(res);
-      GlobalData.loginUser = user;
     }
 
     return user;

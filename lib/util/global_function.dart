@@ -174,7 +174,7 @@ class GlobalFunction {
     await Storage.deleteLoginData(); // 로그인 정보 삭제
     GlobalData.resetData(); // 글로벌 데이터 리셋
 
-    Get.offAll(MainPage());
+    Get.offAll(() => MainPage());
   }
 
   // date picker
