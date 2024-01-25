@@ -61,6 +61,7 @@ dependencies:
 
   kakao_flutter_sdk_user: ^1.7.0 # 카카오 로그인 sdk
   google_sign_in: ^6.2.1 # 구글 로그인
+  sign_in_with_apple: ^5.0.0 # 애플 로그인
 
 dev_dependencies:
   flutter_test:

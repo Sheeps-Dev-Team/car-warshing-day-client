@@ -3,6 +3,7 @@ import 'package:car_washing_day/config/storage.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/data/models/user.dart';
 import 'package:car_washing_day/repository/user_repository.dart';
+import 'package:car_washing_day/screens/login/login_page.dart';
 import 'package:car_washing_day/screens/main/main_page.dart';
 import 'package:car_washing_day/util/global_function.dart';
 import 'package:flutter/material.dart';
@@ -83,10 +84,19 @@ class ProfileController extends GetxController {
 
     Get.close(1); // 로딩 끝
     if (user != null) {
-      GlobalData.loginUser = user;
-      Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
+      if(user.email == '409') {
+        // 중복 이메일 처리
+        await Storage.deleteLoginData(); // 로그인 정보 삭제
+        GlobalData.resetData(); // 글로벌 데이터 리셋
+        Get.offAll(() => LoginPage());
 
-      Get.offAll(() => MainPage());
+        GlobalFunction.showCustomDialog(description: '이미 가입되어 있는 이메일입니다.');
+      } else {
+        GlobalData.loginUser = user;
+        Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
+
+        Get.offAll(() => MainPage());
+      }
     } else {
       GlobalFunction.showToast(msg: '잠시 후 다시 시도해 주세요.');
     }

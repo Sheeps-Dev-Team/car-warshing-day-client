@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/io_client.dart';
 import '../data/global_data.dart';
 import 'custom_exception.dart';
 
@@ -143,6 +143,8 @@ class ApiProvider {
       case 403: //토큰 오류
       case 404: //찾을수 없음
       case 405: //허용되지않은 호출
+      case 409: //중복된 이메일(회원가입)
+          if(Get.currentRoute == '/ProfilePage') return 409;
       case 500: //서버 오류
       case 501: //함수실행 실패
       case 502: //잘못된 접근

@@ -35,20 +35,15 @@ class LoginPage extends StatelessWidget {
                 Gap($style.insets.$16),
                 RichText(
                   textAlign: TextAlign.center,
-                  text: TextSpan(
-                      style: $style.text.headline48.copyWith(
-                          color: $style.colors.primary,
-                          fontWeight: FontWeight.w800),
-                      children: [
-                        TextSpan(
-                          text: '세차 ',
-                          style: $style.text.headline48
-                              .copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const TextSpan(
-                          text: '언제?',
-                        ),
-                      ]),
+                  text: TextSpan(style: $style.text.headline48.copyWith(color: $style.colors.primary, fontWeight: FontWeight.w800), children: [
+                    TextSpan(
+                      text: '세차 ',
+                      style: $style.text.headline48.copyWith(fontWeight: FontWeight.w800),
+                    ),
+                    const TextSpan(
+                      text: '언제?',
+                    ),
+                  ]),
                 ),
                 const Spacer(flex: 1),
                 loginBtn(
@@ -60,10 +55,9 @@ class LoginPage extends StatelessWidget {
                 Gap($style.insets.$15),
                 if (Platform.isIOS) ...{
                   loginBtn(
-                      path: GlobalAssets.svgAppleLogin,
-                      onTap: () {
-                        Get.to(() => ProfilePage(isEditMode: true));
-                      }),
+                    path: GlobalAssets.svgAppleLogin,
+                    onTap: controller.appleLogin,
+                  ),
                   Gap($style.insets.$15),
                 },
                 loginBtn(
@@ -75,22 +69,19 @@ class LoginPage extends StatelessWidget {
                 const Spacer(),
                 RichText(
                   textAlign: TextAlign.center,
-                  text: TextSpan(
-                      style: $style.text.body12
-                          .copyWith(color: $style.colors.darkGrey),
-                      children: [
-                        const TextSpan(
-                          text: '로그인 이전에 sheeps의\n',
-                        ),
-                        underlineTextWidget(text: '서비스 이용약관', onTap: () {}),
-                        const TextSpan(
-                          text: '과 ',
-                        ),
-                        underlineTextWidget(text: '개인정보 처리방침', onTap: () {}),
-                        const TextSpan(
-                          text: '을\n읽고 이해했으며 이에 동의합니다.',
-                        ),
-                      ]),
+                  text: TextSpan(style: $style.text.body12.copyWith(color: $style.colors.darkGrey), children: [
+                    const TextSpan(
+                      text: '로그인 이전에 sheeps의\n',
+                    ),
+                    underlineTextWidget(text: '서비스 이용약관', onTap: () {}),
+                    const TextSpan(
+                      text: '과 ',
+                    ),
+                    underlineTextWidget(text: '개인정보 처리방침', onTap: () {}),
+                    const TextSpan(
+                      text: '을\n읽고 이해했으며 이에 동의합니다.',
+                    ),
+                  ]),
                 ),
                 const Spacer(),
                 if (MediaQuery.of(context).padding.bottom == 0) ...[
@@ -104,8 +95,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  GestureDetector loginBtn(
-      {required String path, required GestureTapCallback onTap}) {
+  GestureDetector loginBtn({required String path, required GestureTapCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: SvgPicture.asset(
@@ -116,14 +106,10 @@ class LoginPage extends StatelessWidget {
   }
 
   //서비스 이용약관, 개인정보 처리방침 위젯
-  TextSpan underlineTextWidget(
-      {required String text, required GestureTapCallback onTap}) {
+  TextSpan underlineTextWidget({required String text, required GestureTapCallback onTap}) {
     return TextSpan(
       text: text,
-      style: $style.text.subTitle12.copyWith(
-          color: $style.colors.primary,
-          decoration: TextDecoration.underline,
-          decorationColor: $style.colors.primary),
+      style: $style.text.subTitle12.copyWith(color: $style.colors.primary, decoration: TextDecoration.underline, decorationColor: $style.colors.primary),
       recognizer: TapGestureRecognizer()..onTap = onTap,
     );
   }
