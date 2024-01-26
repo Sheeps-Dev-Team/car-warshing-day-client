@@ -148,7 +148,6 @@ class ProfilePage extends StatelessWidget {
                                   controller: controller.nicknameController,
                                   style: $style.text.subTitle14,
                                   textAlign: TextAlign.center,
-                                  width: 328 * sizeUnit,
                                   borderRadius:
                                       BorderRadius.circular(100 * sizeUnit),
                                   borderColor: $style.colors.lightGrey,
@@ -162,44 +161,38 @@ class ProfilePage extends StatelessWidget {
                                   style: $style.text.headline16,
                                 ),
                                 Gap($style.insets.$16),
-                                SizedBox(
-                                  width: 328 * sizeUnit,
-                                  child: Obx(
-                                    () => CustomDropdownButton(
-                                      border: Border.all(
-                                          color: $style.colors.lightGrey),
-                                      value: controller.selectedArea.isEmpty
-                                          ? null
-                                          : controller.selectedArea.value,
-                                      items: areaMap.keys.toList(),
-                                      hintText: '시, 도 선택',
-                                      onChanged: (value) {
-                                        controller.selectedSubArea('');
+                                Obx(
+                                  () => CustomDropdownButton(
+                                    border: Border.all(
+                                        color: $style.colors.lightGrey),
+                                    value: controller.selectedArea.isEmpty
+                                        ? null
+                                        : controller.selectedArea.value,
+                                    items: areaMap.keys.toList(),
+                                    hintText: '시, 도 선택',
+                                    onChanged: (value) {
+                                      controller.selectedSubArea('');
 
-                                        controller.selectedArea(value);
-                                      },
-                                    ),
+                                      controller.selectedArea(value);
+                                    },
                                   ),
                                 ),
                                 Gap($style.insets.$12),
-                                SizedBox(
-                                  width: 328 * sizeUnit,
-                                  child: Obx(
-                                    () => CustomDropdownButton(
-                                      border: Border.all(
-                                          color: $style.colors.lightGrey),
-                                      value: controller.selectedSubArea.isEmpty
-                                          ? null
-                                          : controller.selectedSubArea.value,
-                                      items: controller.selectedArea.isEmpty
-                                          ? []
-                                          : areaMap[
-                                              controller.selectedArea.value]!,
-                                      hintText: '구,군 선택',
-                                      onChanged: (value) {
-                                        controller.selectedSubArea(value);
-                                      },
-                                    ),
+                                Obx(
+                                  () => CustomDropdownButton(
+                                    border: Border.all(
+                                        color: $style.colors.lightGrey),
+                                    value: controller.selectedSubArea.isEmpty
+                                        ? null
+                                        : controller.selectedSubArea.value,
+                                    items: controller.selectedArea.isEmpty
+                                        ? []
+                                        : areaMap[
+                                            controller.selectedArea.value]!,
+                                    hintText: '구,군 선택',
+                                    onChanged: (value) {
+                                      controller.selectedSubArea(value);
+                                    },
                                   ),
                                 ),
                                 Gap($style.insets.$24),
@@ -214,45 +207,42 @@ class ProfilePage extends StatelessWidget {
                                       .copyWith(color: $style.colors.darkGrey),
                                 ),
                                 Gap($style.insets.$16),
-                                SizedBox(
-                                  width: 328 * sizeUnit,
-                                  child: Obx(
-                                    () => CustomDropdownButton(
-                                      border: Border.all(
-                                          color: $style.colors.lightGrey),
-                                      value: controller
-                                              .selectedPrecipitationProbability
-                                              .isEmpty
-                                          ? null
-                                          : controller
-                                              .selectedPrecipitationProbability
-                                              .value,
-                                      items: const [
-                                        '0%',
-                                        '10%',
-                                        '20%',
-                                        '30%',
-                                        '40%',
-                                        '50%',
-                                        '60%',
-                                        '70%',
-                                        '80%',
-                                        '90%',
-                                        '100%'
-                                      ],
-                                      hintText: '강수 확률 선택',
-                                      onChanged: (value) {
-                                        if (value == '강수 확률 선택') {
-                                          controller
-                                              .selectedPrecipitationProbability(
-                                                  '');
-                                        } else {
-                                          controller
-                                              .selectedPrecipitationProbability(
-                                                  value);
-                                        }
-                                      },
-                                    ),
+                                Obx(
+                                  () => CustomDropdownButton(
+                                    border: Border.all(
+                                        color: $style.colors.lightGrey),
+                                    value: controller
+                                            .selectedPrecipitationProbability
+                                            .isEmpty
+                                        ? null
+                                        : controller
+                                            .selectedPrecipitationProbability
+                                            .value,
+                                    items: const [
+                                      '0%',
+                                      '10%',
+                                      '20%',
+                                      '30%',
+                                      '40%',
+                                      '50%',
+                                      '60%',
+                                      '70%',
+                                      '80%',
+                                      '90%',
+                                      '100%'
+                                    ],
+                                    hintText: '강수 확률 선택',
+                                    onChanged: (value) {
+                                      if (value == '강수 확률 선택') {
+                                        controller
+                                            .selectedPrecipitationProbability(
+                                                '');
+                                      } else {
+                                        controller
+                                            .selectedPrecipitationProbability(
+                                                value);
+                                      }
+                                    },
                                   ),
                                 ),
                                 Gap($style.insets.$24),
