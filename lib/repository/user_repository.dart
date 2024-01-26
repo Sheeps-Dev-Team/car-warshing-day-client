@@ -49,7 +49,7 @@ class UserRepository {
       urlParam: GlobalData.loginUser!.userId.toString(),
     );
 
-    if (res != null) {
+    if (res != null && res != 409) {
       resStr = res["message"] ?? "";
     }
 
