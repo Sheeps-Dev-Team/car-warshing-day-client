@@ -149,6 +149,9 @@ class GlobalFunction {
     User? user = await UserRepository.login(email, loginType);
     GlobalData.loginUser = user;
 
+    // 자동 로그인 정보 저장
+    await Storage.setLoginData(email: email, loginType: loginType);
+
     // 필수 정보 있는 경우
     if (user != null) {
       // 탈퇴한 경우
@@ -166,8 +169,6 @@ class GlobalFunction {
       Get.offAll(() => ProfilePage(isEditMode: false)); // 필수 정보 입력 페이지로 이동
     }
 
-    // 자동 로그인 정보 저장
-    Storage.setLoginData(email: email, loginType: loginType);
     print("token111 call");
     FirebaseMessaging.instance.getToken().then((token) {
       print("token call");
