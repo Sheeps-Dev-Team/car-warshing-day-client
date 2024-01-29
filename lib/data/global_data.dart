@@ -11,8 +11,6 @@ class GlobalData {
   static List<Weather> weatherList = []; // 날씨 리스트
   static Weather? currentWeather; // 현재 날씨
 
-  static DateTime? currentBackPressTime;
-
   // 데이터 리셋
   static void resetData() {
     loginUser = null;
