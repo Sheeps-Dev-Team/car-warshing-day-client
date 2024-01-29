@@ -6,7 +6,7 @@ import '../_model.dart';
 
 class User {
   User({
-    this.userId = nullInt,
+    this.userId = '',
     required this.email,
     required this.loginType,
     required this.nickName,
@@ -19,7 +19,7 @@ class User {
     this.lastModifiedAt,
   });
 
-  int userId;
+  String userId;
   String email;
   String loginType;
   String nickName;
@@ -40,9 +40,9 @@ class User {
       GlobalData.alarm = json['alarm'];
     }
 
-    if (json['accessToken'] != null) {
-      GlobalData.accessToken = json['schema'] + ' ' + json['accessToken'];
-    }
+    // if (json['accessToken'] != null) {
+    //   GlobalData.accessToken = json['schema'] + ' ' + json['accessToken'];
+    // }
 
     WashingCarDay? washingCarDay;
     if (json['washingcardays'] != null) {
@@ -52,27 +52,25 @@ class User {
     }
 
     return User(
-      userId: json['userId'],
+      userId: json['user_id'] ?? '',
       email: json['email'] ?? '',
-      loginType: json['loginType'] ?? '',
-      nickName: json['nickName'] ?? '',
+      loginType: json['login_type'] ?? '',
+      nickName: json['nickname'] ?? '',
       address: json['address'] ?? '',
       pop: json['custom_pop'] ?? defaultPop,
       washingCarDay: washingCarDay,
       isExit: json['is_exit'] ?? false,
       alarm: json['alarm'] ?? true,
-      createdAt: DateTime.parse(json['createdAt']),
-      lastModifiedAt: json['lastModifiedAt'] == null
-          ? null
-          : DateTime.parse(json['lastModifiedAt']),
+      createdAt: DateTime.parse(json['created_at']),
+      lastModifiedAt: DateTime.parse(json['lastModifiedAt']),
     );
   }
 
   String toCreateJsonEncode() {
     Map<String, dynamic> map = {
       'email': email,
-      'loginType': loginType,
-      'nickName': nickName,
+      'login_type': loginType,
+      'nickname': nickName,
       'address': address,
       'custom_pop': pop,
       'alarm': alarm,
@@ -83,8 +81,8 @@ class User {
 
   String toUpdateJsonEncode() {
     Map<String, dynamic> map = {
-      'loginType': loginType,
-      'nickName': nickName,
+      'login_type': loginType,
+      'nickname': nickName,
       'address': address,
       'custom_pop': pop,
       'alarm': alarm,

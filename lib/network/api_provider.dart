@@ -39,7 +39,7 @@ class ApiProvider {
       final response = await http.get(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization' : GlobalData.accessToken ?? ""
+            // 'Authorization' : GlobalData.accessToken ?? ""
           });
 
       if(response.body == "") return null;
@@ -62,7 +62,7 @@ class ApiProvider {
       final response = await http.post(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization' : GlobalData.accessToken ?? ""
+            // 'Authorization' : GlobalData.accessToken ?? ""
           },
           body: data,
           encoding: Encoding.getByName('utf-8'));
@@ -88,7 +88,7 @@ class ApiProvider {
       final response = await http.patch(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization' : GlobalData.accessToken ?? ""
+            // 'Authorization' : GlobalData.accessToken ?? ""
           },
           body: data,
           encoding: Encoding.getByName('utf-8'));
@@ -114,7 +114,7 @@ class ApiProvider {
       final response = await http.delete(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization' : GlobalData.accessToken ?? ""
+            // 'Authorization' : GlobalData.accessToken ?? ""
           },
           body: data,
           encoding: Encoding.getByName('utf-8'));
