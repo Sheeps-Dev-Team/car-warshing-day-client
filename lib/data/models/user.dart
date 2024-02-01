@@ -45,9 +45,9 @@ class User {
     // }
 
     WashingCarDay? washingCarDay;
-    if (json['washingcardays'] != null) {
-      for (var i = 0; i < json['washingcardays'].length; ++i) {
-        washingCarDay = WashingCarDay.fromJson(json['washingcardays'][i]);
+    if (json['washing_car_days'] != null) {
+      for (var i = 0; i < json['washing_car_days'].length; ++i) {
+        washingCarDay = WashingCarDay.fromJson(json['washing_car_days'][i]);
       }
     }
 
