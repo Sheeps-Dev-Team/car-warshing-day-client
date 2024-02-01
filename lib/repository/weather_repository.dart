@@ -7,7 +7,7 @@ import '../network/api_provider.dart';
 
 class WeatherRepository {
   static const String networkURL = '/weather';
-  static const String washingURL = '/washingcarday';
+  static const String washingURL = '/wcd';
 
   //단기예보
   static Future<List<Weather>> getShortForm(int nx, int ny) async {
