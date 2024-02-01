@@ -60,7 +60,7 @@ class ApiProvider {
 
     String tempUri = getUrl;
 
-    var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
+    var uri = Uri.parse('$tempUri$url');
     try {
       final response = await http.post(uri,
           headers: {

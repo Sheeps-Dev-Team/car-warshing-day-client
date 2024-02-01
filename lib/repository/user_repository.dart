@@ -45,8 +45,10 @@ class UserRepository {
     String? resStr;
     var res = await ApiProvider().post(
       '$networkURL/update_fcm_token',
-      jsonEncode({"fcm_token": fcmToken}),
-      urlParam: GlobalData.loginUser!.userId.toString(),
+      jsonEncode({
+        "user_id":GlobalData.loginUser!.userId,
+        "fcm_token": fcmToken
+      }),
     );
 
     if (res != null && res != 409) {
