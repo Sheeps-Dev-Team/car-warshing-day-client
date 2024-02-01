@@ -16,7 +16,7 @@ class User {
     this.isExit = false,
     this.alarm = true,
     this.createdAt,
-    this.lastModifiedAt,
+    this.updatedAt,
   });
 
   String userId;
@@ -29,7 +29,7 @@ class User {
   bool isExit; // 탈퇴 여부
   bool alarm;
   DateTime? createdAt;
-  DateTime? lastModifiedAt;
+  DateTime? updatedAt;
 
   factory User.fromJson(Map<String, dynamic> json) {
     if (json['badgeCount'] != null) {
@@ -62,7 +62,7 @@ class User {
       isExit: json['is_exit'] ?? false,
       alarm: json['alarm'] ?? true,
       createdAt: DateTime.parse(json['created_at']),
-      lastModifiedAt: DateTime.parse(json['lastModifiedAt']),
+      updatedAt: DateTime.parse(json['updated_at']),
     );
   }
 
