@@ -67,6 +67,6 @@ class WeatherRepository {
       })
     );
 
-    return res["body"];
+    return res["message"];
   }
 }
