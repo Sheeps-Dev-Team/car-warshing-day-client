@@ -145,15 +145,18 @@ class ProfileController extends GetxController {
   void deleteUser() {
     GlobalFunction.showCustomDialog(
       title: '정말 탈퇴하시겠어요?',
-      description: '회원 탈퇴 시 모든 데이터가 삭제되며,\n복구는 불가능합니다.',
+      description: '회원 탈퇴 시 모든 데이터가 삭제되며,\n복구가 불가능합니다.',
       showCancelBtn: true,
       okText: '탈퇴',
       okFunc: () async {
+        GlobalFunction.loadingDialog(); // 로딩 시작
+
         String? res = await UserRepository.delete(GlobalData.loginUser!.userId);
 
         if (res != null) {
           GlobalFunction.logout();
         } else {
+          Get.close(1);
           GlobalFunction.showToast(msg: '잠시후 다시 시도해 주세요.');
         }
       },
