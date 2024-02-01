@@ -31,14 +31,14 @@ class WashingCarDay {
   factory WashingCarDay.fromJson(Map<String, dynamic> json) {
     return WashingCarDay(
       id: json['id'],
-      startedAt: DateTime.parse(json['started_at']).add(const Duration(hours: 9)),
-      finishedAt: DateTime.parse(json['finished_at']).add(const Duration(hours: 9)),
+      startedAt: DateTime.parse(json['started_at']),
+      finishedAt: DateTime.parse(json['finished_at']),
       nx: json['nx'] ?? 0,
       ny: json['ny'] ?? 0,
-      regId: json['regId'] ?? '',
+      regId: json['reg_id'] ?? '',
       customPop: json['custom_pop'] ?? 0,
       checkUpdate: json['check_update'] ?? false,
-      // createdAt: DateTime.parse(json['createdAt']),
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 
