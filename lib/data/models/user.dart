@@ -13,7 +13,6 @@ class User {
     required this.address,
     required this.pop,
     this.washingCarDay,
-    this.isExit = false,
     this.alarm = true,
     this.createdAt,
     this.updatedAt,
@@ -26,7 +25,6 @@ class User {
   String address;
   int pop;
   WashingCarDay? washingCarDay;
-  bool isExit; // 탈퇴 여부
   bool alarm;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -59,7 +57,6 @@ class User {
       address: json['address'] ?? '',
       pop: json['custom_pop'] ?? defaultPop,
       washingCarDay: washingCarDay,
-      isExit: json['is_exit'] ?? false,
       alarm: json['alarm'] ?? true,
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),

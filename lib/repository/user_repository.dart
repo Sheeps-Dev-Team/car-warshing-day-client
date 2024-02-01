@@ -13,12 +13,7 @@ class UserRepository {
     var res = await ApiProvider().post(networkURL, obj.toCreateJsonEncode());
 
     if (res != null) {
-      if(res == 409) {
-        // 중복된 이메일 처리
-        user = User(email: '409', loginType: '', nickName: '', address: '', pop: 0);
-      } else {
-        user = User.fromJson(res);
-      }
+      user = User.fromJson(res);
     }
 
     return user;
@@ -45,13 +40,10 @@ class UserRepository {
     String? resStr;
     var res = await ApiProvider().post(
       '$networkURL/update_fcm_token',
-      jsonEncode({
-        "user_id":GlobalData.loginUser!.userId,
-        "fcm_token": fcmToken
-      }),
+      jsonEncode({"user_id": GlobalData.loginUser!.userId, "fcm_token": fcmToken}),
     );
 
-    if (res != null && res != 409) {
+    if (res != null) {
       resStr = res["message"] ?? "";
     }
 

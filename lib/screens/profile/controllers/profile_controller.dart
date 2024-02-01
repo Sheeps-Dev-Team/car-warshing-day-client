@@ -33,10 +33,11 @@ class ProfileController extends GetxController {
   RxBool get isEditOk {
     final User user = GlobalData.loginUser!;
 
-    return (isOk.value && (nickname.value != user.nickName ||
-            '${selectedArea.value}$division${selectedSubArea.value}' != user.address ||
-            int.parse(selectedPrecipitationProbability.value.replaceFirst('%', '')) != user.pop ||
-            isAlarm.value != user.alarm))
+    return (isOk.value &&
+            (nickname.value != user.nickName ||
+                '${selectedArea.value}$division${selectedSubArea.value}' != user.address ||
+                int.parse(selectedPrecipitationProbability.value.replaceFirst('%', '')) != user.pop ||
+                isAlarm.value != user.alarm))
         .obs;
   }
 
@@ -84,19 +85,10 @@ class ProfileController extends GetxController {
 
     Get.close(1); // 로딩 끝
     if (user != null) {
-      if(user.email == '409') {
-        // 중복 이메일 처리
-        await Storage.deleteLoginData(); // 로그인 정보 삭제
-        GlobalData.resetData(); // 글로벌 데이터 리셋
-        Get.offAll(() => LoginPage());
+      GlobalData.loginUser = user;
+      Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
 
-        GlobalFunction.showCustomDialog(description: '이미 가입되어 있는 이메일입니다.');
-      } else {
-        GlobalData.loginUser = user;
-        Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
-
-        Get.offAll(() => MainPage());
-      }
+      Get.offAll(() => MainPage());
     } else {
       GlobalFunction.showToast(msg: '잠시 후 다시 시도해 주세요.');
     }
@@ -153,7 +145,7 @@ class ProfileController extends GetxController {
   void deleteUser() {
     GlobalFunction.showCustomDialog(
       title: '정말 탈퇴하시겠어요?',
-      description: '회원 탈퇴 시 데이터 복구는 불가능합니다.',
+      description: '회원 탈퇴 시 모든 데이터가 삭제되며,\n복구는 불가능합니다.',
       showCancelBtn: true,
       okText: '탈퇴',
       okFunc: () async {

@@ -147,7 +147,6 @@ class ApiProvider {
       case 404: //찾을수 없음
       case 405: //허용되지않은 호출
       case 409: //중복된 이메일(회원가입)
-          if(Get.currentRoute == '/ProfilePage') return 409;
       case 500: //서버 오류
       case 501: //함수실행 실패
       case 502: //잘못된 접근
