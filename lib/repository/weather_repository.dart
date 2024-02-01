@@ -6,8 +6,8 @@ import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
 class WeatherRepository {
-  static const String networkURL = '/v1/weather';
-  static const String washingURL = '/v1/washingcarday';
+  static const String networkURL = '/weather';
+  static const String washingURL = '/wcd';
 
   //단기예보
   static Future<List<Weather>> getShortForm(int nx, int ny) async {
@@ -15,7 +15,7 @@ class WeatherRepository {
 
     var res = await ApiProvider().get(
       networkURL,
-      urlParam: 'short/$nx/$ny'
+      urlParam: 'short?nx=$nx&ny=$ny'
     );
 
     if (res != null) {
@@ -31,7 +31,7 @@ class WeatherRepository {
 
     var res = await ApiProvider().get(
         networkURL,
-        urlParam: 'middle/$regId'
+        urlParam: 'medium?reg_id=$regId'
     );
 
     if (res != null) {
@@ -47,7 +47,7 @@ class WeatherRepository {
 
     var res = await ApiProvider().post(
       washingURL,
-      obj.toCreateJsonEncode(),urlParam: GlobalData.loginUser!.userId.toString()
+      obj.toCreateJsonEncode(),
     );
 
     if (res != null) {
@@ -58,11 +58,13 @@ class WeatherRepository {
   }
 
   // 세차일 삭제
-  static Future<String?> deleteWashing(int washingDayId) async {
+  static Future<String?> deleteWashing(String washingDayId) async {
     var res = await ApiProvider().delete(
       washingURL,
-      jsonEncode({}),
-      urlParam: '${GlobalData.loginUser!.userId}/$washingDayId',
+      jsonEncode({
+        'user_id': GlobalData.loginUser!.userId,
+        'id': washingDayId
+      })
     );
 
     return res["message"];

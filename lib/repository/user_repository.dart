@@ -5,7 +5,7 @@ import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
 class UserRepository {
-  static const String networkURL = '/v1/user';
+  static const String networkURL = '/user';
 
   //가입
   static Future<User?> create(User obj) async {
@@ -13,12 +13,7 @@ class UserRepository {
     var res = await ApiProvider().post(networkURL, obj.toCreateJsonEncode());
 
     if (res != null) {
-      if(res == 409) {
-        // 중복된 이메일 처리
-        user = User(email: '409', loginType: '', nickName: '', address: '', pop: 0);
-      } else {
-        user = User.fromJson(res);
-      }
+      user = User.fromJson(res);
     }
 
     return user;
@@ -30,7 +25,7 @@ class UserRepository {
     User? user;
     var res = await ApiProvider().post(
       '$networkURL/login',
-      jsonEncode({"email": email, "loginType": loginType}),
+      jsonEncode({"email": email, "login_type": loginType}),
     );
 
     if (res != null) {
@@ -44,12 +39,11 @@ class UserRepository {
   static Future<String?> updateFcmToken(String fcmToken) async {
     String? resStr;
     var res = await ApiProvider().post(
-      '$networkURL/updateFcmToken',
-      jsonEncode({"fcmToken": fcmToken}),
-      urlParam: GlobalData.loginUser!.userId.toString(),
+      '$networkURL/update_fcm_token',
+      jsonEncode({"user_id": GlobalData.loginUser!.userId, "fcm_token": fcmToken}),
     );
 
-    if (res != null && res != 409) {
+    if (res != null) {
       resStr = res["message"] ?? "";
     }
 
@@ -61,18 +55,16 @@ class UserRepository {
     var res = await ApiProvider().patch(
       networkURL,
       obj.toUpdateJsonEncode(),
-      urlParam: GlobalData.loginUser!.userId.toString(),
     );
 
     return res["message"];
   }
 
   // 탈퇴
-  static Future<String?> delete(int id) async {
+  static Future<String?> delete(String id) async {
     var res = await ApiProvider().delete(
       networkURL,
-      jsonEncode({'userId': id}),
-      urlParam: id.toString(),
+      jsonEncode({'user_id': id}),
     );
 
     return res["message"];

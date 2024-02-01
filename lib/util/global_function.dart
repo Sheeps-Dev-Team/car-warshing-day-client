@@ -154,15 +154,7 @@ class GlobalFunction {
 
     // 필수 정보 있는 경우
     if (user != null) {
-      // 탈퇴한 경우
-      if (user.isExit) {
-        await Storage.deleteLoginData(); // 로그인 데이터 삭제
-        if (Get.currentRoute != SplashScreen.route) Get.close(1); // 로딩 끝
-
-        showCustomDialog(description: '탈퇴된 계정입니다.');
-      } else {
-        Get.offAll(() => MainPage());
-      }
+      Get.offAll(() => MainPage());
     } else {
       // 필수 정보 없는 경우
       GlobalData.loginUser = User(email: email, loginType: loginType, nickName: '', address: '', pop: 0);
