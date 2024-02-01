@@ -55,7 +55,7 @@ class ApiProvider {
   }
 
   //post
-  Future<dynamic> post(String url, dynamic data, {String? urlParam}) async {
+  Future<dynamic> post(String url, dynamic data) async {
     var responseJson;
 
     String tempUri = getUrl;
@@ -81,12 +81,12 @@ class ApiProvider {
   }
 
   //patch
-  Future<dynamic> patch(String url, dynamic data, {String? urlParam}) async {
+  Future<dynamic> patch(String url, dynamic data) async {
     var responseJson;
 
     String tempUri = getUrl;
 
-    var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
+    var uri = Uri.parse('$tempUri$url');
     try {
       final response = await http.patch(uri,
           headers: {
@@ -107,12 +107,12 @@ class ApiProvider {
   }
 
   //delete
-  Future<dynamic> delete(String url, dynamic data, {String? urlParam}) async {
+  Future<dynamic> delete(String url, dynamic data) async {
     var responseJson;
 
     String tempUri = getUrl;
 
-    var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
+    var uri = Uri.parse('$tempUri$url');
     try {
       final response = await http.delete(uri,
           headers: {
