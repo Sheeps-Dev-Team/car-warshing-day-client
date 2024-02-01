@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:car_washing_day/data/global_data.dart';
 import 'package:intl/intl.dart';
 
 import '../../config/constants.dart';
@@ -43,11 +44,12 @@ class WashingCarDay {
 
   String toCreateJsonEncode() {
     Map<String, dynamic> map = {
+      'user_id': GlobalData.loginUser!.userId,
       'started_at': DateFormat('yyyy-MM-dd').format(startedAt),
       'finished_at': DateFormat('yyyy-MM-dd').format(finishedAt),
       'nx': nx,
       'ny': ny,
-      'regId': regId,
+      'reg_id': regId,
       'custom_pop': customPop,
     };
 

@@ -47,7 +47,7 @@ class WeatherRepository {
 
     var res = await ApiProvider().post(
       washingURL,
-      obj.toCreateJsonEncode(),urlParam: GlobalData.loginUser!.userId.toString()
+      obj.toCreateJsonEncode(),
     );
 
     if (res != null) {
