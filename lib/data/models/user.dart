@@ -78,6 +78,7 @@ class User {
 
   String toUpdateJsonEncode() {
     Map<String, dynamic> map = {
+      'user_id': GlobalData.loginUser!.userId,
       'login_type': loginType,
       'nickname': nickName,
       'address': address,
