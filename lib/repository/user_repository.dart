@@ -52,7 +52,7 @@ class UserRepository {
     );
 
     if (res != null && res != 409) {
-      resStr = res["body"] ?? "";
+      resStr = res["message"] ?? "";
     }
 
     return resStr;
@@ -65,7 +65,7 @@ class UserRepository {
       obj.toUpdateJsonEncode(),
     );
 
-    return res["body"];
+    return res["message"];
   }
 
   // 탈퇴
@@ -75,6 +75,6 @@ class UserRepository {
       jsonEncode({'user_id': id}),
     );
 
-    return res["body"];
+    return res["message"];
   }
 }
