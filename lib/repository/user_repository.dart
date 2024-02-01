@@ -30,7 +30,7 @@ class UserRepository {
     User? user;
     var res = await ApiProvider().post(
       '$networkURL/login',
-      jsonEncode({"email": email, "loginType": loginType}),
+      jsonEncode({"email": email, "login_type": loginType}),
     );
 
     if (res != null) {
