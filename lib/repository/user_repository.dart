@@ -5,7 +5,7 @@ import '../data/global_data.dart';
 import '../network/api_provider.dart';
 
 class UserRepository {
-  static const String networkURL = '/v1/user';
+  static const String networkURL = '/user';
 
   //가입
   static Future<User?> create(User obj) async {
@@ -44,8 +44,8 @@ class UserRepository {
   static Future<String?> updateFcmToken(String fcmToken) async {
     String? resStr;
     var res = await ApiProvider().post(
-      '$networkURL/updateFcmToken',
-      jsonEncode({"fcmToken": fcmToken}),
+      '$networkURL/update_fcm_token',
+      jsonEncode({"fcm_token": fcmToken}),
       urlParam: GlobalData.loginUser!.userId.toString(),
     );
 
@@ -61,18 +61,16 @@ class UserRepository {
     var res = await ApiProvider().patch(
       networkURL,
       obj.toUpdateJsonEncode(),
-      urlParam: GlobalData.loginUser!.userId.toString(),
     );
 
     return res["message"];
   }
 
   // 탈퇴
-  static Future<String?> delete(int id) async {
+  static Future<String?> delete(String id) async {
     var res = await ApiProvider().delete(
       networkURL,
-      jsonEncode({'userId': id}),
-      urlParam: id.toString(),
+      jsonEncode({'user_id': id}),
     );
 
     return res["message"];

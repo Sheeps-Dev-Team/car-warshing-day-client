@@ -6,7 +6,7 @@ import '../../config/constants.dart';
 
 class WashingCarDay {
   WashingCarDay({
-    this.id = nullInt,
+    this.id = '',
     required this.startedAt,
     required this.finishedAt,
     required this.nx,
@@ -17,7 +17,7 @@ class WashingCarDay {
     this.createdAt,
   });
 
-  int id;
+  String id;
   DateTime startedAt;
   DateTime finishedAt;
   int nx;

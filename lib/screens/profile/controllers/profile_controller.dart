@@ -107,6 +107,7 @@ class ProfileController extends GetxController {
     GlobalFunction.loadingDialog(); // 로딩 시작
 
     final User obj = User(
+      userId: GlobalData.loginUser!.userId,
       email: GlobalData.loginUser!.email,
       loginType: GlobalData.loginUser!.loginType,
       nickName: nickname.value,

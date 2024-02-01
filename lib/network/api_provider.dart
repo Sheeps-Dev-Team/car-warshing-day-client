@@ -13,10 +13,12 @@ enum Status { LOADING, COMPLETED, ERROR }
 class ApiProvider {
   final String _baseUrl = kReleaseMode == false ? "http://192.168.2.168:" : "http://192.168.2.168:"; //서버 붙는 위치
   final String _imageUrl = kReleaseMode == false ? "http://192.168.2.168:" : "http://192.168.2.168:";
+  final String _awsUrl = 'https://w0i2o3wnkk.execute-api.ap-northeast-2.amazonaws.com';
 
   final String port = kReleaseMode == false ? "50012" : "50012";                       //기본 포트
 
-  String get getUrl => _baseUrl + port;
+  //String get getUrl => _baseUrl + port;
+  String get getUrl => _awsUrl;
 
   String getImgUrl() {
     var resUrl = _imageUrl;
@@ -32,14 +34,15 @@ class ApiProvider {
   Future<dynamic> get(String url, {String? urlParam}) async {
     var responseJson;
 
-    String tempUri = _baseUrl + port;
+    String tempUri = getUrl;
 
     var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
+
     try {
       final response = await http.get(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization' : GlobalData.accessToken ?? ""
+            // 'Authorization' : GlobalData.accessToken ?? ""
           });
 
       if(response.body == "") return null;
@@ -55,14 +58,14 @@ class ApiProvider {
   Future<dynamic> post(String url, dynamic data, {String? urlParam}) async {
     var responseJson;
 
-    String tempUri = _baseUrl + port;
+    String tempUri = getUrl;
 
     var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
     try {
       final response = await http.post(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization' : GlobalData.accessToken ?? ""
+            // 'Authorization' : GlobalData.accessToken ?? ""
           },
           body: data,
           encoding: Encoding.getByName('utf-8'));
@@ -81,14 +84,14 @@ class ApiProvider {
   Future<dynamic> patch(String url, dynamic data, {String? urlParam}) async {
     var responseJson;
 
-    String tempUri = _baseUrl + port;
+    String tempUri = getUrl;
 
     var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
     try {
       final response = await http.patch(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization' : GlobalData.accessToken ?? ""
+            // 'Authorization' : GlobalData.accessToken ?? ""
           },
           body: data,
           encoding: Encoding.getByName('utf-8'));
@@ -107,14 +110,14 @@ class ApiProvider {
   Future<dynamic> delete(String url, dynamic data, {String? urlParam}) async {
     var responseJson;
 
-    String tempUri = _baseUrl + port;
+    String tempUri = getUrl;
 
     var uri = Uri.parse('$tempUri$url/${urlParam ?? ""}');
     try {
       final response = await http.delete(uri,
           headers: {
             'Content-Type' : 'application/json',
-            'Authorization' : GlobalData.accessToken ?? ""
+            // 'Authorization' : GlobalData.accessToken ?? ""
           },
           body: data,
           encoding: Encoding.getByName('utf-8'));
