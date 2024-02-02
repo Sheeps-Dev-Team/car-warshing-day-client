@@ -6,6 +6,7 @@ import 'package:car_washing_day/data/models/user.dart';
 import 'package:car_washing_day/screens/login/controllers/login_controller.dart';
 import 'package:car_washing_day/screens/profile/profile_page.dart';
 import 'package:car_washing_day/util/components/base_widget.dart';
+import 'package:car_washing_day/util/global_function.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -73,11 +74,17 @@ class LoginPage extends StatelessWidget {
                     const TextSpan(
                       text: '로그인 이전에 sheeps의\n',
                     ),
-                    underlineTextWidget(text: '서비스 이용약관', onTap: () {}),
+                    underlineTextWidget(
+                      text: '서비스 이용약관',
+                      onTap: () => GlobalFunction.launch(Uri.parse('https://sheeps.notion.site/eada92cf853f477ca8afb3c171c79f43?pvs=4')),
+                    ),
                     const TextSpan(
                       text: '과 ',
                     ),
-                    underlineTextWidget(text: '개인정보 처리방침', onTap: () {}),
+                    underlineTextWidget(
+                      text: '개인정보 처리방침',
+                      onTap: () => GlobalFunction.launch(Uri.parse('https://sheeps.notion.site/e212aa8dd43442aebbb45aea9d1042ab?pvs=4')),
+                    ),
                     const TextSpan(
                       text: '을\n읽고 이해했으며 이에 동의합니다.',
                     ),
