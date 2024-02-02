@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../config/constants.dart';
 import '../data/location_data.dart';
@@ -340,5 +341,14 @@ class GlobalFunction {
     }
 
     return recommendDate;
+  }
+
+  // url 연결 함수
+  static Future<void> launch(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      if (!await launchUrl(url)) {
+        throw Exception('Could not launch $url');
+      }
+    }
   }
 }

@@ -50,6 +50,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0 # 로컬 보안 저장소
   google_mobile_ads: ^4.0.0 # admob
   app_tracking_transparency: ^2.0.4 # ios 앱 추적 허용
+  url_launcher: ^6.2.4 # url 연결
   
   firebase_core: ^2.24.2
   firebase_messaging: ^14.7.9
