@@ -34,16 +34,16 @@ class ProfilePage extends StatelessWidget {
           centerTitle: true,
           titleWidget: isEditMode
               ? GlobalData.loginUser == null
-                  ? Text('로그인 해주세요', style: $style.text.headline20)
+                  ? Text('로그인 해주세요', style: $style.text.headline18)
                   : RichText(
                       text: TextSpan(
-                        style: $style.text.headline20.copyWith(
+                        style: $style.text.headline16.copyWith(
                             color: $style.colors.primary,
                             fontWeight: FontWeight.w700),
                         children: [
                           TextSpan(
                             text: '어서오세요! ',
-                            style: $style.text.headline20
+                            style: $style.text.headline16
                                 .copyWith(fontWeight: FontWeight.w700),
                           ),
                           TextSpan(
@@ -51,13 +51,13 @@ class ProfilePage extends StatelessWidget {
                           ),
                           TextSpan(
                             text: '님',
-                            style: $style.text.headline20
+                            style: $style.text.headline16
                                 .copyWith(fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
                     )
-              : Text('필수 정보 입력', style: $style.text.headline20),
+              : Text('필수 정보 입력', style: $style.text.headline18),
           leading: const SizedBox.shrink(),
           actions: isEditMode
               ? GlobalData.loginUser != null
