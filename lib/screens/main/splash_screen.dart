@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../config/constants.dart';
 import '../../config/global_assets.dart';
+import '../../data/global_data.dart';
 import '../../util/global_function.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -31,9 +32,16 @@ class _SplashScreenState extends State<SplashScreen>
         CurvedAnimation(parent: animationController, curve: Curves.easeIn);
     animationController.forward();
 
-    Future.delayed(const Duration(milliseconds: 2000), () async {
+    Future.delayed(const Duration(milliseconds: 500), () async {
       final String? email = await Storage.getEmail();
       final String? loginType = await Storage.getLoginType();
+
+      String? address = await Storage.getAddress();
+
+      // 위치 데이터 있는 경우
+      if(address != null) {
+        await GlobalFunction.setWeatherList(address);
+      }
 
       if (email != null && loginType != null) {
         GlobalFunction.globalLogin(
