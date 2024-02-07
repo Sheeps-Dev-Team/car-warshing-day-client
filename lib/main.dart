@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -133,6 +134,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   void initState() {
     super.initState();
@@ -186,6 +190,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       title: '세차언제',
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [observer], // 애널리틱스 옵져버 세팅
       theme: ThemeData(
         fontFamily: 'Pretendard',
         scaffoldBackgroundColor: Colors.white,
