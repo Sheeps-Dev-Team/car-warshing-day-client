@@ -44,7 +44,7 @@ class UserRepository {
     );
 
     if (res != null) {
-      resStr = res["message"] ?? "";
+      resStr = res["message"] ?? "message empty";
     }
 
     return resStr;
@@ -57,7 +57,7 @@ class UserRepository {
       obj.toUpdateJsonEncode(),
     );
 
-    return res["message"];
+    return res["message"] ?? "message empty";
   }
 
   // 탈퇴
@@ -67,6 +67,6 @@ class UserRepository {
       jsonEncode({'user_id': id}),
     );
 
-    return res["message"];
+    return res["message"] ?? "message empty";
   }
 }
