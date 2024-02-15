@@ -1,3 +1,4 @@
+import 'package:car_washing_day/analytics/custom_analytics.dart';
 import 'package:car_washing_day/config/storage.dart';
 import 'package:car_washing_day/data/global_data.dart';
 import 'package:car_washing_day/repository/user_repository.dart';
@@ -155,6 +156,7 @@ class GlobalFunction {
 
     // 필수 정보 있는 경우
     if (user != null) {
+      CustomAnalytics.loginEvent(parameters: user.toJson()); // 애널리틱스 로그인 이벤트
       Get.offAll(() => MainPage());
     } else {
       // 필수 정보 없는 경우
@@ -176,6 +178,7 @@ class GlobalFunction {
   // 로그아웃
   static Future<void> logout() async {
     await Storage.deleteLoginData(); // 로그인 정보 삭제
+    await CustomAnalytics.logoutEvent(parameters: GlobalData.loginUser!.toJson()); // 애널리틱스 로그아웃 이벤트
     GlobalData.resetData(); // 글로벌 데이터 리셋
 
     Get.offAll(() => MainPage());

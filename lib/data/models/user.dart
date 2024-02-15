@@ -63,6 +63,16 @@ class User {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        'user_id': userId,
+        'email': email,
+        'login_type': loginType,
+        'nickname': nickName,
+        'address': address,
+        'pop': pop,
+        'alarm': alarm.toString(),
+      };
+
   String toCreateJsonEncode() {
     Map<String, dynamic> map = {
       'email': email,
