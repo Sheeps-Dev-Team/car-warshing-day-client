@@ -9,6 +9,8 @@ import 'package:car_washing_day/util/global_function.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../analytics/custom_analytics.dart';
+
 class ProfileController extends GetxController {
   final TextEditingController nicknameController = TextEditingController();
 
@@ -87,6 +89,7 @@ class ProfileController extends GetxController {
     if (user != null) {
       GlobalData.loginUser = user;
       Storage.setAddressData(obj.address); // 로컬에 위치 데이터 저장
+      CustomAnalytics.signUpEvent(parameters: user.toJson()); // 애널리틱스 회원 가입 이벤트
 
       Get.offAll(() => MainPage());
     } else {
@@ -126,6 +129,8 @@ class ProfileController extends GetxController {
       await GlobalFunction.setWeatherList(obj.address);
       Get.close(1); // 로딩 끝
       GlobalFunction.showToast(msg: '수정이 완료되었습니다.');
+
+      CustomAnalytics.userEditEvent(parameters: GlobalData.loginUser!.toJson()); // 애널리틱스 유저 수정 이벤트
     } else {
       Get.close(1); // 로딩 끝
       GlobalFunction.showToast(msg: '잠시후 다시 시도해 주세요.');
@@ -154,6 +159,7 @@ class ProfileController extends GetxController {
         String? res = await UserRepository.delete(GlobalData.loginUser!.userId);
 
         if (res != null) {
+          await CustomAnalytics.userExitEvent(parameters: GlobalData.loginUser!.toJson()); // 애널리틱스 회원 탈퇴 이벤트
           GlobalFunction.logout();
         } else {
           Get.close(1);

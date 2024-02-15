@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../../../analytics/custom_analytics.dart';
 import '../../../util/global_function.dart';
 
 class CalendarPageController extends GetxController {
@@ -101,6 +102,8 @@ class CalendarPageController extends GetxController {
 
         Get.close(1); // 디테일 다이얼로그 닫기
         GlobalFunction.showToast(msg: '세차일 등록이 완료되었습니다.');
+
+        CustomAnalytics.carWashRegistrationEvent(parameters: washingCarDay.toJson()); // 애널리틱스 세차 등록 이벤트
       } else {
         GlobalFunction.showToast(msg: '잠시 후 다시 시도해 주세요.');
       }
@@ -120,14 +123,15 @@ class CalendarPageController extends GetxController {
     GlobalFunction.loadingDialog(); // 로딩 시작
     String? res = await WeatherRepository.deleteWashing(GlobalData.loginUser!.washingCarDay!.id);
 
-    Get.close(1); // 로딩 끝
     if (res != null) {
-      Get.close(1); // 디테일 다이얼로그 닫기
+      await CustomAnalytics.carWashDeleteEvent(parameters: GlobalData.loginUser!.washingCarDay!.toJson()); // 애널리틱스 세차 등록 해제 이벤트
+      Get.close(2); // 로딩 끝, 디테일 다이얼로그 닫기
 
       GlobalData.loginUser!.washingCarDay = null;
       update(['washingDay']);
       GlobalFunction.showToast(msg: '세차일 등록 해제가 완료되었습니다.');
     } else {
+      Get.close(1); // 로딩 끝
       GlobalFunction.showToast(msg: '잠시 후 다시 시도해 주세요.');
     }
   }

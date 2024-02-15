@@ -42,6 +42,8 @@ class MainPageController extends GetxController {
 
   // 날씨 데이터 세팅
   Future<void> setWeatherData() async {
+    if(GlobalData.weatherList.isNotEmpty) return;
+
     String? address = GlobalData.loginUser?.address ?? await Storage.getAddress();
 
     // 위치 데이터 있는 경우
