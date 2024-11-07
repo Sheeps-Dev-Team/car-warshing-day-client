@@ -1,16 +1,19 @@
-# car_warshing_day
+# 세차언제 Client
+세차언제 클라이언트 입니다.
 
-A new Flutter project.
+# 기획
+언제 세차를하면 지속일을 오래 유지할수 있을지 알 수 있는 앱 프로젝트 입니다.
 
-## Getting Started
+## 앱의 기능 및 요구사항
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **회원가입**
+    - 카카오, 애플, 구글 및 비회원으로 로그인이 가능해야 함
+    - 사용자는 세차일 추천 알고리즘에 사용되는 강수확률을 정할 수 있어야 함
+- **기상 예보 공공API를 활용한 데이터 수집**
+    - 기상 관련 공공API를 사용하여 단기(0~2일) 및 중기(3~10일) 예보 데이터를 가져와야 함
+    - 서로 다른 데이터를 제공하는 각각의 기상 예보 API 결과값을 클라이언트에게 동일한 정보를 제공할 수 있도록 정형화해야 함
+    - 공공API 요청은 하루에 제한되어 있으며, 성능을 고려하여 기상 예보 API 요청을 최소화해야 함
+    - 기상 예보 API 요청이 실패할 경우 대응 방안 필요
+- **세차일 등록 및 알람**
+    - 사용자는 클라이언트를 통해 원하는 날짜의 세차일을 등록할 수 있어야 함
+    - 사용자가 설정한 강수확률을 기반으로 세차 당일 날씨 예보에 따라 FCM을 보내줘야 함
